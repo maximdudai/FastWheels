@@ -4,50 +4,67 @@
 
 $this->title = 'My Yii Application';
 ?>
-<div class="site-index">
 
-    <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4">Congratulations!</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+            <div class="site-index">
 
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
+                <div class="jumbotron text-center bg-transparent">
+                    <h1 class="display-4">Congratulations!</h1>
 
-    <div class="body-content">
+                    <p class="lead">You have successfully created your Yii-powered application.</p>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                    <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
+                </div>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <?= \hail812\adminlte\widgets\Alert::widget([
+                    'type' => 'success',
+                    'body' => '<h3>Congratulations!</h3>',
+                ]) ?>
+                <?= \hail812\adminlte\widgets\Callout::widget([
+                    'type' => 'danger',
+                    'head' => 'I am a danger callout!',
+                    'body' => 'There is a problem that we need to fix. A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.'
+                ]) ?>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                <div class="body-content">
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h2>Heading</h2>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                                fugiat nulla pariatur.</p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                            <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h2>Heading</h2>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                                fugiat nulla pariatur.</p>
+
+                            <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                        </div>
+                        <div class="col-lg-4">
+                            <h2>Heading</h2>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                                fugiat nulla pariatur.</p>
+
+                            <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
