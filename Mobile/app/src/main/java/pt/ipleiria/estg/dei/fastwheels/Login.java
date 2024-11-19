@@ -4,13 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     private EditText userEmail;
     private EditText userPassword;
+    private TextView toRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +21,20 @@ public class LoginActivity extends AppCompatActivity {
 
         userEmail = findViewById(R.id.emailEditText);
         userPassword = findViewById(R.id.passwordEditText);
+        toRegisterButton = findViewById(R.id.noAccount);
+
+        toRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toRegister = new Intent(Login.this, Register.class);
+                startActivity(toRegister);
+            }
+        });
     }
 
     public void handleLoginAccount(View v) {
 
-        Intent loginLayout = new Intent(this, MainActivity.class);
-        startActivity(loginLayout);
-
+        Intent mainActivity = new Intent(this, MainActivity.class);
+        startActivity(mainActivity);
     }
 }

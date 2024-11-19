@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FastWheels</string>
+    <string name="don_t_have_an_account_yet">Don\'t have an account yet?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="recover_here">Recover Here</string>
+    <string name="keep_me_logged_in">Keep me logged in.</string>
+    <string name="password">Password</string>
+    <string name="hintEmail">Email</string>
+    <string name="rent_your_vehicle_today">rent your vehicle today</string>
+    <string name="fast_wheels">FAST WHEELS</string>
 </resources>
