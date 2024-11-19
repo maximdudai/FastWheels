@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import pt.ipleiria.estg.dei.fastwheels.utils.helpers;
 
 public class Register extends AppCompatActivity {
 
@@ -39,9 +42,23 @@ public class Register extends AppCompatActivity {
 
     public void handleRegisterAccount(View v) {
 
-        if(userName.length() == 0 && userEmail.length() == 0 && userPassword.length() == 0) {
+        boolean isDataEmpty = userName.length() == 0 && userEmail.length() == 0 && userPassword.length() == 0;
 
+        if(isDataEmpty)
+            return;
+
+        if(!helpers.isPasswordValid(userPassword.getText().toString())) {
+            //TODO: custom error handler
+            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+            return;
         }
+        if(helpers.isEmailValid(userEmail.getText().toString())) {
+            //TODO: custom error handler
+            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //TODO: Query to database (POST) to insert new user if inserted data is available
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);

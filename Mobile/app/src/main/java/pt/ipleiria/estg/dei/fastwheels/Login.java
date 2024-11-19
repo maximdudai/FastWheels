@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import pt.ipleiria.estg.dei.fastwheels.utils.helpers;
 
 public class Login extends AppCompatActivity {
 
@@ -33,6 +36,24 @@ public class Login extends AppCompatActivity {
     }
 
     public void handleLoginAccount(View v) {
+
+        boolean isDataEmpty = userEmail.length() == 0 && userPassword.length() == 0;
+
+        if(isDataEmpty)
+            return;
+
+        if(!helpers.isPasswordValid(userPassword.getText().toString())) {
+            //TODO: custom error handler
+            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(helpers.isEmailValid(userEmail.getText().toString())) {
+            //TODO: custom error handler
+            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //TODO: Query to database (POST) to check if user exists
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);
