@@ -17,7 +17,7 @@ import pt.ipleiria.estg.dei.fastwheels.utils.helpers;
 
 public class Register extends AppCompatActivity {
 
-    private EditText userName, userEmail, userPassword;
+    private EditText userName, userEmail, userPassword, userRepeatPassword;
     private TextView loginButton;
 
     @Override
@@ -28,6 +28,7 @@ public class Register extends AppCompatActivity {
         userName = findViewById(R.id.nameEditText);
         userEmail = findViewById(R.id.emailEditText);
         userPassword = findViewById(R.id.passwordEditText);
+        userRepeatPassword = findViewById(R.id.repeatPasswordEditText);
 
         loginButton = findViewById(R.id.alreadyRegisterd);
 
@@ -46,6 +47,12 @@ public class Register extends AppCompatActivity {
 
         if(isDataEmpty)
             return;
+
+        if(!userPassword.getText().equals(userRepeatPassword.getText())) {
+            //TODO: custom error handler
+            Toast.makeText(this, "password's don't match", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if(!helpers.isPasswordValid(userPassword.getText().toString())) {
             //TODO: custom error handler

@@ -9,4 +9,5 @@
     <string name="hintEmail">Email</string>
     <string name="rent_your_vehicle_today">rent your vehicle today</string>
     <string name="fast_wheels">FAST WHEELS</string>
+    <string name="repeat_password">Repeat Password</string>
 </resources>
