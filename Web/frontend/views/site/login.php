@@ -2,40 +2,63 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-/** @var \common\models\LoginForm $model */
+/** @var \frontend\models\LoginForm $model */
 
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Log In';
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="container login-container">
+    <div class="row login-row">
+        <!-- Painel Esquerdo -->
+        <div class="col-md-6 login-left-panel">
+            <h2>Entre na sua conta</h2>
+            <p>Guarde e avalie todas as suas experiências</p>
+            <?= Html::a('Voltar', Yii::$app->homeUrl, ['class' => 'btn btn-secondary login-back-btn']) ?>
+        </div>
 
-    <p>Please fill out the following fields to login:</p>
+        <!-- Painel Direito -->
+        <div class="col-md-6 login-right-panel">
+            <div class="login-form-container">
+                <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                <!-- Formulário de Login -->
+                <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <!-- Campo Nome -->
+                <?= $form->field($model, 'username')->textInput([
+                    'placeholder' => 'Nome',
+                ])->label(false) ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <!-- Campo Palavra-passe -->
+                <?= $form->field($model, 'password')->passwordInput([
+                    'placeholder' => 'Palavra-passe',
+                ])->label(false) ?>
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="my-1 mx-0" style="color:#999;">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                    <br>
-                    Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
+                <!-- Checkbox Manter o Login -->
+                <div class="form-group login-checkbox-container">
+                    <?= $form->field($model, 'rememberMe')->checkbox(['label' => 'Manter o login']) ?>
                 </div>
 
+                <!-- Botão de Submissão -->
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Enviar', [
+                        'class' => 'btn btn-primary login-submit-btn',
+                        'name' => 'login-button',
+                    ]) ?>
                 </div>
 
-            <?php ActiveForm::end(); ?>
+                <?php ActiveForm::end(); ?>
+
+                <!-- Links adicionais -->
+                <div class="login-link">
+                    <p>Esqueceu a password? <?= Html::a('Recuperar password aqui', ['/site/request-password-reset']) ?></p>
+                </div>
+                <div class="login-link">
+                    <p>Ainda não criou conta? <?= Html::a('Criar conta aqui', ['/site/signup']) ?></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
