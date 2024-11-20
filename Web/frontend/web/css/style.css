@@ -1,0 +1,407 @@
+/* --------------------Estilo Geral Log In------------------ */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.container.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+.login-row {
+    flex: 1;
+    display: flex;
+}
+
+/* --------------------Estilo do Painel Esquerdo------------------ */
+
+.login-left-panel {
+    background-color: #2b2b2b;
+    color: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    border-radius: 15px 0 0 15px;
+}
+
+.login-left-panel h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.login-left-panel p {
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 30px;
+}
+
+.login-back-btn {
+    background-color: #3a3a3a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.login-back-btn:hover {
+    background-color: #505050;
+}
+
+/* --------------------Estilo do Painel Direito------------------ */
+
+.login-right-panel {
+    flex: 1;
+    background-color: #1c1c1c;
+    padding: 30px 40px;
+    border-radius: 0 15px 15px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.login-form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.login-form-container h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+/* --------------------Estilo dos Inputs e Botões------------------ */
+
+/* Campo de texto */
+.login-form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #3a3a3a;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.login-form-container input::placeholder {
+    color: #b0b0b0;
+}
+
+.login-form-container input:focus {
+    outline: 2px solid #4a90e2;
+}
+
+/* Checkbox */
+.login-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #c9c9c9;
+    margin-bottom: 20px;
+}
+
+.login-checkbox-container .form-check-input {
+    width: 16px;
+    height: 16px;
+    accent-color: #4a90e2;
+    border-radius: 3px;
+    margin-right: 20px;
+}
+
+.login-checkbox-container .form-check-label {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Botão de Enviar */
+.login-submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #3a3a3a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.login-submit-btn:hover {
+    background-color: #505050;
+}
+
+/* Links adicionais */
+.login-link {
+    font-size: 14px;
+    color: #b0b0b0;
+    margin-top: 20px;
+}
+
+.login-link a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* --------------------Estilo Geral Sign Up------------------ */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height: 100%;
+}
+
+.container.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+.signup-row {
+    flex: 1;
+    display: flex;
+}
+
+/* --------------------Estilo do Painel Esquerdo------------------ */
+
+.signup-left-panel {
+    background-color: #2b2b2b;
+    color: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    border-radius: 15px 0 0 15px;
+}
+
+.signup-left-panel h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.signup-left-panel p {
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 30px;
+}
+
+.signup-back-btn {
+    background-color: #3a3a3a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.signup-back-btn:hover {
+    background-color: #505050;
+}
+
+/* --------------------Estilo do Painel Direito------------------ */
+
+.signup-right-panel {
+    flex: 1;
+    background-color: #1c1c1c;
+    padding: 30px 40px;
+    border-radius: 0 15px 15px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.signup-form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.signup-form-container h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+/* --------------------Estilo dos Inputs e Botões------------------ */
+
+/* Campo de texto */
+.signup-form-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #3a3a3a;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.signup-form-container input::placeholder {
+    color: #b0b0b0;
+}
+
+.signup-form-container input:focus {
+    outline: 2px solid #4a90e2;
+}
+
+/* Ícones dentro dos campos */
+.signup-form-container .input-group-text {
+    background: none;
+    border: none;
+    color: #b0b0b0;
+}
+
+/* Checkbox */
+.signup-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #c9c9c9;
+    margin-bottom: 20px;
+}
+
+.signup-checkbox-container .form-check-input {
+    width: 16px;
+    height: 16px;
+    accent-color: #4a90e2;
+    border-radius: 3px;
+    margin-right: 20px;
+}
+
+.signup-checkbox-container .form-check-label {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Botão de Enviar */
+.signup-submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #3a3a3a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.signup-submit-btn:hover {
+    background-color: #505050;
+}
+
+/* Link de Login */
+.signup-login-link {
+    font-size: 14px;
+    color: #b0b0b0;
+    margin-top: 20px;
+}
+
+.signup-login-link a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+.signup-login-link a:hover {
+    text-decoration: underline;
+}
+
+/* --------------------Navbar------------------ */
+.navbar-container {
+    width: 100%;
+    height: auto;
+}
+
+.custom-navbar {
+    background-color: #1c1c1c;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.custom-navbar .navbar-brand {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #ddd;
+}
+
+.custom-navbar-nav {
+    display: flex;
+    gap: 15px;
+}
+
+.custom-navbar-nav .nav-link {
+    color: #fff;
+    font-size: 14px;
+}
+
+.custom-navbar-nav .nav-link:hover {
+    color: #ddd;
+}
+
+.logout-btn {
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    color: #ddd;
+}

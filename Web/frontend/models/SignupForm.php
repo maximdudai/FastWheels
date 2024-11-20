@@ -14,6 +14,9 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $confirmPassword;
+    public $termsAccepted;
+
 
 
     /**
@@ -22,20 +25,31 @@ class SignupForm extends Model
     public function rules()
     {
         return [
+            // Validação para o nome de utilizador
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este nome de utilizador já está a ser utilizado.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
+            // Validação para o email
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este endereço de email já está a ser utilizado.'],
 
+            // Validação para a palavra-passe
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+
+            // Validação para a confirmação da palavra-passe
+            ['confirmPassword', 'required'],
+            ['confirmPassword', 'compare', 'compareAttribute' => 'password', 'message' => 'As palavras-passe não coincidem.'],
+
+            // Validação para aceitação dos termos de utilização
+            ['termsAccepted', 'required', 'requiredValue' => 1, 'message' => 'Deve aceitar os termos de utilização.'],
         ];
+
     }
 
     /**

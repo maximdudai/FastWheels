@@ -7,29 +7,53 @@
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
-$this->title = 'Signup';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Sign Up';
 ?>
-<div class="site-signup">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="container signup-container">
+    <div class="row signup-row">
+        <!-- Painel Esquerdo -->
+        <div class="col-md-6 signup-left-panel">
+            <h2>Crie a sua conta</h2>
+            <p>Guarde e avalie todas as suas experiências</p>
+            <?= Html::a('Voltar', Yii::$app->homeUrl, ['class' => 'btn btn-secondary signup-back-btn']) ?>
+        </div>
 
-    <p>Please fill out the following fields to signup:</p>
+        <!-- Painel Direito -->
+        <div class="col-md-6 signup-right-panel">
+            <div class="signup-form-container">
+                <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+                <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <!-- Nome -->
+                <?= $form->field($model, 'username')->textInput(['placeholder' => 'Nome'])->label(false) ?>
 
-                <?= $form->field($model, 'email') ?>
+                <!-- Email -->
+                <?= $form->field($model, 'email')->textInput(['type' => 'email', 'placeholder' => 'Email'])->label(false) ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <!-- Palavra-passe -->
+                <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Palavra-passe'])->label(false) ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                <!-- Confirmar Palavra-passe -->
+                <?= $form->field($model, 'confirmPassword')->passwordInput(['placeholder' => 'Confirmar Palavra-passe'])->label(false) ?>
+
+                <!-- Checkbox de Termos de Utilização -->
+                <div class="form-group signup-checkbox-container">
+                    <?= $form->field($model, 'termsAccepted')->checkbox(['label' => 'Aceito os termos de utilização']) ?>
                 </div>
 
-            <?php ActiveForm::end(); ?>
+                <!-- Botão de Submeter -->
+                <div class="form-group signup-submit-group">
+                    <?= Html::submitButton('Enviar', ['class' => 'btn btn-primary signup-submit-btn', 'name' => 'signup-button']) ?>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+
+                <!-- Link para Login -->
+                <div class="signup-login-link">
+                    <p>Já tem uma conta? <?= Html::a('Inicie sessão aqui', ['/site/login']) ?></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
