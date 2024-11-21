@@ -2,17 +2,17 @@
 
 namespace backend\controllers;
 
+use common\models\Client;
 use common\models\LoginForm;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\Response;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -75,20 +75,32 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
-        $this->layout = 'blank';
-
+    
+        // $this->layout = 'blank';
+    
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+            $findAsClient = \common\models\Client::find()->where(['userId' => Yii::$app->user->id])->one();
+            if($findAsClient->roleId === 1) {
+                // allow only 'funcionario & administrador' roles
+                Yii::$app->user->logout(); // Log the user out
+                Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
+                return $this->redirect(['site/login']);
+            }
+
+            // Redirect to home or dashboard
             return $this->goBack();
         }
-
+    
         $model->password = '';
-
+    
         return $this->render('login', [
             'model' => $model,
         ]);
     }
+    
+    
 
     /**
      * Logout action.

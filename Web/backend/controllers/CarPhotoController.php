@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use common\models\CarPhoto;
-use backend\models\CarPhotoSearch;
 use yii\web\Controller;
+use backend\models\CarPhotoSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
