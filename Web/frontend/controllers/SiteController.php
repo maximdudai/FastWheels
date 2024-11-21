@@ -2,12 +2,13 @@
 
 namespace frontend\controllers;
 
+use backend\controllers\BaseController;
+use common\models\Client;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -15,11 +16,13 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\RoleSearch;
+use yii\debug\models\timeline\Search;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -68,6 +71,15 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionTestAuthManager()
+    {
+        $auth = \Yii::$app->authManager;
+        if ($auth === null) {
+            throw new \Exception('authManager component is not configured.');
+        }
+        return 'authManager is configured correctly.';
+    }
+
     /**
      * Displays homepage.
      *
@@ -88,18 +100,31 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
+    
+        // $this->layout = 'blank';
+    
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+            $findAsClient = \common\models\Client::find()->where(['userId' => Yii::$app->user->id])->one();
+            if($findAsClient->roleId !== 1){
+                // allow only 'client' role
+                Yii::$app->user->logout(); // Log the user out
+                Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
+                return $this->redirect(['site/login']);
+            }
+
+            // Redirect to home or dashboard
             return $this->goBack();
         }
-
+    
         $model->password = '';
-
+    
         return $this->render('login', [
             'model' => $model,
         ]);
     }
+    
 
     /**
      * Logs out the current user.

@@ -2,9 +2,14 @@
 
 namespace frontend\models;
 
+use backend\models\RoleSearch;
+use common\models\Client;
+use common\models\Role as ModelsRole;
 use Yii;
 use yii\base\Model;
 use common\models\User;
+use frontend\models\RoleSearch as ModelsRoleSearch;
+use yii\rbac\Role;
 
 /**
  * Signup form
@@ -62,15 +67,44 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+    
+        // Create and save user in User table
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
+        $user->status = User::STATUS_ACTIVE;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+        $user->status = 10;
 
-        return $user->save() && $this->sendEmail($user);
+        if (!$user->save()) {
+            // Log or display validation errors
+            \Yii::error($user->getErrors(), 'signup');
+            return null;
+        }
+
+        $auth = \Yii::$app->authManager;
+        $authorRole = $auth->getRole('client');
+        $auth->assign($authorRole, $user->getId());
+
+        $client = new Client();
+        $client->userId = $user->id;
+        $client->name = $this->username;
+        $client->email = $this->email;
+        $client->phone = 'none';
+        $client->roleId = 1;
+        $client->createdAt = date('Y-m-d H:i:s');
+        $client->balance = 0;
+        $client->iban = 'none';
+
+        if(!$client->save()) {
+            // Log or display validation errors
+            \Yii::error($client->getErrors(), 'signup');
+            return null;
+        }
+
+        return $client->save() && $this->sendEmail($user);
     }
 
     /**
