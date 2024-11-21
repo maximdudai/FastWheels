@@ -46,8 +46,8 @@
 //                        ]
 //                    ],
 //                    ['label' => 'Simple Link', 'icon' => 'th', 'badge' => '<span class="right badge badge-danger">New</span>'],
-                    ['label' => 'Funcionarios', 'icon' => 'fa-regular fa-user'],
-                    ['label' => 'Clientes', 'icon' => 'fa-regular fa-user'],
+                    ['label' => 'Funcionarios', 'icon' => 'fa-regular fa-user', 'url' => ['client/index']],
+                    ['label' => 'Clientes', 'icon' => 'fa-regular fa-user', 'url' => ['client/index']],
                     ['label' => 'Veiculos', 'icon' => 'fa-solid fa-car'],
                     ['label' => 'Pedidos de Support', 'icon' => 'fa-solid fa-headset'],
                     // INICIO SECCAO: Yii2 PROVIDED (EXEMPLO)

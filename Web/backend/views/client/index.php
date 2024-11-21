@@ -34,10 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'phone',
             'roleId',
-            //'createdAt',
-            //'balance',
-            //'iban',
-            //'userId',
+            'createdAt',
+            'balance',
+            'iban',
+            // 'userId',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Client $model, $key, $index, $column) {
