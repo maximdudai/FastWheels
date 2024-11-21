@@ -85,7 +85,7 @@ class SiteController extends BaseController
             if($findAsClient->roleId === 1) {
                 // allow only 'funcionario & administrador' roles
                 Yii::$app->user->logout(); // Log the user out
-                Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
+                Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the back office.');
                 return $this->redirect(['site/login']);
             }
 

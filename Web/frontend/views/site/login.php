@@ -23,6 +23,13 @@ $this->title = 'Log In';
             <div class="login-form-container">
                 <h1><?= Html::encode($this->title) ?></h1>
 
+                <!-- Error Messages -->
+                <?php if (Yii::$app->session->hasFlash('error')): ?>
+                    <div class="alert alert-danger">
+                        <?= Yii::$app->session->getFlash('error') ?>
+                    </div>
+                <?php endif; ?>
+
                 <!-- Formulário de Login -->
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
@@ -62,3 +69,4 @@ $this->title = 'Log In';
         </div>
     </div>
 </div>
+
