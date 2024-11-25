@@ -48,7 +48,7 @@ public class Register extends AppCompatActivity {
         if(isDataEmpty)
             return;
 
-        if(!userPassword.getText().equals(userRepeatPassword.getText())) {
+        if(!userPassword.getText().toString().equals(userRepeatPassword.getText().toString())) {
             //TODO: custom error handler
             Toast.makeText(this, "password's don't match", Toast.LENGTH_SHORT).show();
             return;
@@ -59,7 +59,7 @@ public class Register extends AppCompatActivity {
             Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(helpers.isEmailValid(userEmail.getText().toString())) {
+        if(!helpers.isEmailValid(userEmail.getText().toString())) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
             return;
