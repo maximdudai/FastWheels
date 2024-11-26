@@ -36,10 +36,12 @@ class ClientController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionEmployees()
     {
         $searchModel = new ClientSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider->query->andWhere(['roleId' => 2, 'roleId' => 3]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -47,6 +49,20 @@ class ClientController extends Controller
         ]);
     }
 
+    public function actionClients()
+    {
+        $searchModel = new ClientSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider->query->andWhere(['roleId' => 1]);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    
     /**
      * Displays a single Client model.
      * @param int $id ID

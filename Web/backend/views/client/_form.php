@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'iban')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'userId')->textInput() ?>
+    <!-- <?= $form->field($model, 'userId')->textInput() ?> -->
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
