@@ -12,6 +12,9 @@ class m241116_174250_init_rbac extends Migration
      */
     public function safeUp()
     {
+        /*
+         * RBAC  will now be managed by RBac controller and not migrations
+
         $auth = Yii::$app->authManager;
 
         # ### PERMISSIONS ### #
@@ -64,6 +67,7 @@ class m241116_174250_init_rbac extends Migration
         // usually implemented in your User model.
 //        $auth->assign($author, 2);
 //        $auth->assign($admin, 1);
+        */
     }
 
     /**
@@ -71,10 +75,12 @@ class m241116_174250_init_rbac extends Migration
      */
     public function safeDown()
     {
+        /*
         $auth = Yii::$app->authManager;
 
         $auth->removeAll();
         return false;
+        */
     }
 
     /*
