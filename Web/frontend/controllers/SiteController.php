@@ -106,7 +106,9 @@ class SiteController extends BaseController
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
-            $findAsClient = \common\models\Client::find()->where(['userId' => Yii::$app->user->id])->one();
+            $findAsClient = Client::find()->where(['userId' => Yii::$app->user->id])->one();
+
+
             if($findAsClient->roleId !== 1){
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out

@@ -18,6 +18,8 @@ class ProfileController extends Controller
                     ],
                     [
                         'allow' => false,
+                        'roles' => ['admin', 'funcionario'], 
+
                     ],
                 ],
             ],
