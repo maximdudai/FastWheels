@@ -35,9 +35,9 @@ class ProfileController extends Controller
     {
         // Access the logged-in user's ID
         $userId = Yii::$app->user->id;
-var_dump($userId);
+        // var_dump($userId);
 
-        dd(\Yii::$app->authManager->getRolesByUser($userId));
+        // dd(\Yii::$app->authManager->getRolesByUser($userId));
 
         // Use the user ID to fetch the client data
         $searchModel = new ClientSearch();
