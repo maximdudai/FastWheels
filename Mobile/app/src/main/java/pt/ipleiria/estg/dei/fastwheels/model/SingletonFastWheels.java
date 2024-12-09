@@ -1,0 +1,86 @@
+package pt.ipleiria.estg.dei.fastwheels.model;
+import android.content.Context;
+
+import java.util.ArrayList;
+
+public class SingletonFastWheels {
+
+    private ArrayList<Vehicle> vehicles; // Lista de veículos
+    private static SingletonFastWheels instance = null; // Instância única
+
+    private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
+
+    // Método para obter a instância única do Singleton
+    public static synchronized SingletonFastWheels getInstance(Context context) {
+        if (instance == null) {
+            instance = new SingletonFastWheels(context);
+        }
+        return instance;
+    }
+
+    // Construtor privado
+    private SingletonFastWheels(Context context) {
+        vehicles = new ArrayList<>();
+        vehicleDbHelper = new VehicleDbHelper(context); // Inicializar o helper de banco de dados
+    }
+
+    // Método para carregar todos os veículos do banco de dados
+    public ArrayList<Vehicle> getVehiclesDb() {
+        if (vehicles == null || vehicles.isEmpty()) {
+            vehicles = vehicleDbHelper.getAllVehiclesDb();
+        }
+        return new ArrayList<>(vehicles); // Retorna uma nova lista para proteger os dados originais
+    }
+
+    // Obter veículo específico pelo ID
+    public Vehicle getVehicleById(int id) {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getId() == id) {
+                return vehicle;
+            }
+        }
+        return null; // Retorna null se o veículo não for encontrado
+    }
+
+    // Adicionar veículo ao banco de dados e à lista
+    public void addVehicleDb(Vehicle vehicle) {
+        Vehicle auxVehicle = vehicleDbHelper.addVehicleDb(vehicle);
+        if (auxVehicle != null) {
+            vehicles.add(auxVehicle);
+            vehicles = vehicleDbHelper.getAllVehiclesDb(); // Recarrega a lista
+            System.out.println("Veículo adicionado com sucesso!");
+        } else {
+            System.err.println("Erro ao adicionar veículo!");
+        }
+    }
+
+    public void editVehicleDb(Vehicle vehicle) {
+        if (vehicleDbHelper.editVehicleDb(vehicle)) { // Tenta editar o veículo no banco de dados
+            vehicles = vehicleDbHelper.getAllVehiclesDb(); // Atualiza a lista de veículos do banco
+            System.out.println("Veículo editado com sucesso!");
+        } else {
+            System.err.println("Erro ao editar veículo!");
+        }
+    }
+
+
+    public void removeVehicleDb(int vehicleId) {
+        if (vehicleDbHelper.removeVehicleDb(vehicleId)) { // Tenta remover o veículo pelo ID
+            vehicles = vehicleDbHelper.getAllVehiclesDb(); // Atualiza a lista de veículos
+            System.out.println("Veículo removido com sucesso!");
+        } else {
+            System.err.println("Erro ao remover veículo!");
+        }
+    }
+
+    // Consultar veículos por marca
+    public ArrayList<Vehicle> getVehiclesByMark(String mark) {
+        ArrayList<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getMark().equalsIgnoreCase(mark)) {
+                filteredList.add(vehicle);
+            }
+        }
+        return filteredList;
+    }
+}

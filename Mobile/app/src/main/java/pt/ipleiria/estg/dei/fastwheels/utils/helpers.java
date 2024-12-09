@@ -1,6 +1,8 @@
 package pt.ipleiria.estg.dei.fastwheels.utils;
 
+import android.content.Context;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,5 +23,9 @@ public class helpers {
         Matcher matcher = pattern.matcher(password);
 
         return matcher.matches();
+    }
+
+    public static void showError(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

@@ -10,4 +10,7 @@
     <string name="rent_your_vehicle_today">rent your vehicle today</string>
     <string name="fast_wheels">FAST WHEELS</string>
     <string name="repeat_password">Repeat Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">search_button</string>
 </resources>
