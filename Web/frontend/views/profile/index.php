@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 <div class="row mt-3">
 
-                                    <?php $form = ActiveForm::begin(['id' => 'personal-data']); ?>
+                                    <?php $form = ActiveForm::begin(['id' => 'userdata-form']); ?>
                                     <div class="row mb-3 d-flex align-items-center">
                                         <div class="col-4 text-end fw-bold"><?= 'Name' ?></div>
                                         <div class="col-8">
@@ -111,6 +111,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="row mb-3 d-flex align-items-center">
                                         <div class="col-4 text-end fw-bold"><?= 'Balance' ?></div>
                                         <div class="col-8"><?= Html::encode($dataProvider->balance ?? '-') ?></div>
+                                    </div>
+
+                                    <div class="row mb-3 d-flex align-items-center justify-content-end">
+                                        <?= Html::submitButton('Update', ['class' => 'btn btn-primary', 'name' => 'update-button']) ?>
                                     </div>
                                     <?php ActiveForm::end(); ?>
                                 </div>

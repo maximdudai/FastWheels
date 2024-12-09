@@ -40,7 +40,7 @@ AppAsset::register($this);
             ['label' => 'Contacto', 'url' => ['/site/contact']],
             ['label' => 'Veículos', 'url' => ['/site/vehicles']],
             ['label' => 'Perguntas?', 'url' => ['/site/faq']],
-            ['label' => 'profile', 'url' => ['/profile/index']],
+            ['label' => 'profile', 'url' => ['/profile']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : (
