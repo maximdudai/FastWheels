@@ -6,6 +6,10 @@ use yii\console\Controller;
 
 class RbacController extends Controller
 {
+
+    // yii rbac/init
+
+
     public function actionInit()
     {
         $auth = Yii::$app->authManager;
