@@ -1,10 +1,10 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnMyVehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
