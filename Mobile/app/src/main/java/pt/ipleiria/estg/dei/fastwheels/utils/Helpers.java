@@ -7,7 +7,7 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class helpers {
+public class Helpers {
 
     public static boolean isEmailValid(String email) {
         if(email == null)

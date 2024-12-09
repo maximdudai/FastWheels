@@ -1,11 +1,12 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
-import static pt.ipleiria.estg.dei.fastwheels.utils.helpers.showError;
+import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showError;
 
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +18,8 @@ import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
-    private EditText etMark, etModel, etYear, etDoors, etLocationX, etLocationY, etAvailableFrom, etAvailableTo;
+    private EditText etBrand, etModel, etYear, etDoors, etLocationX, etLocationY, etAvailableFrom, etAvailableTo;
+    private ListView lvImgVehicle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vehicle_details);
 
         // Referências para os campos da UI
-        etMark = findViewById(R.id.etMark);
+        etBrand = findViewById(R.id.etBrand);
         etModel = findViewById(R.id.etModel);
         etYear = findViewById(R.id.etYear);
         etDoors = findViewById(R.id.etDoors);
@@ -33,6 +35,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         etLocationY = findViewById(R.id.etLocationY);
         etAvailableFrom = findViewById(R.id.etAvailableFrom);
         etAvailableTo = findViewById(R.id.etAvailableTo);
+        lvImgVehicle = findViewById(R.id.lvImgVehicle);
 
         // Obter o ID do veículo passado pela Intent
         int vehicleId = getIntent().getIntExtra("VEHICLE_ID", -1);
@@ -43,7 +46,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
             if (vehicle != null) {
                 // Preenche os campos com os dados do veículo
-                etMark.setText(vehicle.getMark());
+                etBrand.setText(vehicle.getMark());
                 etModel.setText(vehicle.getCarModel());
                 etYear.setText(String.valueOf(vehicle.getCarYear()));
                 etDoors.setText(String.valueOf(vehicle.getCarDoors()));

@@ -2,18 +2,14 @@ package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -74,7 +70,7 @@ public class VehicleListAdapter extends BaseAdapter {
 
         public ViewHolderVehicle(View view) {
             imgVehicle = view.findViewById(R.id.imgVehicle);
-            tvMark = view.findViewById(R.id.tvMark);
+            tvMark = view.findViewById(R.id.tvBrand);
             tvModel = view.findViewById(R.id.tvModel);
             tvYear = view.findViewById(R.id.tvYear);
             tvLocation = view.findViewById(R.id.tvLocation);

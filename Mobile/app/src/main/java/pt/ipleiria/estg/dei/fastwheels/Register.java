@@ -7,13 +7,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import pt.ipleiria.estg.dei.fastwheels.utils.helpers;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class Register extends AppCompatActivity {
 
@@ -54,12 +50,12 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        if(!helpers.isPasswordValid(userPassword.getText().toString())) {
+        if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!helpers.isEmailValid(userEmail.getText().toString())) {
+        if(!Helpers.isEmailValid(userEmail.getText().toString())) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
             return;

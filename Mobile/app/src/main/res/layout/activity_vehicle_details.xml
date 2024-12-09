@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".VehicleDetailsActivity">
+
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#1A1A1A"
@@ -22,20 +21,22 @@
             android:padding="16dp">
 
             <!-- Marca -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Marca"
                 android:textColor="#CCCCCC"
                 android:textSize="14sp" />
+
             <EditText
-                android:id="@+id/etMark"
+                android:id="@+id/etBrand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#333333"
                 android:editable="false"
-                android:textColor="#FFFFFF"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
 
             <!-- Modelo -->
             <TextView
@@ -44,22 +45,23 @@
                 android:text="Modelo"
                 android:textColor="#CCCCCC"
                 android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/etModel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#333333"
                 android:editable="false"
-                android:textColor="#FFFFFF"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
 
             <!-- Ano e Número de Portas -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
-                android:paddingTop="8dp">
+                android:paddingTop="8dp"
+                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -73,14 +75,15 @@
                         android:text="Ano"
                         android:textColor="#CCCCCC"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/etYear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#333333"
                         android:editable="false"
-                        android:textColor="#FFFFFF"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -96,14 +99,15 @@
                         android:text="Nº Portas"
                         android:textColor="#CCCCCC"
                         android:textSize="14sp" />
+
                     <EditText
                         android:id="@+id/etDoors"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#333333"
                         android:editable="false"
-                        android:textColor="#FFFFFF"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -111,67 +115,90 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
                 android:text="Localização X"
                 android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:paddingTop="8dp" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/etLocationX"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#333333"
                 android:editable="false"
-                android:textColor="#FFFFFF"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
                 android:text="Localização Y"
                 android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:paddingTop="8dp" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/etLocationY"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#333333"
                 android:editable="false"
-                android:textColor="#FFFFFF"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
 
             <!-- Disponibilidade -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
                 android:text="Disponível de:"
                 android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:paddingTop="8dp" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/etAvailableFrom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#333333"
                 android:editable="false"
-                android:textColor="#FFFFFF"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
                 android:text="Disponível até:"
                 android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:paddingTop="8dp" />
+                android:textSize="14sp" />
+
             <EditText
                 android:id="@+id/etAvailableTo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#333333"
                 android:editable="false"
-                android:textColor="#FFFFFF"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="Fotos do Veículo:"
+                android:textColor="#CCCCCC"
+                android:textSize="14sp" />
+
+            <ListView
+                android:id="@+id/lvImgVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="1dp"
+                android:focusable="true"
+                android:focusableInTouchMode="false" />
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

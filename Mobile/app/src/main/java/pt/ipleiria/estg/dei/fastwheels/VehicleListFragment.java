@@ -1,7 +1,5 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
-import static pt.ipleiria.estg.dei.fastwheels.utils.helpers.showError;
-
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
@@ -9,17 +7,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -49,7 +44,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        lvVehicles = view.findViewById(R.id.lv_vehicles);
+        lvVehicles = view.findViewById(R.id.lvImgVehicle);
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
         // Configuração da ListView

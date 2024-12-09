@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 public class Vehicle {
     private int id;                  // ID do veículo
     private int clientId;            // ID do cliente associado
-    private String mark;             // Marca do carro
+    private String brand;             // Marca do carro
     private String Model;         // Modelo do carro
     private int Year;             // Ano do carro
     private int Doors;            // Número de portas
@@ -21,12 +21,12 @@ public class Vehicle {
     }
 
     // Construtor
-    public Vehicle(int id, int clientId, String mark, String carModel, int carYear, int carDoors,
+    public Vehicle(int id, int clientId, String brand, String carModel, int carYear, int carDoors,
                    Timestamp createdAt, boolean status, Timestamp availableFrom, Timestamp availableTo,
                    Location location) { // Adicionado o parâmetro location
         this.id = id;
         this.clientId = clientId;
-        this.mark = mark;
+        this.brand = brand;
         this.Model = carModel;
         this.Year = carYear;
         this.Doors = carDoors;
@@ -55,11 +55,11 @@ public class Vehicle {
     }
 
     public String getMark() {
-        return mark;
+        return brand;
     }
 
     public void setMark(String mark) {
-        this.mark = mark;
+        this.brand = mark;
     }
 
     public String getCarModel() {

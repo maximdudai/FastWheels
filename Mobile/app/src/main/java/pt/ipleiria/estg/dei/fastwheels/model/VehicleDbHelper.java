@@ -13,13 +13,13 @@ import java.util.ArrayList;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "dbVehicles";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private final SQLiteDatabase db;
 
     private static final String TABLE_NAME = "vehicles";
     private static final String ID = "id";
-    private static final String MARK = "mark";
+    private static final String BRAND = "brand";
     private static final String MODEL = "model";
     private static final String YEAR = "year";
     private static final String DOORS = "doors";
@@ -37,12 +37,12 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createVehicleTable = "CREATE TABLE " + TABLE_NAME + " (" +
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                MARK + " TEXT NOT NULL, " +
+                BRAND + " TEXT NOT NULL, " +
                 MODEL + " TEXT NOT NULL, " +
                 YEAR + " INTEGER NOT NULL, " +
                 DOORS + " INTEGER NOT NULL, " +
-                LATITUDE + " REAL, " +
-                LONGITUDE + " REAL, " +
+                LATITUDE + " FLOAT, " +
+                LONGITUDE + " FLOAT, " +
                 AVAILABLE_FROM + " TEXT, " +
                 AVAILABLE_TO + " TEXT);";
 
@@ -57,7 +57,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
 
     public Vehicle addVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
-        values.put(MARK, vehicle.getMark());
+        values.put(BRAND, vehicle.getMark());
         values.put(MODEL, vehicle.getCarModel());
         values.put(YEAR, vehicle.getCarYear());
         values.put(DOORS, vehicle.getCarDoors());
@@ -82,7 +82,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
 
     public boolean editVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
-        values.put(MARK, vehicle.getMark());
+        values.put(BRAND, vehicle.getMark());
         values.put(MODEL, vehicle.getCarModel());
         values.put(YEAR, vehicle.getCarYear());
         values.put(DOORS, vehicle.getCarDoors());
@@ -110,7 +110,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             Vehicle vehicle = new Vehicle();
             vehicle.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
-            vehicle.setMark(cursor.getString(cursor.getColumnIndexOrThrow(MARK)));
+            vehicle.setMark(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
             vehicle.setCarModel(cursor.getString(cursor.getColumnIndexOrThrow(MODEL)));
             vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
             vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
@@ -143,7 +143,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
             do {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
-                vehicle.setMark(cursor.getString(cursor.getColumnIndexOrThrow(MARK)));
+                vehicle.setMark(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
                 vehicle.setCarModel(cursor.getString(cursor.getColumnIndexOrThrow(MODEL)));
                 vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
                 vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
