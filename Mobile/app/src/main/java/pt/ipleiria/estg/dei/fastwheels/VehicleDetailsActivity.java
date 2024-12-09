@@ -11,8 +11,11 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import pt.ipleiria.estg.dei.fastwheels.adapters.ImageListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
@@ -65,6 +68,16 @@ public class VehicleDetailsActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
                 etAvailableFrom.setText(dateFormat.format(vehicle.getAvailableFrom()));
                 etAvailableTo.setText(dateFormat.format(vehicle.getAvailableTo()));
+
+                // Exemplo de lista de imagens (IDs de recursos)
+                List<Integer> imageList = new ArrayList<>();
+                imageList.add(R.drawable.car_test);
+                imageList.add(R.drawable.car_test);
+                imageList.add(R.drawable.car_test);
+
+                // Configurar o adaptador
+                ImageListAdapter adapter = new ImageListAdapter(this, imageList);
+                lvImgVehicle.setAdapter(adapter);
             } else {
                 // Lida com a ausência do veículo correspondente
                 showError(this,"O veículo não foi encontrado.");
