@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import pt.ipleiria.estg.dei.fastwheels.utils.helpers;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class Login extends AppCompatActivity {
 
@@ -66,12 +66,12 @@ public class Login extends AppCompatActivity {
         if(isDataEmpty)
             return;
 
-        if(!helpers.isPasswordValid(userPassword.getText().toString())) {
+        if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!helpers.isEmailValid(userEmail.getText().toString())) {
+        if(!Helpers.isEmailValid(userEmail.getText().toString())) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
             return;

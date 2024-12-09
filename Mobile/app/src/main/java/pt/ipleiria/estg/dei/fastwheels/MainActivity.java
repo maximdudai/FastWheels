@@ -1,17 +1,22 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnMyVehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,5 +37,15 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(notificacao1);
 
         Toast.makeText(this, ""+ notificacao1, Toast.LENGTH_SHORT).show();
+
+        loadFragment(new VehicleListFragment());
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // Gerenciar a transação do fragmento com suporte a addToBackStack
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
     }
 }

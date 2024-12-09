@@ -40,12 +40,13 @@ AppAsset::register($this);
             ['label' => 'Contacto', 'url' => ['/site/contact']],
             ['label' => 'Veículos', 'url' => ['/site/vehicles']],
             ['label' => 'Perguntas?', 'url' => ['/site/faq']],
+            ['label' => 'profile', 'url' => ['/profile']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline'])
-                . Html::submitButton('Logout (' . Yii::$app->user->identity->username . ')', ['class' => 'btn btn-link logout-btn text-decoration-none'])
+                . Html::submitButton(Yii::$app->user->identity->username, ['class' => 'btn btn-link logout-btn text-decoration-none'])
                 . Html::endForm()
                 . '</li>'
             ),
@@ -55,7 +56,7 @@ AppAsset::register($this);
     ?>
 </header>
 
-<main role="main" class="flex-shrink-0">
+<main role="main" class="flex-shrink-0" style="width: 100%;">
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
