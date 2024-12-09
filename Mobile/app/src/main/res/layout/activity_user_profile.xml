@@ -7,4 +7,169 @@
     android:layout_height="match_parent"
     tools:context=".UserProfile">
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- User Info Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#2D2D2D"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_search"
+                    android:layout_marginEnd="16dp"
+                    app:tint="#99ff65" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Maxim Dudai"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="maxim.dudai01@gmail.com"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Locador\n0 veículos adicionados"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Log Out"
+                    android:background="#8B0000"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <!-- Action Buttons Section -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:rowCount="1"
+                android:layout_marginBottom="16dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="#2D2D2D"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="#99ff65" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PASSWORD"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginTop="8dp"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="#2D2D2D"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="#99ff65" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="EMAIL"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginTop="8dp"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#2D2D2D"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="#99ff65" />
+
+                    <TextView
+                        android:id="@+id/notification_badge"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="#FF0000"
+                        android:textColor="#FFFFFF"
+                        android:gravity="center"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:text="1"
+                        android:layout_marginEnd="-10dp"
+                        android:layout_marginTop="-10dp"
+                        android:layout_gravity="end"
+                        android:padding="2dp"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+            </GridLayout>
+
+            <!-- Assistance Button -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Assistência"
+                android:background="#2D2D2D"
+                android:textColor="#FFFFFF"
+                android:drawableStart="@drawable/ic_search"
+                android:padding="16dp" />
+        </LinearLayout>
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

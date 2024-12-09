@@ -61,42 +61,45 @@ public class Login extends AppCompatActivity {
 
     public void handleLoginAccount(View v) {
 
-        boolean isDataEmpty = userEmail.length() == 0 && userPassword.length() == 0;
-
-        if(isDataEmpty)
-            return;
-
-        if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
-            //TODO: custom error handler
-            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(!Helpers.isEmailValid(userEmail.getText().toString())) {
-            //TODO: custom error handler
-            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        //TODO: Query to database (POST) to check if user exists
-
-        if (keepLoggedInCheckbox.isChecked()) {
-            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(KEY_KEEP_LOGGED_IN, true);
-            editor.putString(KEY_EMAIL, userEmail.getText().toString());
-            editor.putString(KEY_PASSWORD, userPassword.getText().toString());
-            editor.apply();
-        } else {
-            // Remover credenciais caso não queira manter o login automático
-            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-        }
-
-        // Redirecionar para a MainActivity
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        startActivity(mainActivity);
-        finish();
+        Intent toProfile = new Intent(this, UserProfile.class);
+        startActivity(toProfile);
+//
+//        boolean isDataEmpty = userEmail.length() == 0 && userPassword.length() == 0;
+//
+//        if(isDataEmpty)
+//            return;
+//
+//        if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
+//            //TODO: custom error handler
+//            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if(!Helpers.isEmailValid(userEmail.getText().toString())) {
+//            //TODO: custom error handler
+//            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        //TODO: Query to database (POST) to check if user exists
+//
+//        if (keepLoggedInCheckbox.isChecked()) {
+//            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putBoolean(KEY_KEEP_LOGGED_IN, true);
+//            editor.putString(KEY_EMAIL, userEmail.getText().toString());
+//            editor.putString(KEY_PASSWORD, userPassword.getText().toString());
+//            editor.apply();
+//        } else {
+//            // Remover credenciais caso não queira manter o login automático
+//            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.clear();
+//            editor.apply();
+//        }
+//
+//        // Redirecionar para a MainActivity
+//        Intent mainActivity = new Intent(this, MainActivity.class);
+//        startActivity(mainActivity);
+            finish();
     }
 }
