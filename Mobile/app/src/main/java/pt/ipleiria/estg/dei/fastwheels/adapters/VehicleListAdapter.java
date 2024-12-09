@@ -2,10 +2,12 @@ package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,63 +20,85 @@ import java.util.ArrayList;
 import pt.ipleiria.estg.dei.fastwheels.R;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
-public class VehicleListAdapter extends ArrayAdapter<Vehicle> {
+public class VehicleListAdapter extends BaseAdapter {
 
-    private final Context context;
-    private final ArrayList<Vehicle> vehicles;
+    private Context context;
+    private LayoutInflater inflater;
+    private ArrayList<Vehicle> vehicles;
 
-    public VehicleListAdapter(@NonNull Context context, ArrayList<Vehicle> vehicles) {
-        super(context, R.layout.vehicle_list_item, vehicles);
+    public VehicleListAdapter(Context context, ArrayList<Vehicle> vehicles) {
         this.context = context;
         this.vehicles = vehicles;
     }
 
+    @Override
+    public int getCount() {
+        return vehicles.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return vehicles.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return vehicles.get(i).getId();
+    }
+
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (inflater == null) {
+            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.vehicle_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.vehicle_list_item, null);
         }
 
-        // Obter o veículo na posição atual
-        Vehicle vehicle = vehicles.get(position);
-
-        // Referenciar os elementos de UI do layout vehicle_item.xml
-        ImageView imgVehicle = convertView.findViewById(R.id.imgVehicle);
-        TextView tvMark = convertView.findViewById(R.id.tvMark);
-        TextView tvModel = convertView.findViewById(R.id.tvModel);
-        TextView tvYear = convertView.findViewById(R.id.tvYear);
-        TextView tvLocation = convertView.findViewById(R.id.tvLocation);
-        TextView tvRating = convertView.findViewById(R.id.tvRating);
-        TextView tvTrips = convertView.findViewById(R.id.tvTrips);
-        Button btnRentVehicle = convertView.findViewById(R.id.btnRentVehicle);
-
-        // Configurar os dados do veículo
-        imgVehicle.setImageResource(R.drawable.car_test); // Substitua com imagens dinâmicas, se possível
-        tvMark.setText(vehicle.getMark());
-        tvModel.setText(vehicle.getCarModel());
-        tvYear.setText(String.valueOf(vehicle.getCarYear()));
-
-        // Configurar localização
-        Location location = vehicle.getLocation();
-        if (location != null) {
-            String locationText = "Lat: " + location.getLatitude() + ", Long: " + location.getLongitude();
-            tvLocation.setText(locationText);
-        } else {
-            tvLocation.setText("Location not available");
+        ViewHolderVehicle viewHolder = (ViewHolderVehicle) convertView.getTag();
+        if (viewHolder == null) {
+            viewHolder = new ViewHolderVehicle(convertView);
+            convertView.setTag(viewHolder);
         }
 
-        // Configurar rating (exemplo estático; adapte conforme necessário)
-        tvRating.setText("0.0"); // Exemplo: substituir por vehicle.getRating(), se existir
-        tvTrips.setText("0 trips"); // Exemplo: substituir por trips reais, se aplicável
-
-        // Configurar o botão "Rent Vehicle"
-        btnRentVehicle.setOnClickListener(v -> {
-            // Ação para alugar veículo, por exemplo, abrir detalhes ou enviar requisição
-            // Exemplo de um Toast:
-            // Toast.makeText(context, "Renting vehicle: " + vehicle.getMark(), Toast.LENGTH_SHORT).show();
-        });
-
+        viewHolder.update(vehicles.get(position));
         return convertView;
     }
+
+    private class ViewHolderVehicle {
+        private ImageView imgVehicle;
+        private TextView tvMark, tvModel, tvYear, tvLocation, tvRating, tvTrips;
+
+        public ViewHolderVehicle(View view) {
+            imgVehicle = view.findViewById(R.id.imgVehicle);
+            tvMark = view.findViewById(R.id.tvMark);
+            tvModel = view.findViewById(R.id.tvModel);
+            tvYear = view.findViewById(R.id.tvYear);
+            tvLocation = view.findViewById(R.id.tvLocation);
+            tvRating = view.findViewById(R.id.tvRating);
+            tvTrips = view.findViewById(R.id.tvTrips);
+        }
+
+        public void update(Vehicle vehicle) {
+            imgVehicle.setImageResource(R.drawable.car_test); // Replace with dynamic image if available
+            tvMark.setText(vehicle.getMark());
+            tvModel.setText(vehicle.getCarModel());
+            tvYear.setText(String.valueOf(vehicle.getCarYear()));
+
+            Location location = vehicle.getLocation();
+            if (location != null) {
+                String locationText = "Lat: " + location.getLatitude() + ", Long: " + location.getLongitude();
+                tvLocation.setText(locationText);
+            } else {
+                tvLocation.setText("Location not available");
+            }
+
+            tvRating.setText("0.0"); // Replace with actual rating if available
+            tvTrips.setText("0 trips"); // Replace with actual trip count if available
+        }
+    }
+
 }

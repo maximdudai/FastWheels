@@ -128,15 +128,6 @@
             android:layout_width="match_parent"
             android:layout_height="47dp" />
 
-        <Button
-            android:id="@+id/btnRentVehicle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#00E5FF"
-            android:padding="8dp"
-            android:text="Rent Vehicle"
-            android:textColor="#000000"
-            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

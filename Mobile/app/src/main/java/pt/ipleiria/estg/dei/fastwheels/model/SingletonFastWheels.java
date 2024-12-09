@@ -21,7 +21,7 @@ public class SingletonFastWheels {
     // Construtor privado
     private SingletonFastWheels(Context context) {
         vehicles = new ArrayList<>();
-        vehicleDbHelper = new VehicleDbHelper(context); // Inicializar o helper de banco de dados
+        vehicleDbHelper = new VehicleDbHelper(context); // Inicializar o helper da base de dados
     }
 
     // Método para carregar todos os veículos do banco de dados

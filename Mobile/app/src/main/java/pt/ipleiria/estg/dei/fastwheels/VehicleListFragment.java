@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -50,24 +53,20 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
         // Configuração da ListView
-        VehicleListAdapter adapter = new VehicleListAdapter(getContext(), vehicleList);
-        lvVehicles.setAdapter(adapter);
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList));
+        Log.d("VehicleListFragment", "Adapter set with " + vehicleList.size() + " items.");
 
-        // Configura o evento de clique
-        lvVehicles.setOnItemClickListener((parent, view1, position, id) -> {
-            Vehicle selectedVehicle = (Vehicle) adapter.getItem(position);
-            Log.d("VehicleListFragment", "Veículo selecionado: " + selectedVehicle.getId());
+        lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("VehicleListFragment", "Item clicked, position: " + i + ", id: " + l);
+                Toast.makeText(getContext(), "Clicked position: " + i + ", ID: " + l, Toast.LENGTH_SHORT).show();
 
-            // Verifique se o ID é válido
-            if (selectedVehicle != null) {
                 Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
-                intent.putExtra("VEHICLE_ID", selectedVehicle.getId());
+                intent.putExtra("VEHICLE_ID", (int) l);
                 startActivity(intent);
-            } else {
-                showError(getContext(), "Veículo inválido");
             }
         });
-
         return view;
     }
 
@@ -110,5 +109,29 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList));
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void addNewVehicle() {
+        // Cria um novo veículo com todos os dados necessários
+        Vehicle newVehicle = new Vehicle();
+
+        // Definindo valores para os atributos obrigatórios
+        newVehicle.setId(0); // Define um ID padrão (ou gere um ID único se necessário)
+        newVehicle.setClientId(123); // Substitua por um ID válido de cliente
+        newVehicle.setMark("Nissan"+" ");
+        newVehicle.setCarModel("GTR");
+        newVehicle.setCarYear(2024);
+        newVehicle.setCarDoors(4); // Número de portas
+        newVehicle.setCreatedAt(new Timestamp(System.currentTimeMillis())); // Data atual como criada
+        newVehicle.setStatus(true); // Status disponível
+        newVehicle.setAvailableFrom(new Timestamp(System.currentTimeMillis())); // Disponível agora
+        newVehicle.setAvailableTo(new Timestamp(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000L)); // Disponível por 7 dias
+        newVehicle.setLocation(null); // Substitua por um objeto Location válido ou use null se não aplicável
+
+        // Adiciona o novo veículo à base de dados do Singleton
+        SingletonFastWheels.getInstance(getContext()).addVehicleDb(newVehicle);
+
+        // Adiciona o veículo à lista local (reflete o banco de dados)
+        vehicleList.add(newVehicle);
     }
 }

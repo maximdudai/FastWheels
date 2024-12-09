@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
