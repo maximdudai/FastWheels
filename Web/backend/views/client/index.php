@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone',
             'roleId' => [
                 'attribute' => 'roleId',
-                
             ],
             'createdAt',
             'balance',
