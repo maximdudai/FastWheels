@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class Login extends AppCompatActivity {
@@ -19,11 +20,6 @@ public class Login extends AppCompatActivity {
     private EditText userPassword;
     private TextView toRegisterButton;
     private CheckBox keepLoggedInCheckbox;
-
-    private static final String PREFS_NAME = "FastWheelsPrefs";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_PASSWORD = "password";
-    private static final String KEY_KEEP_LOGGED_IN = "keepLoggedIn";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +31,12 @@ public class Login extends AppCompatActivity {
         toRegisterButton = findViewById(R.id.noAccount);
         keepLoggedInCheckbox = findViewById(R.id.keepLoggedInCheckbox);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean keepLoggedIn = sharedPreferences.getBoolean(KEY_KEEP_LOGGED_IN, false);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        boolean keepLoggedIn = sharedPreferences.getBoolean(Constants.KEY_KEEP_LOGGED_IN, false);
 
         if (keepLoggedIn) {
-            String savedEmail = sharedPreferences.getString(KEY_EMAIL, null);
-            String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
+            String savedEmail = sharedPreferences.getString(Constants.KEY_EMAIL, null);
+            String savedPassword = sharedPreferences.getString(Constants.KEY_PASSWORD, null);
 
             if (savedEmail != null && savedPassword != null) {
                 // Redirecionar automaticamente para a MainActivity
