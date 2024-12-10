@@ -8,7 +8,6 @@
     tools:context=".UserProfile">
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#000000"
@@ -67,10 +66,12 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/btnLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Log Out"
                     android:background="#8B0000"
+                    android:onClick="handleLogout"
+                    android:text="Log Out"
                     android:textColor="#FFFFFF" />
             </LinearLayout>
 
@@ -123,16 +124,18 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="EMAIL"
-                        android:textColor="#FFFFFF"
                         android:layout_marginTop="8dp"
+                        android:text="EMAILS"
+                        android:textColor="#FFFFFF"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#2D2D2D"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <ImageView
@@ -142,24 +145,23 @@
                         app:tint="#99ff65" />
 
                     <TextView
-                        android:id="@+id/notification_badge"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="#FF0000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="NOTIFICATIONS"
                         android:textColor="#FFFFFF"
-                        android:gravity="center"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:text="1"
-                        android:layout_marginEnd="-10dp"
-                        android:layout_marginTop="-10dp"
-                        android:layout_gravity="end"
-                        android:padding="2dp"
-                        android:textSize="10sp" />
-                </RelativeLayout>
+                        android:textSize="12sp" />
+                </LinearLayout>
+
             </GridLayout>
 
             <!-- Assistance Button -->
+            <View
+                android:id="@+id/view4"
+                android:layout_width="wrap_content"
+                android:layout_height="350dp"
+                android:layout_weight="2" />
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
