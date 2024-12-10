@@ -13,4 +13,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">search_button</string>
+    <string name="assist_ncia">Assistência</string>
+    <string name="user_profile">user profile</string>
+    <string name="profile_password">password</string>
+    <string name="profile_email">emails</string>
+    <string name="profile_notifications">notifications</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="profileemail_gmail_com">profileemail@gmail.com</string>
+    <string name="profile_logout">Log Out</string>
+    <string name="change_current_password">change current password</string>
+    <string name="change_current_email">Change current email</string>
+    <string name="assistance">Assistance</string>
 </resources>
