@@ -35,7 +35,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             [['clientId', 'closed'], 'integer'],
             [['createdAt'], 'safe'],
             [['content'], 'string', 'max' => 1000],
-            [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
+            [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'userId']],
         ];
     }
 

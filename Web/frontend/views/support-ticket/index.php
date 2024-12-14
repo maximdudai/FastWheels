@@ -29,10 +29,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'createdAt',
-            'closed',
+            'closed' => [
+                'attribute' => 'closed',
+                'value' => function (SupportTicket $model) {
+                    return $model->closed ? 'Yes' : 'No';
+                }
+            ],
             [
                 'class' => ActionColumn::className(),
-                'template' => '{view} {update} {delete}',
+                'template' => '{view} {delete}',
                 'urlCreator' => function ($action, SupportTicket $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

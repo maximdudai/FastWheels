@@ -21,6 +21,15 @@ class ClientController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => VerbFilter::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'], // @ means authenticated users
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -55,8 +64,12 @@ class ClientController extends Controller
      */
     public function actionView($id)
     {
+        dd($id);
+
+        $client = Client::find()->where(['id' => $id])->one();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($client->id),
         ]);
     }
 
