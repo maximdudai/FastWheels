@@ -47,7 +47,7 @@ AppAsset::register($this);
         $menuItems = [
             ['label' => 'Contacto', 'url' => ['/site/contact']],
             ['label' => 'Veículos', 'url' => ['/site/vehicles']],
-            ['label' => 'Perguntas?', 'url' => ['/supportticket']],
+            ['label' => 'Contacte-nos', 'url' => ['/supportticket']],
         ];
 
         // If the user is a guest, the login link should be displayed
