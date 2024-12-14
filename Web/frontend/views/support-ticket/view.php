@@ -1,5 +1,6 @@
 <?php
 
+use common\models\SupportTicket;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -28,7 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'content',
             'createdAt',
-            'closed',
+            'closed' => [
+                'attribute' => 'closed',
+                'value' => function (SupportTicket $model) {
+                    return $model->closed ? 'Yes' : 'No';
+                }
+            ],
         ],
     ]) ?>
 
