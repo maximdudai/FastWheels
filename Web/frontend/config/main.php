@@ -40,6 +40,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // Add this rule
+                'supportticket' => 'support-ticket/index',
+                'supportticket/<action>' => 'support-ticket/<action>',
             ],
         ],
     ],

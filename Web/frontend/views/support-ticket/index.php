@@ -25,17 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'clientId',
-            'content',
             'createdAt',
             'closed',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {update} {delete}',
                 'urlCreator' => function ($action, SupportTicket $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

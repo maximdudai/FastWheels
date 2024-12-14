@@ -39,14 +39,14 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Contacto', 'url' => ['/site/contact']],
             ['label' => 'Veículos', 'url' => ['/site/vehicles']],
-            ['label' => 'Perguntas?', 'url' => ['/site/faq']],
+            ['label' => 'Perguntas?', 'url' => ['/supportticket']],
             ['label' => 'profile', 'url' => ['/profile']],
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline'])
-                . Html::submitButton(Yii::$app->user->identity->username, ['class' => 'btn btn-link logout-btn text-decoration-none'])
+                . Html::submitButton('Logout', ['class' => 'btn btn-link logout-btn text-decoration-none'])
                 . Html::endForm()
                 . '</li>'
             ),
