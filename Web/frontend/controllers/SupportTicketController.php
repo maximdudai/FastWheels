@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use Yii;
+use common\models\Client;
 use common\models\SupportTicket;
 use frontend\models\SupportTicketSearch;
 use yii\web\Controller;
@@ -41,6 +43,9 @@ class SupportTicketController extends Controller
         $searchModel = new SupportTicketSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        //all the support tickets created by logged in user
+        $dataProvider->query->andWhere(['clientId' => \Yii::$app->user->id]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -69,13 +74,21 @@ class SupportTicketController extends Controller
     {
         $model = new SupportTicket();
 
+        $model->clientId = \Yii::$app->user->id;
+        $model->createdAt = date('Y-m-d H:i:s');
+        $model->closed = 0;
+
         if ($this->request->isPost) {
+            
             if ($model->load($this->request->post()) && $model->save()) {
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
         }
+        var_dump($model->getErrors());
+
 
         return $this->render('create', [
             'model' => $model,

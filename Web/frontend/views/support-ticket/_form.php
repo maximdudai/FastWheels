@@ -12,16 +12,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'clientId')->textInput() ?>
-
-    <?= $form->field($model, 'content')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'createdAt')->textInput() ?>
-
-    <?= $form->field($model, 'closed')->textInput() ?>
+    <?= $form->field($model, 'content')->textarea(['placeholder' => 'Describe your help request', 'style' => 'min-height:10rem;']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Send', ['class' => 'btn btn-success mt-2']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -13,9 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="client-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-<?= DetailView::widget([
+    <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'name',
@@ -27,5 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'iban',
         ],
     ]) ?>
+
+    <!-- button to going to edit page -->
+    <p>
+        <?= Html::a('Edit', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p>
 
 </div>
