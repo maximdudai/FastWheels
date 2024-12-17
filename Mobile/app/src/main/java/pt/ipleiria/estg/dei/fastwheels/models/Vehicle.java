@@ -1,26 +1,44 @@
-/*package pt.ipleiria.estg.dei.fastwheels.models;
+package pt.ipleiria.estg.dei.fastwheels.models;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.List;
 
-//table UserCar
-public class UserCar {
-    private int id, clientId, carYear, carDoors, status;
-    private String carBrand, carModel;
-    private LocalDateTime createdAt, availableFrom, availableTo;
+//model for table UserCar
+public class Vehicle {
 
-    public UserCar(int id, int clientId, int carYear, int carDoors,
-                   String carBrand, String carModel,
-                   LocalDateTime createdAt, LocalDateTime availableFrom, LocalDateTime availableTo) {
+    private final int id;
+    private final int clientId;
+    private String carBrand;
+    private String carModel;
+    private int carYear;
+    private int carDoors;
+    private Timestamp createdAt;
+    private boolean status; // Estado Ativo ou Desativo
+    private Timestamp availableFrom;
+    private Timestamp availableTo;
+    private String address;
+    private String postalCode;
+    private String cidade;
+    private List<VehiclePhoto> vehiclePhotos;
+
+
+    public Vehicle(int id, int clientId, String carBrand, String carModel, int carYear, int carDoors,
+                   Timestamp createdAt, boolean status, Timestamp availableFrom, Timestamp availableTo,
+                   String address, String postalCode, String cidade, List<VehiclePhoto> vehiclePhotos) {
         this.id = id;
         this.clientId = clientId;
-        this.carYear = carYear;
-        this.carDoors = carDoors;
         this.carBrand = carBrand;
         this.carModel = carModel;
+        this.carYear = carYear;
+        this.carDoors = carDoors;
         this.createdAt = createdAt;
+        this.status = status;
         this.availableFrom = availableFrom;
         this.availableTo = availableTo;
-        this.status = 1; // 1 - true; 0 - false
+        this.address = address;
+        this.postalCode = postalCode;
+        this.cidade = cidade;
+        this.vehiclePhotos = vehiclePhotos;
     }
 
     public int getId() {
@@ -29,30 +47,6 @@ public class UserCar {
 
     public int getClientId() {
         return clientId;
-    }
-
-    public int getCarYear() {
-        return carYear;
-    }
-
-    public void setCarYear(int carYear) {
-        this.carYear = carYear;
-    }
-
-    public int getCarDoors() {
-        return carDoors;
-    }
-
-    public void setCarDoors(int carDoors) {
-        this.carDoors = carDoors;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public String getCarBrand() {
@@ -71,23 +65,79 @@ public class UserCar {
         this.carModel = carModel;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public int getCarYear() {
+        return carYear;
+    }
+
+    public void setCarYear(int carYear) {
+        this.carYear = carYear;
+    }
+
+    public int getCarDoors() {
+        return carDoors;
+    }
+
+    public void setCarDoors(int carDoors) {
+        this.carDoors = carDoors;
+    }
+
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getAvailableFrom() {
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public Timestamp getAvailableFrom() {
         return availableFrom;
     }
 
-    public void setAvailableFrom(LocalDateTime availableFrom) {
+    public void setAvailableFrom(Timestamp availableFrom) {
         this.availableFrom = availableFrom;
     }
 
-    public LocalDateTime getAvailableTo() {
+    public Timestamp getAvailableTo() {
         return availableTo;
     }
 
-    public void setAvailableTo(LocalDateTime availableTo) {
+    public void setAvailableTo(Timestamp availableTo) {
         this.availableTo = availableTo;
     }
-}*/
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public List<VehiclePhoto> getVehiclePhotos() {
+        return vehiclePhotos;
+    }
+
+    public void setVehiclePhotos(List<VehiclePhoto> vehiclePhotos) {
+        this.vehiclePhotos = vehiclePhotos;
+    }
+}

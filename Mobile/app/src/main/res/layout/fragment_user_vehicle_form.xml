@@ -1,305 +1,338 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/secondary_color"
-    android:padding="16dp">
-    <!-- xmlns:app="http://schemas.android.com/apk/res-auto" -->
+    android:fillViewport="true">
 
-    <!-- Marca -->
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <TextView
-        android:id="@+id/tvMarca"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="marca"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-
-    <EditText
-        android:id="@+id/etMarca"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp"/>
-
-    <!-- Modelo -->
-    <TextView
-        android:id="@+id/tvModelo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="modelo"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"
-        android:textStyle="bold"/>
-
-    <EditText
-        android:id="@+id/etModelo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp"/>
-
-    <!-- Ano e Número de Portas -->
     <LinearLayout
+        android:id="@+id/layoutMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_height="match_parent"
+        android:background="@color/secondary_color"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Ano -->
-        <LinearLayout
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <!-- Marca -->
+        <TextView
+            android:id="@+id/tvMarca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:text="@string/vehicle_form_marca"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvAno"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ano"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/etAno"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-        <!-- Número de Portas -->
-        <LinearLayout
+        <EditText
+            android:id="@+id/etMarca"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white" />
 
-            <TextView
-                android:id="@+id/tvNPortas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="n_de_portas"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/etNumPortas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- Cidade -->
-    <TextView
-        android:id="@+id/tvCidade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="cidade"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"
-        android:textStyle="bold"/>
-
-    <EditText
-        android:id="@+id/etCidade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp"/>
-
-    <!-- Localização X e Y -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
-
-        <!-- Localização X -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvLocalizacaoX"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="localizacao_x"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/etLocalizacaoX"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-        <!-- Localização Y -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvLocalizacaoY"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="localizacao_y"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/etLocalizacaoY"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- Disponível de e Disponível até -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
-
-        <!-- Disponível de -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvDisponivelDe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="disponivel_de"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/etDisponivelDe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/white"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-        <!-- Disponível até -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvDisponivelAte"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="disponivel_ate"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:layout_marginBottom="4dp"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/etDisponivelAte"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- Adicionar Fotografias -->
-    <TextView
-        android:id="@+id/tvAddFoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="adicionar_fotografias"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"
-        android:textStyle="bold"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
-
-        <ImageView
-            android:id="@+id/ivIcon"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/gallery_icon" />
-
+        <!-- Modelo -->
         <TextView
-            android:id="@+id/tvNomeFotoCarregadas"
+            android:id="@+id/tvModelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle_form_modelo"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etModelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@android:color/white" />
+
+        <!-- Ano e Número de Portas -->
+        <LinearLayout
+            android:id="@+id/layoutAnoPortas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Ano -->
+            <LinearLayout
+                android:id="@+id/layoutAno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvAno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vehicle_form_ano"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etnAno"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="4"
+                    android:inputType="number"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <!-- Número de Portas -->
+            <LinearLayout
+                android:id="@+id/layoutPortas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvNPortas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/vehicle_form_n_portas"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etnNumPortas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:ems="2"
+                    android:inputType="number"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Morada -->
+        <TextView
+            android:id="@+id/tvMorada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle_form_morada"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etMorada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/white"
+            android:scrollHorizontally="true"
+            android:textColor="@android:color/white" />
+
+        <!-- Codigo Postal e Cidade -->
+        <LinearLayout
+            android:id="@+id/layoutCpCidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Codigo Postal -->
+            <LinearLayout
+                android:id="@+id/layoutCp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCodigoPostal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vehicle_form_codigo_postal"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etpaCodigoPostal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="8"
+                    android:inputType="textPostalAddress"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Cidade-->
+            <LinearLayout
+                android:id="@+id/layoutCidade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/vehicle_form_cidade"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etCidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Disponível de e Disponível até -->
+        <LinearLayout
+            android:id="@+id/layoutDisponib"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Disponível de -->
+            <LinearLayout
+                android:id="@+id/layoutDisponibDe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDisponivelDe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_form_disponivel_de"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etdDisponivelDe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Selecione a data"
+                    android:inputType="none"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <!-- Disponível até -->
+            <LinearLayout
+                android:id="@+id/layoutDisponibAte"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDisponivelAte"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/vehicle_form_disponivel_ate"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etdDisponivelAte"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Selecione a data"
+                    android:inputType="none"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Adicionar Fotografias -->
+        <LinearLayout
+            android:id="@+id/layoutFotografias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tvSelFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vehicle_form_selecionar_fotografias"
+                android:layout_marginEnd="20dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/gallery_icon"
+                android:contentDescription="Galeria de Fotos"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+        <!-- Mostrar fotografias -->
+        <GridLayout
+            android:id="@+id/selectedImagesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:columnCount="3"
+            android:orientation="horizontal"
+            android:rowCount="1"
+            android:layout_marginBottom="30dp"/>
+
+        <!-- Botão Guardar -->
+        <Button
+            android:id="@+id/btnGuardar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="foto.png, foto2.png [ex]"
-            android:textColor="@android:color/white"/>
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:padding="12dp"
+            android:text="@string/vehicle_form_btn_guardar"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
     </LinearLayout>
-
-    <!-- Botão Adicionar -->
-    <Button
-        android:id="@+id/btnAdicionar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@android:color/holo_orange_dark"
-        android:padding="12dp"
-        android:text="adicionar"
-        android:textColor="@android:color/white"
-        android:textStyle="bold" />
-
-</LinearLayout>
+</ScrollView>

@@ -17,7 +17,7 @@ import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnMyVehicles;
+    Button btnMyVehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, ""+ notificacao1, Toast.LENGTH_SHORT).show();
 
-        loadFragment(new VehicleListFragment());
+        //loadFragment(new VehicleListFragment());
+
+        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
+        btnMyVehicles.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            startActivity(intent);
+        });
     }
 
     private void loadFragment(Fragment fragment) {

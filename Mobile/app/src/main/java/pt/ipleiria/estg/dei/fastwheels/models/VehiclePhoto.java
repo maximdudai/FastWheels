@@ -1,7 +1,10 @@
-/*package pt.ipleiria.estg.dei.fastwheels.models;
+package pt.ipleiria.estg.dei.fastwheels.models;
 
+//model for table CarPhoto
 public class VehiclePhoto {
-    private int id, carId;
+
+    private final int id;
+    private final int carId;
     private String photoUrl;
 
     public VehiclePhoto(int id, int carId, String photoUrl) {
@@ -18,10 +21,6 @@ public class VehiclePhoto {
         return carId;
     }
 
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
-
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -29,4 +28,5 @@ public class VehiclePhoto {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
-}*/
+
+}
