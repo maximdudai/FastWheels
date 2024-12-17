@@ -10,7 +10,6 @@
     <string name="rent_your_vehicle_today">rent your vehicle today</string>
     <string name="fast_wheels">FAST WHEELS</string>
     <string name="repeat_password">Repeat Password</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">search_button</string>
     <string name="assist_ncia">Assistência</string>
@@ -24,4 +23,20 @@
     <string name="change_current_password">change current password</string>
     <string name="change_current_email">Change current email</string>
     <string name="assistance">Assistance</string>
+    <string name="vehicle_form_marca">Marca</string>
+    <string name="vehicle_form_modelo">Modelo</string>
+    <string name="vehicle_form_ano">Ano</string>
+    <string name="vehicle_form_n_portas">Nº de portas</string>
+    <string name="vehicle_form_morada">Morada Completa</string>
+    <string name="vehicle_form_disponivel_de">Disponível de</string>
+    <string name="vehicle_form_disponivel_ate">Disponível até</string>
+    <string name="vehicle_form_btn_guardar">Guardar</string>
+    <string name="vehicle_form_selecionar_fotografias">Selecionar Fotografia(s)</string>
+    <string name="vehicle_form_codigo_postal">Código Postal</string>
+    <string name="vehicle_list_marca">"Marca: "</string>
+    <string name="vehicle_list_modelo">"Modelo: "</string>
+    <string name="vehicle_list_ano">"Ano: "</string>
+    <string name="vehicle_list_n_portas">"Nº de portas: "</string>
+    <string name="vehicle_list_estado">"Estado: "</string>
+    <string name="vehicle_form_cidade">Cidade</string>
 </resources>

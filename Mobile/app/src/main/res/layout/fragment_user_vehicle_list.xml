@@ -41,7 +41,7 @@
                 android:id="@+id/tvListaMarcaTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="marca_list_vehicle"
+                android:text="@string/vehicle_list_marca"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -67,7 +67,7 @@
                 android:id="@+id/tvListaModeloTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="modelo_list_vehicle"
+                android:text="@string/vehicle_list_modelo"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -93,7 +93,7 @@
                 android:id="@+id/tvListaAnoTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ano_list_vehicle"
+                android:text="@string/vehicle_list_ano"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -119,7 +119,7 @@
                 android:id="@+id/tvListaNPortasTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="n_portas_list_vehicle"
+                android:text="@string/vehicle_list_n_portas"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -145,7 +145,7 @@
                 android:id="@+id/tvListaEstadoTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="estado_list_vehicle"
+                android:text="@string/vehicle_list_estado"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:textStyle="bold" />

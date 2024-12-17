@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 21, 2024 at 02:18 AM
--- Server version: 8.3.0
--- PHP Version: 8.2.18
+-- Generation Time: Dec 14, 2024 at 11:15 PM
+-- Server version: 8.0.31
+-- PHP Version: 8.1.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,7 +50,6 @@ INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
 ('client', '16', 1732150776),
 ('client', '8', 1732148672),
 ('client', '9', 1732148768);
-
 -- --------------------------------------------------------
 
 --
@@ -76,14 +75,14 @@ CREATE TABLE IF NOT EXISTS `auth_item` (
 --
 
 INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES
-('addVehicle', 2, 'Insert Vehicle for rent', NULL, NULL, 1731787046, 1731787046),
-('admin', 1, NULL, NULL, NULL, 1731787046, 1731787046),
-('client', 1, NULL, NULL, NULL, 1731787046, 1731787046),
-('deleteVehicle', 2, 'Delete vehicle', NULL, NULL, 1731787046, 1731787046),
-('funcionario', 1, NULL, NULL, NULL, 1731787046, 1731787046),
-('manageReservations', 2, 'Manage car reservations', NULL, NULL, 1731787046, 1731787046),
-('manageTicket', 2, 'Manage client support tickets', NULL, NULL, 1731787046, 1731787046),
-('manageVehicle', 2, 'Manage vehicle', NULL, NULL, 1731787046, 1731787046);
+('addVehicle', 2, 'Insert Vehicle for rent', NULL, NULL, 1732821973, 1732821973),
+('admin', 1, NULL, NULL, NULL, 1732821973, 1732821973),
+('client', 1, NULL, NULL, NULL, 1732821973, 1732821973),
+('deleteVehicle', 2, 'Delete vehicle', NULL, NULL, 1732821973, 1732821973),
+('funcionario', 1, NULL, NULL, NULL, 1732821973, 1732821973),
+('manageReservations', 2, 'Manage car reservations', NULL, NULL, 1732821973, 1732821973),
+('manageTicket', 2, 'Manage client support tickets', NULL, NULL, 1732821973, 1732821973),
+('manageVehicle', 2, 'Manage vehicle', NULL, NULL, 1732821973, 1732821973);
 
 -- --------------------------------------------------------
 
@@ -144,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `carphotos` (
   `photoUrl` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx-carPhotos-carId` (`carId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -160,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `carreviews` (
   `createdAt` timestamp NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx-carReview-carId` (`carId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -182,7 +181,15 @@ CREATE TABLE IF NOT EXISTS `clients` (
   PRIMARY KEY (`id`),
   KEY `idx-clients-roleId` (`roleId`),
   KEY `idx-clients-userId` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `clients`
+--
+
+INSERT INTO `clients` (`id`, `name`, `email`, `phone`, `roleId`, `createdAt`, `balance`, `iban`, `userId`) VALUES
+(1, 'adminteste', 'teste@gmail.com', 'none', 3, '2024-11-27 21:33:12', '0.00', 'none', 2),
+(2, 'client', 'client@gmail.com', 'none', 1, '2024-11-27 22:19:04', '0.00', 'none', 3);
 
 -- --------------------------------------------------------
 
@@ -199,24 +206,7 @@ CREATE TABLE IF NOT EXISTS `favorites` (
   PRIMARY KEY (`id`),
   KEY `idx-favorites-clientId` (`clientId`),
   KEY `idx-favorites-carId` (`carId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `localizations`
---
-
-DROP TABLE IF EXISTS `localizations`;
-CREATE TABLE IF NOT EXISTS `localizations` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `carId` int NOT NULL,
-  `locationCity` varchar(100) NOT NULL,
-  `locationX` float NOT NULL,
-  `locationY` float NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idx-localization-carId` (`carId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -229,38 +219,41 @@ CREATE TABLE IF NOT EXISTS `migration` (
   `version` varchar(180) NOT NULL,
   `apply_time` int DEFAULT NULL,
   PRIMARY KEY (`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `migration`
 --
 
 INSERT INTO `migration` (`version`, `apply_time`) VALUES
-('m000000_000000_base', 1731694513),
-('m130524_201442_init', 1731694515),
-('m190124_110200_add_verification_token_column_to_user_table', 1731694515),
-('m241115_195536_add_admin_user', 1731700564),
-('m241115_195725_add_admin_user', 1731700668),
-('m140506_102106_rbac_init', 1731778534),
-('m170907_052038_rbac_add_index_on_auth_assignment_user_id', 1731778534),
-('m180523_151638_rbac_updates_indexes_without_prefix', 1731778535),
-('m200409_110543_rbac_update_mssql_trigger', 1731778535),
-('m241116_174250_init_rbac', 1731787046),
-('m241118_222149_create_roles_table', 1732044082),
-('m241118_222258_create_clients_table', 1732044082),
-('m241118_222330_create_notifications_table', 1732044082),
-('m241118_222359_create_supportTickets_table', 1732044082),
-('m241118_222507_create_userCars_table', 1732044082),
-('m241118_222643_create_favorites_table', 1732044083),
-('m241118_222656_create_carReview_table', 1732044083),
-('m241118_222706_create_carPhotos_table', 1732044083),
-('m241118_222719_create_localization_table', 1732044083),
-('m241118_225735_create_reservations_table', 1732044083),
-('m241118_225843_create_payments_table', 1732044083),
-('m241119_223434_rename_table_carReview', 1732128523),
-('m241119_224606_rename_table_localization', 1732128523),
-('m241119_232018_addfk_table_clients', 1732128523),
-('m241121_005613_insert_roles_into_roles_table', 1732150625);
+('m000000_000000_base', 1731968391),
+('m130524_201442_init', 1731968404),
+('m140506_102106_rbac_init', 1731968441),
+('m170907_052038_rbac_add_index_on_auth_assignment_user_id', 1731968441),
+('m180523_151638_rbac_updates_indexes_without_prefix', 1731968441),
+('m190124_110200_add_verification_token_column_to_user_table', 1731968404),
+('m200409_110543_rbac_update_mssql_trigger', 1731968441),
+('m241115_195725_add_admin_user', 1731968404),
+('m241116_174250_init_rbac', 1731968453),
+('m241118_222149_create_roles_table', 1731969013),
+('m241118_222258_create_clients_table', 1731969014),
+('m241118_222330_create_notifications_table', 1731969014),
+('m241118_222359_create_supportTickets_table', 1731969014),
+('m241118_222507_create_userCars_table', 1731969349),
+('m241118_222643_create_favorites_table', 1731969349),
+('m241118_222656_create_carReview_table', 1731969567),
+('m241118_222706_create_carPhotos_table', 1731969567),
+('m241118_222719_create_localization_table', 1731969568),
+('m241118_225735_create_reservations_table', 1731970771),
+('m241118_225843_create_payments_table', 1731970772),
+('m241119_223434_rename_table_carReview', 1732056438),
+('m241119_224606_rename_table_localization', 1732056438),
+('m241119_232018_addfk_table_clients', 1732060728),
+('m241121_005613_insert_roles_into_roles_table', 1732158647),
+('m241205_183346_rename_carName_to_carBrand_table_userCars', 1733423711),
+('m241210_212544_add_fields_to_userCars', 1733866674),
+('m241210_220304_drop_localizations_table', 1733868377),
+('m241211_225549_add_field_cidade_to_userCars_table', 1733957933);
 
 -- --------------------------------------------------------
 
@@ -277,7 +270,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `read` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx-notifications-clientId` (`clientId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -298,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
   KEY `idx-payments-reserveId` (`reserveId`),
   KEY `idx-payments-clientId` (`clientId`),
   KEY `idx-payments-carId` (`carId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -319,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   PRIMARY KEY (`id`),
   KEY `idx-reservations-clientId` (`clientId`),
   KEY `idx-reservations-carId` (`carId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -332,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `id` int NOT NULL AUTO_INCREMENT,
   `roleName` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `roles`
@@ -358,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `supporttickets` (
   `closed` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx-supportTickets-clientId` (`clientId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -382,7 +375,16 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`, `verification_token`) VALUES
+(1, 'admin', '64nJcL3DqByI5NFSNDkrASzae0lDJDNN', '$2y$13$bc2fSB7eal3V9gixST1R9u8npN44S1tnLBCp3e130JxZS623EiTEm', NULL, 'admin@example.com', 10, 1731968404, 1731968404, NULL),
+(2, 'adminteste', 'slXYg3oXmz4EklgWHHkTI6DD_qLoJdjE', '$2y$13$MTvJk0wWvT/gqToOmqlw6.Qx9KKgGfYTgpYhTX02Lb19wa.v/IdtO', NULL, 'teste@gmail.com', 10, 1732743025, 1732743025, '5O2LFASVtes7BVL5yidav4OWfH7csZ4z_1732743025'),
+(3, 'client', 'XO8ImsADzhVOviitVw8eDwMr47CXf3fH', '$2y$13$dZyQ/rhJsDyiGgq5H8Fi6OcXjFQgAS6ts4XjQRCZ5lLtjFIZs/4G2', NULL, 'client@gmail.com', 10, 1732745944, 1732745944, 'Rpi-xLxjSox5VtyKdAoUuT5AdCptJ4tl_1732745944');
 
 -- --------------------------------------------------------
 
@@ -394,7 +396,7 @@ DROP TABLE IF EXISTS `usercars`;
 CREATE TABLE IF NOT EXISTS `usercars` (
   `id` int NOT NULL AUTO_INCREMENT,
   `clientId` int NOT NULL,
-  `carName` varchar(80) NOT NULL,
+  `carBrand` varchar(80) NOT NULL,
   `carModel` varchar(30) NOT NULL,
   `carYear` int NOT NULL,
   `carDoors` int NOT NULL,
@@ -402,9 +404,12 @@ CREATE TABLE IF NOT EXISTS `usercars` (
   `status` tinyint(1) DEFAULT NULL,
   `availableFrom` timestamp NOT NULL,
   `availableTo` timestamp NOT NULL,
+  `morada` varchar(200) NOT NULL,
+  `codigoPostal` varchar(10) NOT NULL,
+  `cidade` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx-userCars-clientId` (`clientId`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Constraints for dumped tables
@@ -430,10 +435,63 @@ ALTER TABLE `auth_item_child`
   ADD CONSTRAINT `auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `carphotos`
+--
+ALTER TABLE `carphotos`
+  ADD CONSTRAINT `fk-carPhotos-carId` FOREIGN KEY (`carId`) REFERENCES `usercars` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `carreviews`
+--
+ALTER TABLE `carreviews`
+  ADD CONSTRAINT `fk-carReview-carId` FOREIGN KEY (`carId`) REFERENCES `usercars` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `clients`
 --
 ALTER TABLE `clients`
-  ADD CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `fk-clients-roleId` FOREIGN KEY (`roleId`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `idx-clients-userId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `favorites`
+--
+ALTER TABLE `favorites`
+  ADD CONSTRAINT `fk-favorites-carId` FOREIGN KEY (`carId`) REFERENCES `usercars` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk-favorites-clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `fk-notifications-clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `fk-payments-carId` FOREIGN KEY (`carId`) REFERENCES `usercars` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk-payments-clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk-payments-reserveId` FOREIGN KEY (`reserveId`) REFERENCES `reservations` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD CONSTRAINT `fk-reservations-carId` FOREIGN KEY (`carId`) REFERENCES `usercars` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk-reservations-clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `supporttickets`
+--
+ALTER TABLE `supporttickets`
+  ADD CONSTRAINT `fk-supportTickets-clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `usercars`
+--
+ALTER TABLE `usercars`
+  ADD CONSTRAINT `fk-userCars-clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
