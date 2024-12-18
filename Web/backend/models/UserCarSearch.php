@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Client;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\UserCar;
@@ -18,7 +19,7 @@ class UserCarSearch extends UserCar
     {
         return [
             [['id', 'clientId', 'carYear', 'carDoors', 'status'], 'integer'],
-            [['carName', 'carModel', 'createdAt', 'availableFrom', 'availableTo'], 'safe'],
+            [['carBrand', 'carModel', 'createdAt', 'availableFrom', 'availableTo'], 'safe'],
         ];
     }
 
@@ -68,9 +69,14 @@ class UserCarSearch extends UserCar
             'availableTo' => $this->availableTo,
         ]);
 
-        $query->andFilterWhere(['like', 'carName', $this->carName])
+        $query->andFilterWhere(['like', 'carBrand', $this->carBrand])
             ->andFilterWhere(['like', 'carModel', $this->carModel]);
 
         return $dataProvider;
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(Client::class, ['id' => 'clientId']);
     }
 }

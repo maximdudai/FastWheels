@@ -48,6 +48,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'user-car' => 'user-car/index',
+                // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/client',
@@ -55,8 +57,8 @@ return [
                         'POST login' => 'login',
                     ],
                     'tokens' => [
-                        '{id}' => '<id:\\d+>',
-                        '{username}' => '<username:\\w+>',
+                        '{id}' => '<id:\\d+>', 
+                        '{username}' => '<username:\\w+>', 
                     ]
                 ]
 
