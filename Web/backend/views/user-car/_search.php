@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clientId') ?>
 
-    <?= $form->field($model, 'carName') ?>
+    <?= $form->field($model, 'carBrand') ?>
 
     <?= $form->field($model, 'carModel') ?>
 

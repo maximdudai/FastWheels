@@ -12,6 +12,7 @@ use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\User;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -104,12 +105,14 @@ class SiteController extends BaseController
         // $this->layout = 'blank';
     
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        $post = Yii::$app->request->post();
+        if ($model->load($post) && $model->login()) {
+            
+            $username = $post['LoginForm']['username'];
+            $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
+            
 
-            $findAsClient = Client::find()->where(['userId' => Yii::$app->user->id])->one();
-
-
-            if($findAsClient->roleId !== 1){
+            if(isset($getRoleId) && $getRoleId !== 1) {
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out
                 Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
