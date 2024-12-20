@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,10 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements LoginListener {
 
     private EditText userEmail;
     private EditText userPassword;
@@ -62,19 +68,32 @@ public class Login extends AppCompatActivity {
         if(isDataEmpty)
             return;
 
-        if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
+        String loginEmail = userEmail.getText().toString();
+        String loginPassword = userPassword.getText().toString();
+
+        if(!Helpers.isPasswordValid(loginPassword)) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!Helpers.isEmailValid(userEmail.getText().toString())) {
+        if(!Helpers.isEmailValid(loginEmail)) {
             //TODO: custom error handler
             Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //TODO: Query to database (POST) to check if user exists
+        // send authentication request to API
+        SingletonFastWheels.getInstance(getApplicationContext()).loginAPI(loginEmail, loginPassword, getApplicationContext());
+    }
 
+    @Override
+    public void onValidateLogin(String token, String email, Context context) {
+        System.out.println("----> token: " + token);
+        if(Objects.equals(token, null)) {
+            Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
         if (keepLoggedInCheckbox.isChecked()) {
             SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
