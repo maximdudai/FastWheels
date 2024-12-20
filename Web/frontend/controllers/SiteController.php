@@ -33,17 +33,17 @@ class SiteController extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'login'], // Include 'login' in the 'only' list
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'login'], // Allow 'login' for guest users
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?'], // '?' means guest users
                     ],
                     [
                         'actions' => ['logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'], // '@' means authenticated users
                     ],
                 ],
             ],
@@ -55,6 +55,7 @@ class SiteController extends BaseController
             ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -101,18 +102,18 @@ class SiteController extends BaseController
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-    
+
         // $this->layout = 'blank';
-    
+
         $model = new LoginForm();
         $post = Yii::$app->request->post();
         if ($model->load($post) && $model->login()) {
-            
+
             $username = $post['LoginForm']['username'];
             $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
-            
 
-            if(isset($getRoleId) && $getRoleId !== 1) {
+
+            if (isset($getRoleId) && $getRoleId !== 1) {
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out
                 Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
@@ -122,14 +123,14 @@ class SiteController extends BaseController
             // Redirect to home or dashboard
             return $this->goBack();
         }
-    
+
         $model->password = '';
-    
+
         return $this->render('login', [
             'model' => $model,
         ]);
     }
-    
+
 
     /**
      * Logs out the current user.

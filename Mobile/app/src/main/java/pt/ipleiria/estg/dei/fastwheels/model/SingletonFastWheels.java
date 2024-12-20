@@ -119,6 +119,7 @@ public class SingletonFastWheels {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                System.out.println("---> loginapi: " + error.getMessage());
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }) {
@@ -126,7 +127,7 @@ public class SingletonFastWheels {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("email", email);
+                params.put("username", email);
                 params.put("password", password);
 
                 return params;
