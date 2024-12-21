@@ -14,9 +14,7 @@ public class LoginParser {
             String fetchUserToken = fetchData.getString("token");
 
             token = fetchUserToken;
-
         } catch (JSONException e) {
-            System.out.println("----> parser: " + e);
             e.printStackTrace();
 
         }

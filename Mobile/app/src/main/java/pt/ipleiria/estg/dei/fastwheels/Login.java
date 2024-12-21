@@ -90,7 +90,6 @@ public class Login extends AppCompatActivity implements LoginListener {
 
     @Override
     public void onValidateLogin(String token, String email, Context context) {
-        System.out.println("----> token: " + token);
         if(token.isEmpty()) {
             Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
             return;

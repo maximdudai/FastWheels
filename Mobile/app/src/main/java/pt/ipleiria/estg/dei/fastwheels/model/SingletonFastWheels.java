@@ -112,10 +112,7 @@ public class SingletonFastWheels {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("---> api response: " + response);
                 String token = String.valueOf(LoginParser.parseLoginData(response));
-
-                System.out.println("---> received token: " + token);
 
                 if(loginListener != null)
                     loginListener.onValidateLogin(token, email, context);
@@ -123,7 +120,6 @@ public class SingletonFastWheels {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("---> loginapi: " + error.getMessage());
                 Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }) {
