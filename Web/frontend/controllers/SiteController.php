@@ -112,7 +112,7 @@ class SiteController extends BaseController
             $username = $post['LoginForm']['username'];
             $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
 
-
+            
             if (isset($getRoleId) && $getRoleId !== 1) {
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out

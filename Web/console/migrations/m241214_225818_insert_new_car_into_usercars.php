@@ -13,9 +13,9 @@ class m241214_225818_insert_new_car_into_usercars extends Migration
      */
     public function safeUp()
     {
-        // $clientId = Client::findOne(['name' => 'fouser']) -> userId;
+        // $clientId = Client::findOne(['name' => 'maximdudai']) -> userId;
 
-        // if($clientId == null) {
+        // if(!$clientId) {
         //     echo "Client not found";
         //     return false;
         // }
