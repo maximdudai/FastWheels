@@ -43,6 +43,7 @@ public class SingletonFastWheels {
     private SingletonFastWheels(Context context) {
         vehicles = new ArrayList<>();
         vehicleDbHelper = new VehicleDbHelper(context); // Inicializar o helper da base de dados
+
     }
 
     // Método para carregar todos os veículos do banco de dados
@@ -111,7 +112,10 @@ public class SingletonFastWheels {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                System.out.println("---> api response: " + response);
                 String token = String.valueOf(LoginParser.parseLoginData(response));
+
+                System.out.println("---> received token: " + token);
 
                 if(loginListener != null)
                     loginListener.onValidateLogin(token, email, context);
@@ -135,6 +139,8 @@ public class SingletonFastWheels {
         };
         volleyQueue.add(request);
     }
-
+    public void setLoginListener(LoginListener loginListener) {
+        this.loginListener = loginListener;
+    }
     //endregion
 }
