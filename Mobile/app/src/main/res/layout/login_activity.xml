@@ -64,7 +64,7 @@
             android:backgroundTint="@color/white"
             android:hint="@string/hintEmail"
             android:inputType="textEmailAddress"
-            android:text="testemail@gmail.com"
+            android:text="fouser"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -89,7 +89,7 @@
             android:backgroundTint="@android:color/white"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:text="123Qweasdzxc"
+            android:text="qweasdzxc"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
