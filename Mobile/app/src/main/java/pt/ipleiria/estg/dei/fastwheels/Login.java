@@ -92,27 +92,26 @@ public class Login extends AppCompatActivity implements LoginListener {
     public void onValidateLogin(String token, String email, Context context) {
         if(token.isEmpty()) {
             Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (keepLoggedInCheckbox.isChecked()) {
-            SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(Constants.KEY_KEEP_LOGGED_IN, true);
-            editor.putString(Constants.KEY_EMAIL, userEmail.getText().toString());
-            editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
-            editor.apply();
         } else {
-            // Remover credenciais caso não queira manter o login automático
-            SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-        }
+            if (keepLoggedInCheckbox.isChecked()) {
+                SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(Constants.KEY_KEEP_LOGGED_IN, true);
+                editor.putString(Constants.KEY_EMAIL, userEmail.getText().toString());
+                editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
+                editor.apply();
+            } else {
+                // Remover credenciais caso não queira manter o login automático
+                SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+            }
 
-        // Redirecionar para a MainActivity
-        Intent mainActivity = new Intent(this, UserProfile.class);
-        startActivity(mainActivity);
-        finish();
+            // Redirecionar para a MainActivity
+            Intent mainActivity = new Intent(this, UserProfile.class);
+            startActivity(mainActivity);
+            finish();
+        }
     }
 }

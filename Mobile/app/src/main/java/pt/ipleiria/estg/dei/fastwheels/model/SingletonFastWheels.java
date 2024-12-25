@@ -108,26 +108,27 @@ public class SingletonFastWheels {
 
     //region #LoginListener
 
-    public void loginAPI(String email, String password, final Context context) {
+    public void loginAPI(String username, String password, final Context context) {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 String token = String.valueOf(LoginParser.parseLoginData(response));
 
                 if(loginListener != null)
-                    loginListener.onValidateLogin(token, email, context);
+                    loginListener.onValidateLogin(token, username, context);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+                Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
             }
         }) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", email);
+                params.put("username", username);
                 params.put("password", password);
 
                 return params;
