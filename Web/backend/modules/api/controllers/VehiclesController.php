@@ -17,8 +17,9 @@ class ClientController extends ActiveController
   {
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
-      'class' => HttpBasicAuth::className(),
-      'except' => ['login'],
+      'class' => HttpBasicAuth::className(), // ou QueryParamAuth::className(),
+      'except' => ['index', 'view'],
+      'auth' => [$this, 'authintercept']
     ];
     return $behaviors;
   }
@@ -32,9 +33,9 @@ class ClientController extends ActiveController
     $data = Yii::$app->request->post();
 
     // Check if received user token is valid
-    $findClientByVerificationToken = User::findByVerificationToken($data['token']); 
+    $findClientByVerificationToken = User::findByVerificationToken($data['token']);
 
-    if(!$findClientByVerificationToken){
+    if (!$findClientByVerificationToken) {
       throw new BadMethodCallException('Invalid token');
     }
 
@@ -60,7 +61,7 @@ class ClientController extends ActiveController
     $model->availableFrom = $availableFrom;
     $model->availableTo = $availableTo;
     $model->status = $status;
-    
+
     if ($model->save()) {
       return [
         'status' => 'success',
