@@ -41,15 +41,18 @@ class VehiclesController extends ActiveController
     }
 
     // retrieve data from the request
-    $clientId = $findClientByVerificationToken->id;
+    $clientId = 2;
     $carBrand = $data['carBrand'];
     $carModel = $data['carModel'];
     $carYear = $data['carYear'];
     $carDoors = $data['carDoors'];
     $createdAt = date('Y-m-d H:i:s');
+    $status = 0;
     $availableFrom = date('Y-m-d H:i:s');
     $availableTo = date('Y-m-d H:i:s');
-    $status = 0;
+    $address = $data['address'];
+    $postalCode = $data['postalCode'];
+    $city = $data['city'];
 
     // Create a new UserCar model with the received data
     $model = new UserCar();
@@ -62,6 +65,9 @@ class VehiclesController extends ActiveController
     $model->availableFrom = $availableFrom;
     $model->availableTo = $availableTo;
     $model->status = $status;
+    $model->address = $address;
+    $model->postalCode = $postalCode;
+    $model->city = $city;
 
     if ($model->save()) {
       return [
