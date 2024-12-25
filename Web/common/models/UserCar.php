@@ -17,23 +17,22 @@ use Yii;
  * @property int|null $status
  * @property string $availableFrom
  * @property string $availableTo
- *
- * @property Carphoto[] $carphotos
- * @property Carreview[] $carreviews
- * @property Client $client
- * @property Favorite[] $favorites
- * @property Localization[] $localizations
- * @property Payment[] $payments
- * @property Reservation[] $reservations
+ * @property string $address
+ * @property string $postalCode
+ * @property string $city
  */
+
 class UserCar extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
-        return 'userCars';
+        return 'usercars';
     }
 
     /**
@@ -42,12 +41,13 @@ class UserCar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'carBrand', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo'], 'required'],
+            [['clientId', 'carBrand', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo', 'address', 'postalCode', 'city'], 'required'],
             [['clientId', 'carYear', 'carDoors', 'status'], 'integer'],
             [['createdAt', 'availableFrom', 'availableTo'], 'safe'],
             [['carBrand'], 'string', 'max' => 80],
-            [['carModel'], 'string', 'max' => 30],
-            [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
+            [['carModel', 'city'], 'string', 'max' => 30],
+            [['address'], 'string', 'max' => 200],
+            [['postalCode'], 'string', 'max' => 10],
         ];
     }
 
@@ -59,7 +59,7 @@ class UserCar extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'clientId' => 'Client ID',
-            'carBrand' => 'Car Name',
+            'carBrand' => 'Car Brand',
             'carModel' => 'Car Model',
             'carYear' => 'Car Year',
             'carDoors' => 'Car Doors',
@@ -67,6 +67,9 @@ class UserCar extends \yii\db\ActiveRecord
             'status' => 'Status',
             'availableFrom' => 'Available From',
             'availableTo' => 'Available To',
+            'address' => 'Address',
+            'postalCode' => 'Postal Code',
+            'city' => 'City',
         ];
     }
 
