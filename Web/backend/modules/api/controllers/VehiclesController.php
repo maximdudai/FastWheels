@@ -18,11 +18,12 @@ class VehiclesController extends ActiveController
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
       'class' => HttpBasicAuth::className(), // ou QueryParamAuth::className(),
-      'except' => ['index', 'view'],
+      'except' => ['index', 'view', 'create'],
       'auth' => [$this, 'authintercept']
     ];
     return $behaviors;
   }
+
   public function actionCreate()
   {
 
