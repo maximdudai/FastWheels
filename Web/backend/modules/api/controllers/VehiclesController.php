@@ -42,7 +42,7 @@ class VehiclesController extends ActiveController
 
     // retrieve data from the request
     $clientId = $findClientByVerificationToken->id;
-    $carName = $data['carName'];
+    $carName = $data['carBrand'];
     $carModel = $data['carModel'];
     $carYear = $data['carYear'];
     $carDoors = $data['carDoors'];
