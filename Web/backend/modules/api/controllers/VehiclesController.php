@@ -9,7 +9,7 @@ use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBasicAuth;
 
-class ClientController extends ActiveController
+class VehiclesController extends ActiveController
 {
   public $modelClass = 'common\models\UserCar';
 
