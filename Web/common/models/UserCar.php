@@ -32,7 +32,7 @@ class UserCar extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'usercars';
+        return 'userCars';
     }
 
     /**
