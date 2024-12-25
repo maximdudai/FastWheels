@@ -60,8 +60,15 @@ return [
                         '{id}' => '<id:\\d+>', 
                         '{username}' => '<username:\\w+>', 
                     ]
+                    
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/vehicles',
+                    'extraPatterns' => [
+                        'POST create' => 'create',
+                    ]
                 ]
-
             ],
         ],
     ],
