@@ -41,7 +41,7 @@ class VehiclesController extends ActiveController
     }
 
     // retrieve data from the request
-    $clientId = 2;
+    $clientId = 1;
     $carBrand = $data['carBrand'];
     $carModel = $data['carModel'];
     $carYear = $data['carYear'];

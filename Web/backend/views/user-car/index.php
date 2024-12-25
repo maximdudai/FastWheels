@@ -32,6 +32,7 @@ $isUserHasAccessToDelete = ($client && $client->roleId === 3); // Check if the u
                 'label' => 'Owner',
                 'value' => function (UserCar $model) {
                     $username = Client::findOne(['userId' => $model->clientId])->name;
+                    dd($username);
                     return $username ? $username : 'N/A'; // Check if the relation exists
                 },
             ],
