@@ -8,6 +8,9 @@ use common\models\UserCar;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBasicAuth;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
+use yii\web\UnauthorizedHttpException;
 
 class VehiclesController extends ActiveController
 {
@@ -26,56 +29,76 @@ class VehiclesController extends ActiveController
 
   public function actionCreate()
   {
-
-    if (!Yii::$app->request->post()) {
-      throw new BadMethodCallException('Invalid request method');
+    if (!Yii::$app->request->isPost) {
+      throw new BadRequestHttpException('Invalid request method');
     }
 
     $data = Yii::$app->request->post();
 
-    // Check if received user token is valid
-    $findClientByVerificationToken = User::findByVerificationToken($data['token']);
+    // Validate token
+    $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
 
     if (!$findClientByVerificationToken) {
-      throw new BadMethodCallException('Invalid token');
+      throw new UnauthorizedHttpException('Invalid token');
     }
 
-    // retrieve data from the request
-    $clientId = 1;
-    $carBrand = $data['carBrand'];
-    $carModel = $data['carModel'];
-    $carYear = $data['carYear'];
-    $carDoors = $data['carDoors'];
-    $createdAt = date('Y-m-d H:i:s');
-    $status = 0;
-    $availableFrom = date('Y-m-d H:i:s');
-    $availableTo = date('Y-m-d H:i:s');
-    $address = $data['address'];
-    $postalCode = $data['postalCode'];
-    $city = $data['city'];
-
-    // Create a new UserCar model with the received data
+    // Create a new UserCar model
     $model = new UserCar();
-    $model->clientId = $clientId;
-    $model->carBrand = $carBrand;
-    $model->carModel = $carModel;
-    $model->carYear = $carYear;
-    $model->carDoors = $carDoors;
-    $model->createdAt = $createdAt;
-    $model->availableFrom = $availableFrom;
-    $model->availableTo = $availableTo;
-    $model->status = $status;
-    $model->address = $address;
-    $model->postalCode = $postalCode;
-    $model->city = $city;
 
-    if ($model->save()) {
-      return [
-        'status' => 'success',
-        'data' => $model->attributes,
-      ];
-    } else {
-      return $model->errors;
+    // Load data into the model and validate
+    if ($model->load($data, '') && $model->validate()) {
+      $model->clientId = $findClientByVerificationToken->id ?? 1;
+      $model->createdAt = date('Y-m-d H:i:s');
+
+      if ($model->save()) {
+        return [
+          'status' => 'success',
+          'data' => $model->attributes,
+        ];
+      }
     }
+
+    return [
+      'status' => 'error',
+      'errors' => $model->errors,
+    ];
+  }
+
+  public function actionUpdate($id)
+  {
+    if (!Yii::$app->request->isPut) {
+      throw new BadRequestHttpException('Invalid request method');
+    }
+
+    $data = Yii::$app->request->put();
+
+    // Validate token
+
+    $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
+    if (!$findClientByVerificationToken) {
+      throw new UnauthorizedHttpException('Invalid token');
+    }
+
+    // Find the existing model
+    $model = UserCar::findOne($id);
+    if (!$model) {
+      throw new NotFoundHttpException('Invalid vehicle ID');
+    }
+
+    // Load and validate data
+    if ($model->load($data, '') && $model->validate()) {
+      if ($model->save()) {
+        return [
+          'status' => 'success',
+          'data' => $model->attributes,
+        ];
+      }
+    }
+
+    // Return validation errors
+    return [
+      'status' => 'error',
+      'errors' => $model->errors,
+    ];
   }
 }

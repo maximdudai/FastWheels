@@ -57,17 +57,21 @@ return [
                         'POST login' => 'login',
                     ],
                     'tokens' => [
-                        '{id}' => '<id:\\d+>', 
-                        '{username}' => '<username:\\w+>', 
+                        '{id}' => '<id:\\d+>',
+                        '{username}' => '<username:\\w+>',
                     ]
-                    
+
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/vehicles',
                     'extraPatterns' => [
                         'POST create' => 'create',
-                    ]
+                        'PUT {id}/update' => 'update',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
                 ]
             ],
         ],
