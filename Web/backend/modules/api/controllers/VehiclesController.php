@@ -76,7 +76,12 @@ class VehiclesController extends ActiveController
 
     $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
     if (!$findClientByVerificationToken) {
-      throw new UnauthorizedHttpException('Invalid token');
+      // throw new UnauthorizedHttpException('Invalid token');
+    
+      return [
+        'status' => 'error',
+        'errors' => ['Invalid token' => 'Invalid token'],
+      ];
     }
 
     // Find the existing model
