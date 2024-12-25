@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $clientId
- * @property string $carName
+ * @property string $carBrand
  * @property string $carModel
  * @property int $carYear
  * @property int $carDoors
@@ -42,10 +42,10 @@ class UserCar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'carName', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo'], 'required'],
+            [['clientId', 'carBrand', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo'], 'required'],
             [['clientId', 'carYear', 'carDoors', 'status'], 'integer'],
             [['createdAt', 'availableFrom', 'availableTo'], 'safe'],
-            [['carName'], 'string', 'max' => 80],
+            [['carBrand'], 'string', 'max' => 80],
             [['carModel'], 'string', 'max' => 30],
             [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
         ];
@@ -59,7 +59,7 @@ class UserCar extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'clientId' => 'Client ID',
-            'carName' => 'Car Name',
+            'carBrand' => 'Car Name',
             'carModel' => 'Car Model',
             'carYear' => 'Car Year',
             'carDoors' => 'Car Doors',

@@ -42,7 +42,7 @@ class VehiclesController extends ActiveController
 
     // retrieve data from the request
     $clientId = $findClientByVerificationToken->id;
-    $carName = $data['carBrand'];
+    $carBrand = $data['carBrand'];
     $carModel = $data['carModel'];
     $carYear = $data['carYear'];
     $carDoors = $data['carDoors'];
@@ -54,7 +54,7 @@ class VehiclesController extends ActiveController
     // Create a new UserCar model with the received data
     $model = new UserCar();
     $model->clientId = $clientId;
-    $model->carName = $carName;
+    $model->carBrand = $carBrand;
     $model->carModel = $carModel;
     $model->carYear = $carYear;
     $model->carDoors = $carDoors;
