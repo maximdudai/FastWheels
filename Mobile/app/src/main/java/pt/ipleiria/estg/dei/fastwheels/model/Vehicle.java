@@ -54,12 +54,12 @@ public class Vehicle {
         this.clientId = clientId;
     }
 
-    public String getMark() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setMark(String mark) {
-        this.brand = mark;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getCarModel() {

@@ -2,6 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_color">#1423BA</color>
-    <color name="secondary_color">#212832</color>
+    <color name="main_color">#003087</color>
+    <color name="secondary_color">#0066FF</color>
+
+    <!-- Cores principais do tema -->
+    <color name="colorPrimary">#003087</color>
+    <color name="colorPrimaryVariant">#0066FF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Cores do fundo do menu -->
+    <color name="menu_background">#0066FF</color> <!-- Cor de fundo do menu no tema claro -->
+    <color name="menu_text_color">#FFFFFF</color> <!-- Cor do texto do menu no tema claro -->
+
 </resources>

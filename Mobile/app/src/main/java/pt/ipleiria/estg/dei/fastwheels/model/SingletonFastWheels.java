@@ -77,7 +77,7 @@ public class SingletonFastWheels {
     public ArrayList<Vehicle> getVehiclesByMark(String mark) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
         for (Vehicle vehicle : vehicles) {
-            if (vehicle.getMark().equalsIgnoreCase(mark)) {
+            if (vehicle.getBrand().equalsIgnoreCase(mark)) {
                 filteredList.add(vehicle);
             }
         }

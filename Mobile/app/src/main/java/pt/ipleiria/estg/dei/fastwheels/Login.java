@@ -1,5 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -68,12 +70,12 @@ public class Login extends AppCompatActivity {
 
         if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
             //TODO: custom error handler
-            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+            showMessage(this, "Invalid Password");
             return;
         }
         if(!Helpers.isEmailValid(userEmail.getText().toString())) {
             //TODO: custom error handler
-            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
+            showMessage(this, "Invalid email address");
             return;
         }
 

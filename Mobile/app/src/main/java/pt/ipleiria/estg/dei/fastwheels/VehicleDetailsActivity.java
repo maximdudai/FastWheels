@@ -1,11 +1,10 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
-import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showError;
+import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +48,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
             if (vehicle != null) {
                 // Preenche os campos com os dados do veículo
-                etBrand.setText(vehicle.getMark());
+                etBrand.setText(vehicle.getBrand());
                 etModel.setText(vehicle.getCarModel());
                 etYear.setText(String.valueOf(vehicle.getCarYear()));
                 etDoors.setText(String.valueOf(vehicle.getCarDoors()));
@@ -80,11 +79,11 @@ public class VehicleDetailsActivity extends AppCompatActivity {
                 lvImgVehicle.setAdapter(adapter);
             } else {
                 // Lida com a ausência do veículo correspondente
-                showError(this,"O veículo não foi encontrado.");
+                showMessage(this,"O veículo não foi encontrado.");
             }
         } else {
             // Lida com a ausência de um ID válido
-            showError(this,"ID do veículo inválido.");
+            showMessage(this,"ID do veículo inválido.");
         }
     }
 }
