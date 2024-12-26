@@ -11,10 +11,17 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'api' => [
+            'class' => 'backend\modules\api\ModuleAPI',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -41,6 +48,33 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'user-car' => 'user-car/index',
+                // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/client',
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                        '{username}' => '<username:\\w+>',
+                    ]
+
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/vehicles',
+                    'extraPatterns' => [
+                        'GET {id}/index' => 'index',
+                        'POST create' => 'create',
+                        'PUT {id}/update' => 'update',
+                        'DELETE {id}/delete' => 'delete',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ]
             ],
         ],
     ],

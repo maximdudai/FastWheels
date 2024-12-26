@@ -12,6 +12,7 @@ use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\User;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -32,17 +33,17 @@ class SiteController extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'login'], // Include 'login' in the 'only' list
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'login'], // Allow 'login' for guest users
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?'], // '?' means guest users
                     ],
                     [
                         'actions' => ['logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'], // '@' means authenticated users
                     ],
                 ],
             ],
@@ -54,6 +55,7 @@ class SiteController extends BaseController
             ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -100,16 +102,18 @@ class SiteController extends BaseController
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-    
+
         // $this->layout = 'blank';
-    
+
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        $post = Yii::$app->request->post();
+        if ($model->load($post) && $model->login()) {
 
-            $findAsClient = Client::find()->where(['userId' => Yii::$app->user->id])->one();
+            $username = $post['LoginForm']['username'];
 
+            $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
 
-            if($findAsClient->roleId !== 1){
+            if ($getRoleId['roleId'] != 1) {
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out
                 Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
@@ -119,14 +123,13 @@ class SiteController extends BaseController
             // Redirect to home or dashboard
             return $this->goBack();
         }
-    
+
         $model->password = '';
-    
+
         return $this->render('login', [
             'model' => $model,
         ]);
     }
-    
 
     /**
      * Logs out the current user.

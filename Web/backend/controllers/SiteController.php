@@ -79,10 +79,15 @@ class SiteController extends Controller
         // $this->layout = 'blank';
     
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        // get POST parameters
+        $post = Yii::$app->request->post();
 
-            $findAsClient = \common\models\Client::find()->where(['userId' => Yii::$app->user->id])->one();
-            if($findAsClient->roleId === 1) {
+        if ($model->load($post) && $model->login()) {
+
+            $username = $post['LoginForm']['username'];
+            $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
+
+            if(isset($getRoleId->roleId) && $getRoleId->roleId === 1) {
                 // allow only 'funcionario & administrador' roles
                 Yii::$app->user->logout(); // Log the user out
                 Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the back office.');

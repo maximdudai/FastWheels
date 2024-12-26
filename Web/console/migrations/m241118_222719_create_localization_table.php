@@ -15,7 +15,7 @@ class m241118_222719_create_localization_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('{{%localization}}', [
+        $this->createTable('{{%localizations}}', [
             'id' => $this->primaryKey(),
             'carId' => $this->integer()->notNull(),
             'locationCity' => $this->string(100)->notNull(),
@@ -25,15 +25,15 @@ class m241118_222719_create_localization_table extends Migration
 
         // creates index for column `carId`
         $this->createIndex(
-            '{{%idx-localization-carId}}',
-            '{{%localization}}',
+            '{{%idx-localizations-carId}}',
+            '{{%localizations}}',
             'carId'
         );
 
         // add foreign key for table `{{%userCars}}`
         $this->addForeignKey(
-            '{{%fk-localization-carId}}',
-            '{{%localization}}',
+            '{{%fk-localizations-carId}}',
+            '{{%localizations}}',
             'carId',
             '{{%userCars}}',
             'id',
@@ -48,16 +48,16 @@ class m241118_222719_create_localization_table extends Migration
     {
         // drops foreign key for table `{{%userCars}}`
         $this->dropForeignKey(
-            '{{%fk-localization-carId}}',
-            '{{%localization}}'
+            '{{%fk-localizations-carId}}',
+            '{{%localizations}}'
         );
 
         // drops index for column `carId`
         $this->dropIndex(
-            '{{%idx-localization-carId}}',
-            '{{%localization}}'
+            '{{%idx-localizations-carId}}',
+            '{{%localizations}}'
         );
 
-        $this->dropTable('{{%localization}}');
+        $this->dropTable('{{%localizations}}');
     }
 }

@@ -1,7 +1,21 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
+import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
 
 public class SingletonFastWheels {
 
@@ -10,10 +24,17 @@ public class SingletonFastWheels {
 
     private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
 
+    //volley
+    private static RequestQueue volleyQueue;
+
+    // listeners
+    private LoginListener loginListener;
+
     // Método para obter a instância única do Singleton
     public static synchronized SingletonFastWheels getInstance(Context context) {
         if (instance == null) {
             instance = new SingletonFastWheels(context);
+            volleyQueue = Volley.newRequestQueue(context);
         }
         return instance;
     }
@@ -22,6 +43,7 @@ public class SingletonFastWheels {
     private SingletonFastWheels(Context context) {
         vehicles = new ArrayList<>();
         vehicleDbHelper = new VehicleDbHelper(context); // Inicializar o helper da base de dados
+
     }
 
     // Método para carregar todos os veículos do banco de dados
@@ -83,4 +105,39 @@ public class SingletonFastWheels {
         }
         return filteredList;
     }
+
+    //region #LoginListener
+
+    public void loginAPI(String username, String password, final Context context) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String token = String.valueOf(LoginParser.parseLoginData(response));
+
+                if(loginListener != null)
+                    loginListener.onValidateLogin(token, username, context);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("username", username);
+                params.put("password", password);
+
+                return params;
+            }
+        };
+        volleyQueue.add(request);
+    }
+    public void setLoginListener(LoginListener loginListener) {
+        this.loginListener = loginListener;
+    }
+    //endregion
 }
