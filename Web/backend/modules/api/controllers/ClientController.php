@@ -1,4 +1,5 @@
 <?php
+
 namespace backend\modules\api\controllers;
 
 use yii\rest\ActiveController;
@@ -12,15 +13,23 @@ class ClientController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => HttpBasicAuth::className(),
-            'except' => ['login'], // Exclude 'login' from authentication
+
+        $behaviors['verbs'] = [
+            'class' => \yii\filters\VerbFilter::className(),
+            'actions' => [
+                '*' => ['POST'], // Permit only POST requests
+            ],
         ];
+
         return $behaviors;
     }
 
     public function actionLogin()
     {
+        if(!\Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
+
         $receivedUser = \Yii::$app->request->post();
 
         if (!isset($receivedUser['username']) || !isset($receivedUser['password'])) {
@@ -47,4 +56,3 @@ class ClientController extends ActiveController
         ];
     }
 }
-

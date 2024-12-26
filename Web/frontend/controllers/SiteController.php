@@ -113,7 +113,7 @@ class SiteController extends BaseController
 
             $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
 
-            if ($getRoleId !== "1") {
+            if ($getRoleId['roleId'] != 1) {
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out
                 Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');

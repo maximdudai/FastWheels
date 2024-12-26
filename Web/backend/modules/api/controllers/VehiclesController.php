@@ -20,9 +20,12 @@ class VehiclesController extends ActiveController
   {
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
-      'class' => HttpBasicAuth::className(), // ou QueryParamAuth::className(),
-      'except' => ['index', 'view', 
-        'create', 'update', 'delete', 'options', 'count', 'list' // TODO: delete after testing
+      'class' => HttpBasicAuth::className(),
+      'except' => [
+        'index',
+        'view',
+        'count',
+        'list'
       ],
       'auth' => [$this, 'authintercept']
     ];
@@ -31,24 +34,28 @@ class VehiclesController extends ActiveController
 
   public function authintercept($username, $password)
   {
-      $user = User::findByUsername($username);
-      if ($user && $user->validatePassword($password)) {
-          $this->user = $user; //Guardar user autenticado
-          return $user;
-      }
-      // error code 403
-      throw new \yii\web\ForbiddenHttpException('Unauthorized', 403);
+    $user = User::findByUsername($username);
+
+    if ($user && $user->validatePassword($password)) {
+      $this->user = $user; //Guardar user autenticado
+      return $user;
+    }
+    // error code 403
+    throw new \yii\web\ForbiddenHttpException('Unauthorized', 403);
   }
 
-  public function actionCount() {
+  public function actionCount()
+  {
     return ['count' => UserCar::find()->count()];
   }
 
-  public function actionList() {
+  public function actionList()
+  {
     return UserCar::find()->all();
   }
 
-  public function actionIndex($id) {
+  public function actionIndex($id)
+  {
     return UserCar::findOne($id);
   }
 
@@ -100,7 +107,7 @@ class VehiclesController extends ActiveController
     // Validate token
 
     $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
-    
+
     if (!$findClientByVerificationToken) {
       throw new UnauthorizedHttpException('Invalid token', 403);
     }
@@ -127,7 +134,8 @@ class VehiclesController extends ActiveController
       'errors' => $model->errors,
     ];
   }
-  public function actionDelete($id) {
+  public function actionDelete($id)
+  {
     if (!Yii::$app->request->isDelete) {
       throw new BadRequestHttpException('Invalid request method');
     }
