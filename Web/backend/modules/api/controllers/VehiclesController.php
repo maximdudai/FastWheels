@@ -48,6 +48,10 @@ class VehiclesController extends ActiveController
     return UserCar::find()->all();
   }
 
+  public function actionIndex($id) {
+    return UserCar::findOne($id);
+  }
+
   public function actionCreate()
   {
     if (!Yii::$app->request->isPost) {

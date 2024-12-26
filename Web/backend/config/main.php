@@ -66,6 +66,7 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/vehicles',
                     'extraPatterns' => [
+                        'GET {id}/index' => 'index',
                         'POST create' => 'create',
                         'PUT {id}/update' => 'update',
                         'DELETE {id}/delete' => 'delete',
