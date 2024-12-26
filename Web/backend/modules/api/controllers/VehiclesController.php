@@ -21,10 +21,31 @@ class VehiclesController extends ActiveController
     $behaviors = parent::behaviors();
     $behaviors['authenticator'] = [
       'class' => HttpBasicAuth::className(), // ou QueryParamAuth::className(),
-      'except' => ['index', 'view', 'create'],
+      'except' => ['index', 'view', 
+        'create', 'update', 'delete', 'options', 'count', 'list' // TODO: delete after testing
+      ],
       'auth' => [$this, 'authintercept']
     ];
     return $behaviors;
+  }
+
+  public function authintercept($username, $password)
+  {
+      $user = User::findByUsername($username);
+      if ($user && $user->validatePassword($password)) {
+          $this->user = $user; //Guardar user autenticado
+          return $user;
+      }
+      // error code 403
+      throw new \yii\web\ForbiddenHttpException('Unauthorized', 403);
+  }
+
+  public function actionCount() {
+    return ['count' => UserCar::find()->count()];
+  }
+
+  public function actionList() {
+    return UserCar::find()->all();
   }
 
   public function actionCreate()
@@ -47,7 +68,7 @@ class VehiclesController extends ActiveController
 
     // Load data into the model and validate
     if ($model->load($data, '') && $model->validate()) {
-      $model->clientId = $findClientByVerificationToken->id ?? 1;
+      $model->clientId = $findClientByVerificationToken->id;
       $model->createdAt = date('Y-m-d H:i:s');
 
       if ($model->save()) {
@@ -75,13 +96,9 @@ class VehiclesController extends ActiveController
     // Validate token
 
     $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
-    if (!$findClientByVerificationToken) {
-      // throw new UnauthorizedHttpException('Invalid token');
     
-      return [
-        'status' => 'error',
-        'errors' => ['Invalid token' => 'Invalid token'],
-      ];
+    if (!$findClientByVerificationToken) {
+      throw new UnauthorizedHttpException('Invalid token', 403);
     }
 
     // Find the existing model
@@ -91,7 +108,7 @@ class VehiclesController extends ActiveController
     }
 
     // Load and validate data
-    if ($model->load($data, '') && $model->validate()) {
+    if ($model->load($data) && $model->validate()) {
       if ($model->save()) {
         return [
           'status' => 'success',
@@ -101,6 +118,38 @@ class VehiclesController extends ActiveController
     }
 
     // Return validation errors
+    return [
+      'status' => 'error',
+      'errors' => $model->errors,
+    ];
+  }
+  public function actionDelete($id) {
+    if (!Yii::$app->request->isDelete) {
+      throw new BadRequestHttpException('Invalid request method');
+    }
+
+    $data = Yii::$app->request->delete();
+
+    // Validate token
+    $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
+
+    if (!$findClientByVerificationToken) {
+      throw new UnauthorizedHttpException('Invalid token');
+    }
+
+    // Find the existing model
+    $model = UserCar::findOne($id);
+    if (!$model) {
+      throw new NotFoundHttpException('Invalid vehicle ID');
+    }
+
+    // Delete the model
+    if ($model->delete()) {
+      return [
+        'status' => 'success',
+      ];
+    }
+
     return [
       'status' => 'error',
       'errors' => $model->errors,

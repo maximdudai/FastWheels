@@ -68,6 +68,7 @@ return [
                     'extraPatterns' => [
                         'POST create' => 'create',
                         'PUT {id}/update' => 'update',
+                        'DELETE {id}/delete' => 'delete',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
