@@ -2,11 +2,9 @@
 
 namespace backend\modules\api\controllers;
 
-
-use Yii;
 use yii\rest\ActiveController;
+use common\models\User; // Ensure this is your user model
 use yii\filters\auth\HttpBasicAuth;
-use common\models\User;
 
 class ClientController extends ActiveController
 {
@@ -15,19 +13,25 @@ class ClientController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => HttpBasicAuth::className(),
-            'except' => ['login'],
+
+        $behaviors['verbs'] = [
+            'class' => \yii\filters\VerbFilter::className(),
+            'actions' => [
+                '*' => ['POST'], // Permit only POST requests
+            ],
         ];
+
         return $behaviors;
     }
 
-
     public function actionLogin()
     {
+        if(!\Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
+
         $receivedUser = \Yii::$app->request->post();
 
-        // Check if the username and password were sent
         if (!isset($receivedUser['username']) || !isset($receivedUser['password'])) {
             throw new \yii\web\BadRequestHttpException('Please provide username and password');
         }
