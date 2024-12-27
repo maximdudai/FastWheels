@@ -40,4 +40,6 @@
     <string name="vehicle_list_estado">"Estado: "</string>
     <string name="vehicle_form_cidade">Cidade</string>
     <string name="vehicle_image">Fotos do veículo</string>
+    <string name="ndopen">ndOpen</string>
+    <string name="ndclose">ndClose</string>
 </resources>

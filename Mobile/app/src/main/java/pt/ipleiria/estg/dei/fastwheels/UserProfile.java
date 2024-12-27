@@ -46,6 +46,5 @@ public class UserProfile extends AppCompatActivity {
     public void handleSupport(View v) {
         Intent supportPage = new Intent(this, Support.class);
         startActivity(supportPage);
-        finish();
     }
 }

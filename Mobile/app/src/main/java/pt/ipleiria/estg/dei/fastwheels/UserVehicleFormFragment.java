@@ -114,7 +114,7 @@ public class UserVehicleFormFragment extends Fragment {
     private void setupOpenGallery() {
         ivOpenGallery.setOnClickListener(v -> {
             if (selectedImages.size() >= MAX_IMAGES) {
-                Helpers.showError(getContext(), "Execedeu o limite de " + MAX_IMAGES + " fotografias!");
+                Helpers.showMessage(getContext(), "Execedeu o limite de " + MAX_IMAGES + " fotografias!");
             } else {
                 checkAndroidPermissionsUser();
             }
@@ -156,7 +156,7 @@ public class UserVehicleFormFragment extends Fragment {
                 openGallery.launch("image/*");
             } else {
                 //Negado -> abrir mensagem erro
-                Helpers.showError(getContext(), "Permissão para aceder a galeria negada!");
+                Helpers.showMessage(getContext(), "Permissão para aceder a galeria negada!");
             }
         }
     }
@@ -195,7 +195,7 @@ public class UserVehicleFormFragment extends Fragment {
                     .setPositiveButton("Sim", (dialog, which) -> {
                         selectedImages.remove(uri);
                         selectedImagesContainer.removeView(imageView);
-                        Helpers.showError(getContext(), "Fotografia removida");
+                        Helpers.showMessage(getContext(), "Fotografia removida");
                     })
                     .setNegativeButton("Não", null) // Não faz nada
                     .show();
@@ -329,7 +329,7 @@ public class UserVehicleFormFragment extends Fragment {
             // Adicionar o veículo à BD através do Singleton
             SingletonFastWheels.getInstance(requireContext()).addVehicleDb(newVehicle);
 
-            Helpers.showError(getContext(),"Veículo adicionado com sucesso!");
+            Helpers.showMessage (getContext(),"Veículo adicionado com sucesso!");
         } catch (Exception e) {
         Log.e("SaveVehicleError", "Erro ao salvar veículo: " + e.getMessage());
         }
