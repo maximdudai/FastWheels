@@ -3,10 +3,12 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -39,20 +41,32 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, ""+ notificacao1, Toast.LENGTH_SHORT).show();
 
-        //loadFragment(new VehicleListFragment());
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
-        btnMyVehicles.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
-            startActivity(intent);
-        });
+        loadFragment(new VehicleListFragment());
     }
 
     private void loadFragment(Fragment fragment) {
         // Gerenciar a transação do fragmento com suporte a addToBackStack
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fragment)
+                .replace(R.id.contentFragment, fragment)
                 .commit();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFragment);
+        if (fragment instanceof VehicleListFragment) {
+            // Previne recriação do menu
+            getSupportFragmentManager().popBackStackImmediate();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

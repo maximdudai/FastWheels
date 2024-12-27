@@ -1,6 +1,8 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
 import android.content.Context;
+import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -70,19 +72,16 @@ public class Login extends AppCompatActivity implements LoginListener {
         if(isDataEmpty)
             return;
 
-        String loginEmail = userEmail.getText().toString();
-        String loginPassword = userPassword.getText().toString();
-//
-//        if(!Helpers.isPasswordValid(loginPassword)) {
-//            //TODO: custom error handler
-//            Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if(!Helpers.isEmailValid(loginEmail)) {
-//            //TODO: custom error handler
-//            Toast.makeText(this, "Invalid email address", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        if(!Helpers.isPasswordValid(userPassword.getText().toString())) {
+            //TODO: custom error handler
+            showMessage(this, "Invalid Password");
+            return;
+        }
+        if(!Helpers.isEmailValid(userEmail.getText().toString())) {
+            //TODO: custom error handler
+            showMessage(this, "Invalid email address");
+            return;
+        }
 
         // send authentication request to API
         SingletonFastWheels.getInstance(getApplicationContext()).loginAPI(loginEmail, loginPassword, getApplicationContext());

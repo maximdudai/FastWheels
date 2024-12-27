@@ -1,10 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FastWheels" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/main_color</item>
+
+    <!-- Tema base sem ActionBar para o modo claro -->
+    <style name="Base.Theme.FastWheels" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+
+        <!-- Personalize o estilo do popup menu -->
+        <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
+        <item name="popupMenuStyle">@style/PopupMenuStyle</item>
     </style>
 
+    <!-- Tema final usado pela aplicação -->
     <style name="Theme.FastWheels" parent="Base.Theme.FastWheels" />
+
+    <!-- Estilo do PopupMenu -->
+    <style name="PopupMenuStyle" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@color/menu_background</item>
+        <item name="android:textAppearance">@style/PopupMenuTextAppearance</item>
+    </style>
+
+    <!-- Estilo do texto dos itens do PopupMenu -->
+    <style name="PopupMenuTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/menu_text_color</item>
+    </style>
+
 </resources>

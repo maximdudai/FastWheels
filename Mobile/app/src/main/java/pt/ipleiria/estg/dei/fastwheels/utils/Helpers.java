@@ -29,7 +29,7 @@ public class Helpers {
         return matcher.matches();
     }
 
-    public static void showError(Context context, String message) {
+    public static void showMessage(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 

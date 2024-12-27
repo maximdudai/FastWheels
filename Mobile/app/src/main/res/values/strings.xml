@@ -39,4 +39,5 @@
     <string name="vehicle_list_n_portas">"Nº de portas: "</string>
     <string name="vehicle_list_estado">"Estado: "</string>
     <string name="vehicle_form_cidade">Cidade</string>
+    <string name="vehicle_image">Fotos do veículo</string>
 </resources>
