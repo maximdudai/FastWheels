@@ -6,7 +6,6 @@ import android.app.DatePickerDialog;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -130,7 +128,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
             showDatePickerDialog("Data de Fim", date -> filterByAvailableTo(date));
             return true;
         } else if (itemId == R.id.filterByLocation) {
-            showFilterDialog("Localização", "Digite a localização desejada", input -> filterByLocation(input));
+            showFilterDialog("Localização", "Digite a residência, código postal ou cidade", input -> filterByLocation(input));
             return true;
         } else if (itemId == R.id.deleteFilters) {
             clearFilters();
@@ -198,12 +196,16 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     private void filterByLocation(String location) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
         for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
-            if (v.getLocation() != null && v.getLocation().toString().toLowerCase().contains(location.toLowerCase())) {
+
+            if ((v.getLocation() != null && v.getLocation().toLowerCase().contains(location.toLowerCase())) ||
+                    (v.getPostalCode() != null && v.getPostalCode().toLowerCase().contains(location.toLowerCase())) ||
+                    (v.getCity() != null && v.getCity().toLowerCase().contains(location.toLowerCase()))) {
                 filteredList.add(v);
             }
         }
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
     }
+
 
     private void showFilterDialog(String title, String hint, Consumer<String> onInputConfirmed) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -268,7 +270,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         newVehicle.setStatus(true); // Status disponível
         newVehicle.setAvailableFrom(new Timestamp(System.currentTimeMillis())); // Disponível agora
         newVehicle.setAvailableTo(new Timestamp(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000L)); // Disponível por 7 dias
-        newVehicle.setLocation(null); // Substitua por um objeto Location válido ou use null se não aplicável
+        newVehicle.setLocation("Rua Exemplo, 123"); // Exemplo de residência
+        newVehicle.setPostalCode("1234-567"); // Exemplo de código postal
+        newVehicle.setCity("Lisboa"); // Exemplo de cidade
 
         // Adiciona o novo veículo à base de dados do Singleton
         SingletonFastWheels.getInstance(getContext()).addVehicleDb(newVehicle);

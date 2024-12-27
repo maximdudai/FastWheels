@@ -1,7 +1,6 @@
 package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
-import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +65,11 @@ public class VehicleListAdapter extends BaseAdapter {
 
     private class ViewHolderVehicle {
         private ImageView imgVehicle;
-        private TextView tvMark, tvModel, tvYear, tvLocation, tvRating, tvTrips;
+        private TextView tvBrand, tvModel, tvYear, tvLocation, tvRating, tvTrips;
 
         public ViewHolderVehicle(View view) {
             imgVehicle = view.findViewById(R.id.imgVehicle);
-            tvMark = view.findViewById(R.id.tvBrand);
+            tvBrand = view.findViewById(R.id.tvBrand);
             tvModel = view.findViewById(R.id.tvModel);
             tvYear = view.findViewById(R.id.tvYear);
             tvLocation = view.findViewById(R.id.tvLocation);
@@ -79,21 +78,14 @@ public class VehicleListAdapter extends BaseAdapter {
         }
 
         public void update(Vehicle vehicle) {
-            imgVehicle.setImageResource(R.drawable.car_test); // Replace with dynamic image if available
-            tvMark.setText(vehicle.getBrand());
+            imgVehicle.setImageResource(R.drawable.car_test);
+            tvBrand.setText(vehicle.getBrand());
             tvModel.setText(vehicle.getCarModel());
             tvYear.setText(String.valueOf(vehicle.getCarYear()));
+            tvLocation.setText(vehicle.getLocation());
 
-            Location location = vehicle.getLocation();
-            if (location != null) {
-                String locationText = "Lat: " + location.getLatitude() + ", Long: " + location.getLongitude();
-                tvLocation.setText(locationText);
-            } else {
-                tvLocation.setText("Location not available");
-            }
-
-            tvRating.setText("0.0"); // Replace with actual rating if available
-            tvTrips.setText("0 trips"); // Replace with actual trip count if available
+            tvRating.setText("0.0"); // Replace
+            tvTrips.setText("0 trips"); // Replace
         }
     }
 

@@ -1,8 +1,11 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+<<<<<<<<< Temporary merge branch 1
 import android.content.Context;
+=========
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -112,7 +115,7 @@ public class Login extends AppCompatActivity implements LoginListener {
             }
 
             // Redirecionar para a MainActivity
-            Intent mainActivity = new Intent(this, UserProfile.class);
+            Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
             finish();
         }
