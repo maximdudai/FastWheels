@@ -43,7 +43,7 @@
 
                     ['label' => 'Company', 'header' => true],
                     ['label' => 'Support ticket', 'icon' => 'fa-solid fa-headset'],
-                    ['label' => 'Taxes', 'icon' => 'fa-solid fa-percent'],
+                    ['label' => 'Taxes', 'icon' => 'fa-solid fa-percent', 'url' => ['/taxes']]
                 ],
             ]);
             ?>

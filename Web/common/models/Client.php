@@ -152,4 +152,17 @@ class Client extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Usercar::class, ['clientId' => 'id']);
     }
+
+    /**
+     * Check if user is admin
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public static function isUserAdmin($userId)
+    {   
+        $client = self::findOne(['userId' => $userId]);
+
+        return $client && $client->roleId === 3;
+    }
 }
