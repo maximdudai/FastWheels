@@ -7,6 +7,30 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="always|collapseActionView" />
 
+    <item
+        android:id="@+id/filterByCarDoors"
+        android:title="Filtrar por Portas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filterByAvailableFrom"
+        android:title="Filtrar por Data de Início"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filterByAvailableTo"
+        android:title="Filtrar por Data de Fim"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filterByLocation"
+        android:title="Filtrar por Localização"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/deleteFilters"
+        android:title="Remover Filtros"
+        app:showAsAction="never" />
 </menu>

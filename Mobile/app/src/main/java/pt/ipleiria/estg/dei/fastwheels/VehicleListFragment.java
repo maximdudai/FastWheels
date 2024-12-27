@@ -1,5 +1,9 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
+
+import android.app.DatePickerDialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
@@ -10,11 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -30,6 +37,11 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     private ListView lvVehicles;
     private ArrayList<Vehicle> vehicleList;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private SearchView searchView;
+    private Integer appliedCarDoors;
+    private String availableFrom;
+    private String availableTo;
+    private String locationFilter;
 
     public VehicleListFragment() {
         // Construtor padrão necessário
@@ -37,9 +49,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
-
         // Configuração do SwipeRefreshLayout
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -47,15 +59,21 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
+        appliedCarDoors = null;
+        availableFrom = null;
+        availableTo = null;
+        locationFilter = null;
+
+        // Add test vehicle
+        //addNewVehicle();
+
         // Configuração da ListView
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList));
-        Log.d("VehicleListFragment", "Adapter set with " + vehicleList.size() + " items.");
 
         lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("VehicleListFragment", "Item clicked, position: " + i + ", id: " + l);
-                Toast.makeText(getContext(), "Clicked position: " + i + ", ID: " + l, Toast.LENGTH_SHORT).show();
+                showMessage(getContext(), "Clicked position: " + i + ", ID: " + l);
 
                 Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
                 intent.putExtra("VEHICLE_ID", (int) l);
@@ -67,12 +85,11 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        // Infla o menu de pesquisa
         inflater.inflate(R.menu.search_menu, menu);
 
         // Configuração da barra de pesquisa
         MenuItem itemSearch = menu.findItem(R.id.itemSearch);
-        SearchView searchView = (SearchView) itemSearch.getActionView();
+        searchView = (SearchView) itemSearch.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -85,7 +102,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
                 // Filtra os veículos pelo texto digitado
                 for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
-                    if (v.getMark().toLowerCase().contains(newText.toLowerCase()) ||
+                    if (v.getBrand().toLowerCase().contains(newText.toLowerCase()) ||
                             v.getCarModel().toLowerCase().contains(newText.toLowerCase())) {
                         tempVehicles.add(v);
                     }
@@ -96,7 +113,137 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
                 return true;
             }
         });
+        super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.filterByCarDoors) {
+            showSingleChoiceDialog("Número de Portas", new String[]{"2", "3", "4"}, selected -> filterByCarDoors(Integer.parseInt(selected)));
+            return true;
+        } else if (itemId == R.id.filterByAvailableFrom) {
+            showDatePickerDialog("Data de Início", date -> filterByAvailableFrom(date));
+            return true;
+        } else if (itemId == R.id.filterByAvailableTo) {
+            showDatePickerDialog("Data de Fim", date -> filterByAvailableTo(date));
+            return true;
+        } else if (itemId == R.id.filterByLocation) {
+            showFilterDialog("Localização", "Digite a localização desejada", input -> filterByLocation(input));
+            return true;
+        } else if (itemId == R.id.deleteFilters) {
+            clearFilters();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void clearFilters() {
+        // Redefina os filtros aplicados
+        appliedCarDoors = null;  // Número de portas
+        availableFrom = null;    // Data de início
+        availableTo = null;      // Data de fim
+        locationFilter = null;   // Localização
+
+        // Recarregar a lista sem filtros
+        reloadListWithoutFilters();
+
+        // Exibir uma mensagem para o usuário
+        showMessage(getContext(), "Filtros removidos");
+    }
+
+
+
+    private void reloadListWithoutFilters() {
+        // Obter todos os veículos sem filtros
+        ArrayList<Vehicle> allVehicles = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+
+        // Atualizar o adaptador da ListView com todos os veículos
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), allVehicles));
+    }
+
+
+    private void filterByCarDoors(int doors) {
+        ArrayList<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+            if (v.getCarDoors() == doors) {
+                filteredList.add(v);
+            }
+        }
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+    }
+
+    private void filterByAvailableFrom(Timestamp startDate) {
+        ArrayList<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+            if (v.getAvailableFrom().after(startDate)) {
+                filteredList.add(v);
+            }
+        }
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+    }
+
+    private void filterByAvailableTo(Timestamp endDate) {
+        ArrayList<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+            if (v.getAvailableTo().before(endDate)) {
+                filteredList.add(v);
+            }
+        }
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+    }
+
+    private void filterByLocation(String location) {
+        ArrayList<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+            if (v.getLocation() != null && v.getLocation().toString().toLowerCase().contains(location.toLowerCase())) {
+                filteredList.add(v);
+            }
+        }
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+    }
+
+    private void showFilterDialog(String title, String hint, Consumer<String> onInputConfirmed) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(title);
+
+        final EditText input = new EditText(getContext());
+        input.setHint(hint);
+        builder.setView(input);
+
+        builder.setPositiveButton("Filtrar", (dialog, which) -> {
+            String userInput = input.getText().toString().trim();
+            if (!userInput.isEmpty()) {
+                onInputConfirmed.accept(userInput);
+            }
+        });
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void showSingleChoiceDialog(String title, String[] options, Consumer<String> onOptionSelected) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(title);
+
+        builder.setItems(options, (dialog, which) -> {
+            onOptionSelected.accept(options[which]);
+        });
+        builder.show();
+    }
+
+    private void showDatePickerDialog(String title, Consumer<Timestamp> onDateSelected) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
+        datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, dayOfMonth, 0, 0, 0);
+            Timestamp selectedDate = new Timestamp(calendar.getTimeInMillis());
+            onDateSelected.accept(selectedDate);
+        });
+        datePickerDialog.show();
+    }
+
 
     @Override
     public void onRefresh() {
@@ -113,10 +260,10 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Definindo valores para os atributos obrigatórios
         newVehicle.setId(0); // Define um ID padrão (ou gere um ID único se necessário)
         newVehicle.setClientId(123); // Substitua por um ID válido de cliente
-        newVehicle.setMark("Nissan"+" ");
-        newVehicle.setCarModel("GTR");
-        newVehicle.setCarYear(2024);
-        newVehicle.setCarDoors(4); // Número de portas
+        newVehicle.setBrand("Datsun"+" ");
+        newVehicle.setCarModel("Velho");
+        newVehicle.setCarYear(1945);
+        newVehicle.setCarDoors(2); // Número de portas
         newVehicle.setCreatedAt(new Timestamp(System.currentTimeMillis())); // Data atual como criada
         newVehicle.setStatus(true); // Status disponível
         newVehicle.setAvailableFrom(new Timestamp(System.currentTimeMillis())); // Disponível agora

@@ -80,7 +80,7 @@ public class VehicleListAdapter extends BaseAdapter {
 
         public void update(Vehicle vehicle) {
             imgVehicle.setImageResource(R.drawable.car_test); // Replace with dynamic image if available
-            tvMark.setText(vehicle.getMark());
+            tvMark.setText(vehicle.getBrand());
             tvModel.setText(vehicle.getCarModel());
             tvYear.setText(String.valueOf(vehicle.getCarYear()));
 

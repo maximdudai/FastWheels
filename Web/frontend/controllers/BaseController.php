@@ -4,7 +4,7 @@ namespace frontend\controllers;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
-class ProfileController extends Controller
+class BaseController extends Controller
 {
     public function behaviors()
     {

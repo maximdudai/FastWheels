@@ -57,7 +57,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
 
     public Vehicle addVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
-        values.put(BRAND, vehicle.getMark());
+        values.put(BRAND, vehicle.getBrand());
         values.put(MODEL, vehicle.getCarModel());
         values.put(YEAR, vehicle.getCarYear());
         values.put(DOORS, vehicle.getCarDoors());
@@ -82,7 +82,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
 
     public boolean editVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
-        values.put(BRAND, vehicle.getMark());
+        values.put(BRAND, vehicle.getBrand());
         values.put(MODEL, vehicle.getCarModel());
         values.put(YEAR, vehicle.getCarYear());
         values.put(DOORS, vehicle.getCarDoors());
@@ -110,7 +110,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             Vehicle vehicle = new Vehicle();
             vehicle.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
-            vehicle.setMark(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
+            vehicle.setBrand(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
             vehicle.setCarModel(cursor.getString(cursor.getColumnIndexOrThrow(MODEL)));
             vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
             vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
@@ -143,7 +143,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
             do {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
-                vehicle.setMark(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
+                vehicle.setBrand(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
                 vehicle.setCarModel(cursor.getString(cursor.getColumnIndexOrThrow(MODEL)));
                 vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
                 vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
