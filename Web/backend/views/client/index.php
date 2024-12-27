@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Client;
+use common\models\Role;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -14,7 +15,6 @@ $this->title = 'Clients';
 $this->params['breadcrumbs'][] = $this->title;
 
 $isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
-
 
 ?>
 <div class="client-index">
@@ -40,7 +40,10 @@ $isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
             'email:email',
             'phone',
             'roleId' => [
-                'attribute' => 'roleId',
+                'attribute' => 'Role',
+                'value' => function ($model) {
+                    return $model->role ? $model->role->roleName : 'No role assigned';
+                },
             ],
             'createdAt',
             'balance',
