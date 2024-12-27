@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Support">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Tem alguma dúvida ?\nEntre em contacto connosco!"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+    <!-- Expandable ListView para FAQ -->
+    <ExpandableListView
+        android:id="@+id/faqListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="5dp" />
+
+    <!-- Texto de contato -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Se precisar de mais ajuda, contacte-nos:"
+        android:paddingTop="16dp" />
+
+    <!-- Email -->
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ajuda@app.com"
+        android:textColor="@android:color/holo_blue_dark"
+        android:paddingBottom="8dp" />
+
+    <!-- Botão para enviar email -->
+    <Button
+        android:id="@+id/btnEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="Enviar Email" />
+
+</LinearLayout>

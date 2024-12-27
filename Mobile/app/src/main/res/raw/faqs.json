@@ -1,0 +1,128 @@
+[
+  {
+    "categoria": "Conta e Registo",
+    "perguntas": [
+      {
+        "pergunta": "Como posso criar uma conta?",
+        "resposta": "Para criar uma conta, clique no botão 'Registar' na página inicial da aplicação. Preencha os seus dados pessoais, aceite os Termos e Condições e conclua o registo."
+      },
+      {
+        "pergunta": "Esqueci-me da minha palavra-passe. O que devo fazer?",
+        "resposta": "Clique em 'Esqueci-me da palavra-passe' na página de login e siga as instruções para redefinir a sua palavra-passe."
+      },
+      {
+        "pergunta": "Posso alterar os meus dados pessoais depois de criar uma conta?",
+        "resposta": "Sim, pode alterar os seus dados pessoais na secção 'Perfil' dentro da aplicação."
+      },
+      {
+        "pergunta": "Posso usar a aplicação sem criar uma conta?",
+        "resposta": "Não, é necessário criar uma conta para poder alugar ou listar veículos na nossa plataforma."
+      }
+    ]
+  },
+  {
+    "categoria": "Aluguer de Veículos",
+    "perguntas": [
+      {
+        "pergunta": "Como posso alugar um carro?",
+        "resposta": "Utilize a barra de pesquisa para encontrar carros disponíveis na sua área. Escolha o carro, selecione as datas desejadas e finalize a reserva."
+      },
+      {
+        "pergunta": "Posso cancelar uma reserva depois de confirmada?",
+        "resposta": "Sim, pode cancelar uma reserva, mas aplicam-se políticas de cancelamento que variam conforme a antecedência do cancelamento."
+      },
+      {
+        "pergunta": "O que acontece se devolver o carro atrasado?",
+        "resposta": "Se devolver o carro atrasado, poderá ser aplicada uma taxa adicional. Entre em contacto com o proprietário caso preveja atrasos."
+      },
+      {
+        "pergunta": "Posso alugar um carro para outra pessoa?",
+        "resposta": "Não, o aluguer só pode ser utilizado pelo titular da conta que efetuou a reserva."
+      }
+    ]
+  },
+  {
+    "categoria": "Listagem de Veículos",
+    "perguntas": [
+      {
+        "pergunta": "Como posso listar o meu carro para aluguer?",
+        "resposta": "Na aplicação, vá até à secção 'Os Meus Veículos' e clique em 'Adicionar Veículo'. Preencha as informações, carregue as fotos e defina o preço de aluguer."
+      },
+      {
+        "pergunta": "Posso alterar as informações do meu carro depois de listá-lo?",
+        "resposta": "Sim, pode editar as informações do seu carro a qualquer momento na secção 'Os Meus Veículos'."
+      },
+      {
+        "pergunta": "O que acontece se o meu carro sofrer danos durante o aluguer?",
+        "resposta": "Todos os alugueres estão protegidos por um seguro abrangente. Em caso de danos, entre em contacto com a nossa equipa de suporte imediatamente."
+      },
+      {
+        "pergunta": "Posso definir requisitos para quem pode alugar o meu carro?",
+        "resposta": "Sim, pode definir requisitos, como idade mínima e experiência de condução, ao criar o anúncio do seu veículo."
+      }
+    ]
+  },
+  {
+    "categoria": "Pagamentos e Taxas",
+    "perguntas": [
+      {
+        "pergunta": "Como faço o pagamento do aluguer?",
+        "resposta": "O pagamento é feito diretamente na aplicação através de métodos seguros, como cartão de crédito ou outros meios disponíveis."
+      },
+      {
+        "pergunta": "Quando recebo o pagamento pelo aluguer do meu carro?",
+        "resposta": "O pagamento será transferido para a sua conta bancária até 3 dias úteis após o término do aluguer."
+      },
+      {
+        "pergunta": "Há alguma comissão para usar a plataforma?",
+        "resposta": "Sim, cobramos uma comissão sobre o valor total do aluguer. Esta comissão será exibida antes de confirmar a reserva ou o anúncio."
+      },
+      {
+        "pergunta": "Posso receber o pagamento em outro método além de transferência bancária?",
+        "resposta": "Atualmente, os pagamentos são processados apenas por transferência bancária para a conta que indicar no perfil."
+      }
+    ]
+  },
+  {
+    "categoria": "Seguro e Segurança",
+    "perguntas": [
+      {
+        "pergunta": "Os carros alugados estão cobertos por seguro?",
+        "resposta": "Sim, todos os veículos listados na plataforma estão protegidos por um seguro abrangente durante o período de aluguer."
+      },
+      {
+        "pergunta": "O que está incluído no seguro?",
+        "resposta": "O seguro cobre danos ao veículo, roubo e responsabilidade civil. Consulte os Termos do Seguro na aplicação para mais detalhes."
+      },
+      {
+        "pergunta": "Posso adicionar uma cobertura extra ao seguro?",
+        "resposta": "Sim, pode selecionar coberturas adicionais durante o processo de reserva por um custo extra."
+      },
+      {
+        "pergunta": "O que devo fazer em caso de acidente?",
+        "resposta": "Em caso de acidente, contacte imediatamente a nossa linha de suporte e siga as instruções fornecidas."
+      }
+    ]
+  },
+  {
+    "categoria": "Suporte ao Cliente",
+    "perguntas": [
+      {
+        "pergunta": "Como posso entrar em contacto com o suporte ao cliente?",
+        "resposta": "Pode enviar um email para suporte@fastwheels.com ou utilizar o botão 'Ajuda' na aplicação para abrir um chat."
+      },
+      {
+        "pergunta": "Qual é o horário de atendimento do suporte ao cliente?",
+        "resposta": "O suporte ao cliente está disponível de segunda a sexta-feira, das 9h às 18h."
+      },
+      {
+        "pergunta": "Posso reportar problemas com um locatário ou locador?",
+        "resposta": "Sim, utilize a secção 'Reportar Problemas' na aplicação para comunicar qualquer situação e a nossa equipa entrará em contacto."
+      },
+      {
+        "pergunta": "Os meus dados pessoais estão seguros?",
+        "resposta": "Sim, seguimos rigorosas normas de privacidade e proteção de dados. Consulte a nossa Política de Privacidade para mais informações."
+      }
+    ]
+  }
+]

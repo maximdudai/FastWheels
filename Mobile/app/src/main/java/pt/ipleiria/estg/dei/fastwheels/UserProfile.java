@@ -42,4 +42,10 @@ public class UserProfile extends AppCompatActivity {
         startActivity(toLogin);
         finish();
     }
+
+    public void handleSupport(View v) {
+        Intent supportPage = new Intent(this, Support.class);
+        startActivity(supportPage);
+        finish();
+    }
 }
