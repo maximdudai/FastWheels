@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "dbVehicles";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     private final SQLiteDatabase db;
 
@@ -23,8 +23,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     private static final String MODEL = "model";
     private static final String YEAR = "year";
     private static final String DOORS = "doors";
-    private static final String LATITUDE = "latitude";
-    private static final String LONGITUDE = "longitude";
+    private static final String LOCATION = "location";
     private static final String AVAILABLE_FROM = "available_from";
     private static final String AVAILABLE_TO = "available_to";
 
@@ -41,13 +40,13 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 MODEL + " TEXT NOT NULL, " +
                 YEAR + " INTEGER NOT NULL, " +
                 DOORS + " INTEGER NOT NULL, " +
-                LATITUDE + " FLOAT, " +
-                LONGITUDE + " FLOAT, " +
+                LOCATION + " TEXT, " +
                 AVAILABLE_FROM + " TEXT, " +
                 AVAILABLE_TO + " TEXT);";
 
         db.execSQL(createVehicleTable);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -61,10 +60,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         values.put(MODEL, vehicle.getCarModel());
         values.put(YEAR, vehicle.getCarYear());
         values.put(DOORS, vehicle.getCarDoors());
-        if (vehicle.getLocation() != null) {
-            values.put(LATITUDE, vehicle.getLocation().getLatitude());
-            values.put(LONGITUDE, vehicle.getLocation().getLongitude());
-        }
+        values.put(LOCATION, vehicle.getLocation());
         if (vehicle.getAvailableFrom() != null) {
             values.put(AVAILABLE_FROM, vehicle.getAvailableFrom().toString());
         }
@@ -86,10 +82,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         values.put(MODEL, vehicle.getCarModel());
         values.put(YEAR, vehicle.getCarYear());
         values.put(DOORS, vehicle.getCarDoors());
-        if (vehicle.getLocation() != null) {
-            values.put(LATITUDE, vehicle.getLocation().getLatitude());
-            values.put(LONGITUDE, vehicle.getLocation().getLongitude());
-        }
+        values.put(LOCATION, vehicle.getLocation());
         if (vehicle.getAvailableFrom() != null) {
             values.put(AVAILABLE_FROM, vehicle.getAvailableFrom().toString());
         }
@@ -115,14 +108,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
             vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
             vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
 
-            double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(LATITUDE));
-            double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(LONGITUDE));
-            if (latitude != 0 || longitude != 0) {
-                android.location.Location location = new android.location.Location(android.location.LocationManager.GPS_PROVIDER);
-                location.setLatitude(latitude);
-                location.setLongitude(longitude);
-                vehicle.setLocation(location);
-            }
+            String location = cursor.getString(cursor.getColumnIndexOrThrow(LOCATION));
+            vehicle.setLocation(location);
 
             String availableFrom = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_FROM));
             String availableTo = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_TO));
@@ -148,14 +135,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
                 vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
 
-                double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow(LATITUDE));
-                double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow(LONGITUDE));
-                if (latitude != 0 || longitude != 0) {
-                    android.location.Location location = new android.location.Location(android.location.LocationManager.GPS_PROVIDER);
-                    location.setLatitude(latitude);
-                    location.setLongitude(longitude);
-                    vehicle.setLocation(location);
-                }
+                String location = cursor.getString(cursor.getColumnIndexOrThrow(LOCATION));
+                vehicle.setLocation(location);
 
                 String availableFrom = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_FROM));
                 String availableTo = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_TO));

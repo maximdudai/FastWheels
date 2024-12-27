@@ -27,7 +27,6 @@
         <activity
             android:name=".UserProfile"
             android:exported="false"
-            android:parentActivityName=".MainActivity"
             />
         <activity
             android:name=".VehicleDetailsActivity"

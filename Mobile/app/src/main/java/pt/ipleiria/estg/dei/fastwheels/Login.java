@@ -111,7 +111,7 @@ public class Login extends AppCompatActivity implements LoginListener {
             }
 
             // Redirecionar para a MainActivity
-            Intent mainActivity = new Intent(this, UserProfile.class);
+            Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
             finish();
         }
