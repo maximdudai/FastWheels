@@ -12,13 +12,17 @@ use yii\grid\GridView;
 
 $this->title = 'Clients';
 $this->params['breadcrumbs'][] = $this->title;
+
+$isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
+
+
 ?>
 <div class="client-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?php if (Yii::$app->controller->action->id === 'employees'): ?>
+        <?php if (Yii::$app->controller->action->id === 'employees' && (!Yii::$app->user->isGuest && $isUserAdmin)): ?>
             <?= Html::a('Create Employee', ['create'], ['class' => 'btn btn-success']) ?>
         <?php endif; ?>
     </p>

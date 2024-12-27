@@ -14,19 +14,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true, 'value' => ""]) ?>
+
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'roleId')->textInput() ?>
-
-    <?= $form->field($model, 'createdAt')->textInput() ?>
-
-    <?= $form->field($model, 'balance')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'iban')->textInput(['maxlength' => true]) ?>
-
-    <!-- <?= $form->field($model, 'userId')->textInput() ?> -->
+    <?= 
+        $form->field($model, 'roleId')->textInput()
+        ->dropDownList(
+            ['2' => 'Employee', '3' => 'Admin'],
+            ['prompt' => 'Select Role']
+        );
+     ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -36,17 +36,14 @@
             <?php
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
+                    ['label' => 'Management', 'header' => true],
                     ['label' => 'Funcionarios', 'icon' => 'fa-regular fa-user', 'url' => ['/client/employees']],
                     ['label' => 'Clientes', 'icon' => 'fa-regular fa-user', 'url' => ['/client/clients']],
                     ['label' => 'Veiculos', 'icon' => 'fa-solid fa-car', 'url' => ['/user-car']], // Absolute URL
-                    
-                    ['label' => 'Pedidos de Support', 'icon' => 'fa-solid fa-headset'],
 
-                    // INICIO SECCAO: Yii2 PROVIDED (EXEMPLO)
-                    ['label' => 'Yii2 PROVIDED', 'header' => true],
-                    ['label' => 'Login', 'url' => ['/site/login'], 'icon' => 'sign-in-alt', 'visible' => Yii::$app->user->isGuest],
-                    ['label' => 'Gii', 'icon' => 'file-code', 'url' => ['/gii'], 'target' => '_blank'],
-                    ['label' => 'Debug', 'icon' => 'bug', 'url' => ['/debug'], 'target' => '_blank'],
+                    ['label' => 'Company', 'header' => true],
+                    ['label' => 'Support ticket', 'icon' => 'fa-solid fa-headset'],
+                    ['label' => 'Taxes', 'icon' => 'fa-solid fa-percent', 'url' => ['/taxes']]
                 ],
             ]);
             ?>
