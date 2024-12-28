@@ -18,7 +18,7 @@ class m241118_222507_create_userCars_table extends Migration
         $this->createTable('{{%userCars}}', [
             'id' => $this->primaryKey(),
             'clientId' => $this->integer()->notNull(),
-            'carName' => $this->string(80)->notNull(),
+            'carBrand' => $this->string(80)->notNull(),
             'carModel' => $this->string(30)->notNull(),
             'carYear' => $this->integer()->notNull(),
             'carDoors' => $this->integer()->notNull(),
