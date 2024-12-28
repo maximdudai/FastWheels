@@ -24,16 +24,6 @@ class m241115_195725_add_admin_user extends Migration
             'created_at' => time(),
             'updated_at' => time(),
         ]);
-        $this->insert('{{%clients}}', [
-            'name' => 'admin',
-            'email' => 'admin@example.com',
-            'phone' => '1234567890',
-            'roleId' => 3, // Active
-            'createdAt' => time(),
-            'balance' => '0',
-            'iban' => 'none',
-            'userId' => 1
-        ]);
     }
 
     /**
