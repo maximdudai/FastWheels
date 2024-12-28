@@ -49,7 +49,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'user-car' => 'user-car/index',
-                // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
+                // 'user-car/<action:\w+>/<id:\d+>' => 'user-car/<action>',
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/client',
