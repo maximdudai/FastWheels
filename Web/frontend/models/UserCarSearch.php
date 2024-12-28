@@ -18,7 +18,7 @@ class UserCarSearch extends UserCar
     {
         return [
             [['id', 'clientId', 'carYear', 'carDoors', 'status'], 'integer'],
-            [['carName', 'carModel', 'createdAt', 'availableFrom', 'availableTo'], 'safe'],
+            [['carBrand', 'carModel', 'createdAt', 'availableFrom', 'availableTo'], 'safe'],
         ];
     }
 
@@ -68,7 +68,7 @@ class UserCarSearch extends UserCar
             'availableTo' => $this->availableTo,
         ]);
 
-        $query->andFilterWhere(['like', 'carName', $this->carName])
+        $query->andFilterWhere(['like', 'carBrand', $this->carBrand])
             ->andFilterWhere(['like', 'carModel', $this->carModel]);
 
         return $dataProvider;
