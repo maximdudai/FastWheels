@@ -43,6 +43,8 @@ return [
                 // Add this rule
                 'supportticket' => 'support-ticket/index',
                 'supportticket/<action>' => 'support-ticket/<action>',
+                'usercar' => 'user-car/index',
+                'usercar/<action>' => 'user-car/<action>',
             ],
         ],
     ],

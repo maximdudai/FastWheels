@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'clientId',
-            'carName',
+            'carBrand',
             'carModel',
             'carYear',
             //'carDoors',
