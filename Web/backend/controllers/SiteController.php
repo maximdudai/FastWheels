@@ -5,6 +5,7 @@ namespace backend\controllers;
 use yii\web\Controller;
 use common\models\Client;
 use common\models\LoginForm;
+use common\models\User;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -62,6 +63,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        // $searchModel = new User();
+        // $dataProvider = $searchModel->search($this->app->user->identity->id);
+
+
+        // return $this->render('index', [
+        //     'searchModel' => $searchModel,
+        //     'dataProvider' => $dataProvider,
+        // ]);
         return $this->render('index');
     }
 

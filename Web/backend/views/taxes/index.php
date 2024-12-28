@@ -29,7 +29,7 @@ $isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
 
     <p style="background-color: #eef; color: #333; font-size: 16px; padding: 10px; border: 1px solid #aac; border-radius: 5px; text-align: center;">
         <strong>Current Tax Value:</strong> <?= Html::encode($currentTaxValue) ?>
-        <span>€</span>
+        <span>%</span>
     </p>
 
     <?php if (!Yii::$app->user->isGuest && $isUserAdmin): ?>
