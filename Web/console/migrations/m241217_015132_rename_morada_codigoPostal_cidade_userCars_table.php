@@ -14,7 +14,7 @@ class m241217_015132_rename_morada_codigoPostal_cidade_userCars_table extends Mi
     {
         $this->renameColumn('{{%userCars}}', 'morada', 'address');
         $this->renameColumn('{{%userCars}}', 'codigoPostal', 'postalCode');
-        $this->renameColumn('{{%userCars}}', 'cidade', 'city');
+        $this->renameColumn('{{%userCars}}', 'city', 'city');
     }
 
     /**
@@ -24,7 +24,7 @@ class m241217_015132_rename_morada_codigoPostal_cidade_userCars_table extends Mi
     {
         $this->renameColumn('{{%userCars}}', 'address', 'morada');
         $this->renameColumn('{{%userCars}}', 'postalCode', 'codigoPostal');
-        $this->renameColumn('{{%userCars}}', 'city', 'cidade');
+        $this->renameColumn('{{%userCars}}', 'city', 'city');
     }
 
 }

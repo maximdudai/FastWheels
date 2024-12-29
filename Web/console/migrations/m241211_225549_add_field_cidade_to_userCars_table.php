@@ -12,7 +12,7 @@ class m241211_225549_add_field_cidade_to_userCars_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%userCars}}', 'cidade', $this->string(30)->notNull());
+        $this->addColumn('{{%userCars}}', 'city', $this->string(30)->notNull());
     }
 
     /**
@@ -20,7 +20,7 @@ class m241211_225549_add_field_cidade_to_userCars_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('{{%userCars}}', 'cidade');
+        $this->dropColumn('{{%userCars}}', 'city');
     }
 
 }
