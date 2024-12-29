@@ -112,30 +112,36 @@ public class SingletonFastWheels {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String token = String.valueOf(LoginParser.parseLoginData(response));
-
-                if(loginListener != null)
-                    loginListener.onValidateLogin(token, username, context);
+                User user = LoginParser.parseLoginData(response);
+                System.out.println("------> user: " + user);
+                if (user != null) {
+                    String token = user.getToken(); // Get the token from the User object
+                    System.out.println("------> tokenloginapi: " + token);
+                    if (loginListener != null) {
+                        loginListener.onValidateLogin(token, username, context);
+                    }
+                } else {
+                    Toast.makeText(context, "Failed to parse login data", Toast.LENGTH_SHORT).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Invalid authentication credentials", Toast.LENGTH_SHORT).show();
             }
         }) {
-
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
-
                 return params;
             }
         };
         volleyQueue.add(request);
     }
+
     public void setLoginListener(LoginListener loginListener) {
         this.loginListener = loginListener;
     }

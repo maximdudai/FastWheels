@@ -3,6 +3,7 @@
 namespace backend\modules\api\controllers;
 
 use common\models\Client;
+use common\models\User;
 use yii\rest\ActiveController;
 
 class ClientController extends ActiveController
@@ -40,12 +41,19 @@ class ClientController extends ActiveController
 
         $user = Client::findByName($username);
 
-        if ($user && $user->validatePassword($password)) {
+        $findUser = User::findByUsername($username);
+        $getUserToken = $findUser->verification_token;
+ 
+        if ($findUser && $findUser->validatePassword($password)) {
             return [
                 'status' => 'success',
-                'token' => $user->verification_token,
-                'username' => $user->username,
+                'token' => $getUserToken,
+                'username' => $user->name,
                 'id' => $user->id,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'balance' => $user->balance,
+                'iban' => $user->iban,
             ];
         }
 
