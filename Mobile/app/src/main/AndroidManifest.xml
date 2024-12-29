@@ -29,18 +29,13 @@
             android:exported="false" />
         <activity
             android:name=".UserProfile"
-            android:exported="false"
-<<<<<<<<< Temporary merge branch 1
-            android:parentActivityName=".MainActivity"
-            />
+            android:exported="false" />
+
         <activity
             android:name=".VehicleDetailsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-=========
-            android:parentActivityName=".MainActivity" />
 
->>>>>>>>> Temporary merge branch 2
         <activity
             android:name=".Register"
             android:exported="false" />

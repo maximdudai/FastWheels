@@ -13,7 +13,9 @@ public class LoginParser {
             JSONObject fetchData = new JSONObject(response);
             String fetchUserToken = fetchData.getString("token");
 
+
             token = fetchUserToken;
+            System.out.println("Token a ver: " + token);
         } catch (JSONException e) {
             e.printStackTrace();
 
