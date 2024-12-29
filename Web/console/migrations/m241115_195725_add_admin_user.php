@@ -12,10 +12,13 @@ class m241115_195725_add_admin_user extends Migration
      */
     public function safeUp()
     {
+        $authKey = Yii::$app->security->generateRandomString();
+        $passwordHash = Yii::$app->security->generatePasswordHash('admin123');
+
         $this->insert('{{%user}}', [
             'username' => 'admin',
-            'auth_key' => Yii::$app->security->generateRandomString(),
-            'password_hash' => Yii::$app->security->generatePasswordHash('admin123'), // Replace with a secure password
+            'auth_key' => $authKey,
+            'password_hash' => $passwordHash, // Replace with a secure password
             'email' => 'admin@example.com',
             'status' => 10, // Active
             'created_at' => time(),

@@ -5,6 +5,11 @@ namespace backend\controllers;
 use yii\web\Controller;
 use common\models\Client;
 use common\models\LoginForm;
+use common\models\Payment;
+use common\models\Reservation;
+use common\models\SupportTicket;
+use common\models\User;
+use common\models\UserCar;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -62,9 +67,26 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        // Query total counts
+        $userCount = User::find()->count(); // Total users
+        $paymentCount = Payment::find()->count(); // Total payments
+        $reservationCount = Reservation::find()->count(); // Total reservations
+        $supportTicketCount = SupportTicket::find()->count(); // Total support tickets
+        $userCarCount = UserCar::find()->count(); // Total user cars
+    
+        // Send all data to the view
+        return $this->render('index', [
+            'counts' => [
+                'users' => $userCount,
+                'payments' => $paymentCount,
+                'reservations' => $reservationCount,
+                'supportTickets' => $supportTicketCount,
+                'userCars' => $userCarCount,
+            ],
+        ]);
     }
-
+    
+  
     /**
      * Login action.
      *

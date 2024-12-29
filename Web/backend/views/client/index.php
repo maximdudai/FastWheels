@@ -56,5 +56,5 @@ $isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
                 }
             ],
         ],
-    ]); ?>
+    ]); ?>  
 </div>

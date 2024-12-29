@@ -165,7 +165,9 @@ public class Vehicle {
     private boolean status;          // Status (disponível ou não)
     private Timestamp availableFrom; // Data de início da disponibilidade
     private Timestamp availableTo;   // Data de término da disponibilidade
-    private Location location;       // Localização do veículo (nova propriedade)
+    private String location;        // Residência
+    private String postalCode;       // Código postal
+    private String city;             // Cidade
 
     public Vehicle() {
     }
@@ -173,7 +175,7 @@ public class Vehicle {
     // Construtor
     public Vehicle(int id, int clientId, String brand, String carModel, int carYear, int carDoors,
                    Timestamp createdAt, boolean status, Timestamp availableFrom, Timestamp availableTo,
-                   Location location) { // Adicionado o parâmetro location
+                   String location, String postalCode, String city) { // Adicionado o parâmetro location
         this.id = id;
         this.clientId = clientId;
         this.brand = brand;
@@ -184,7 +186,9 @@ public class Vehicle {
         this.status = status;
         this.availableFrom = availableFrom;
         this.availableTo = availableTo;
-        this.location = location; // Inicializando a localização
+        this.location = location;
+        this.postalCode = postalCode;
+        this.city = city;
     }
 
     // Getters e Setters
@@ -268,9 +272,7 @@ public class Vehicle {
         this.availableTo = availableTo;
     }
 
-    public Location getLocation() { // Getter para localização
-        return location;
-    }
+    public String getLocation() { return location; }
 
     public void setLocation(Location location) { // Setter para localização
         this.location = location;

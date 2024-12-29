@@ -2,53 +2,96 @@
 
 /** @var yii\web\View $this */
 
-$this->title = 'My Yii Application';
+$this->title = 'Fast Wheels - Admin Dashboard';
 ?>
 
 <div class="site-index">
-
-    <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-
-    <div class="body-content">
-
+    <div class="body-content p-2">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card bg-primary">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text text-lg">Users</p>
+                            <h5 class="card-title" style="background: rgba(67, 67, 67, 0.5); padding:2px 10px;font-size:1.25rem; color:white;"><?= $counts['users'] ?></h5>
+                        </div>
+                        <i class="bi bi-person fs-1"></i>
+                    </div>
+                    <a href="#" class="card-footer text-center text-white bg-primary">More info <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text text-lg">Payments</p>
+                            <h5 class="card-title" style="background: rgba(67, 67, 67, 0.5); padding:2px 10px;font-size:1.25rem; color:white;"><?= $counts['payments'] ?></h5>
+                        </div>
+                        <i class="bi bi-cash fs-1"></i>
+                    </div>
+                    <a href="#" class="card-footer text-center text-white bg-success">More info <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-warning">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text text-lg text-white">Reservations</p>
+                            <h5 class="card-title" style="background: rgba(67, 67, 67, 0.5); padding:2px 10px;font-size:1.25rem; color:white;"><?= $counts['reservations'] ?></h5>
+                        </div>
+                        <i class="bi bi-calendar-check fs-1"></i>
+                    </div>
+                    <a href="#" class="card-footer text-center text-white bg-warning">More info <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-danger">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text text-lg">Support Tickets</p>
+                            <h5 class="card-title" style="background:rgba(67, 67, 67, 0.5); padding:2px 10px;"><?= $counts['supportTickets'] ?></h5>
+                        </div>
+                        <i class="bi bi-chat-dots fs-1"></i>
+                    </div>
+                    <a href="#" class="card-footer text-center text-white bg-danger">More info <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-info">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text text-lg">User Cars</p>
+                            <h5 class="card-title" style="background: rgba(67, 67, 67, 0.5); padding:2px 10px;font-size:1.25rem; color:white;"><?= $counts['userCars'] ?></h5>
+                        </div>
+                        <i class="bi bi-car-front fs-1"></i>
+                    </div>
+                    <a href="#" class="card-footer text-center text-white bg-info">More info <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>Taxes</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>Manage taxes for the system.</p>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <p><a class="btn btn-default" href="/taxes">Manage Taxes &raquo;</a></p>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>Employees</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>Manage employees for the system.</p>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                <p><a class="btn btn-default" href="/employees">Manage Employees &raquo;</a></p>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
+                <h2>Clients</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>Manage clients for the system.</p>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <p><a class="btn btn-default" href="/clients">Manage Clients &raquo;</a></p>
             </div>
         </div>
     </div>
+
 </div>

@@ -1,8 +1,11 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Button;
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Após marcar como lida:");
         System.out.println(notificacao1);
 
-        Toast.makeText(this, ""+ notificacao1, Toast.LENGTH_SHORT).show();
+        showMessage(this, ""+ notificacao1);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFragment(Fragment fragment) {
-        // Gerenciar a transação do fragmento com suporte a addToBackStack
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.contentFragment, fragment)
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFragment);
         if (fragment instanceof VehicleListFragment) {
-            // Previne recriação do menu
+
             getSupportFragmentManager().popBackStackImmediate();
         } else {
             super.onBackPressed();

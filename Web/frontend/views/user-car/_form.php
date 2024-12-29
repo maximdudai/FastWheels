@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clientId')->textInput() ?>
 
-    <?= $form->field($model, 'carName')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'carBrand')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'carModel')->textInput(['maxlength' => true]) ?>
 

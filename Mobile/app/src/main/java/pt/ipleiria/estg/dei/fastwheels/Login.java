@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.content.Context;
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import java.util.Objects;
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
@@ -75,6 +77,16 @@ public class Login extends AppCompatActivity implements LoginListener {
         String loginEmail = userEmail.getText().toString();
         String loginPassword = userPassword.getText().toString();
 
+//        if(!Helpers.isPasswordValid(loginPassword)) {
+//            //TODO: custom error handler
+//            showMessage(this, "Invalid Password");
+//            return;
+//        }
+//        if(!Helpers.isEmailValid(loginEmail)) {
+//            //TODO: custom error handler
+//            showMessage(this, "Invalid email address");
+//            return;
+//        }
 
 /*
         if(!Helpers.isPasswordValid(loginPassword)) {
@@ -94,6 +106,7 @@ public class Login extends AppCompatActivity implements LoginListener {
 
     @Override
     public void onValidateLogin(String token, String email, Context context) {
+
         if(token.isEmpty()) {
             Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
         } else {
@@ -113,7 +126,7 @@ public class Login extends AppCompatActivity implements LoginListener {
             }
 
             // Redirecionar para a MainActivity
-            Intent mainActivity = new Intent(this, UserProfile.class);
+            Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
             finish();
         }
