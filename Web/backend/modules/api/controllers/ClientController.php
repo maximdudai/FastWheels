@@ -2,9 +2,8 @@
 
 namespace backend\modules\api\controllers;
 
+use common\models\Client;
 use yii\rest\ActiveController;
-use common\models\User; // Ensure this is your user model
-use yii\filters\auth\HttpBasicAuth;
 
 class ClientController extends ActiveController
 {
@@ -39,17 +38,14 @@ class ClientController extends ActiveController
         $username = $receivedUser['username'];
         $password = $receivedUser['password'];
 
-        $user = User::findByUsername($username);
+        $user = Client::findByName($username);
 
         if ($user && $user->validatePassword($password)) {
             return [
                 'status' => 'success',
                 'token' => $user->verification_token,
-                'clientId' => $user->id,
                 'username' => $user->username,
-                'email' => $user->email,
-                'createdAt' => $user->created_at,
-                'password' => $user->password,
+                'id' => $user->id,
             ];
         }
 
