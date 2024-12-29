@@ -1,8 +1,6 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
-<<<<<<<<< Temporary merge branch 1
 import android.content.Context;
-=========
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
 import android.content.Context;

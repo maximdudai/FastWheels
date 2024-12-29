@@ -45,6 +45,11 @@ class ClientController extends ActiveController
             return [
                 'status' => 'success',
                 'token' => $user->verification_token,
+                'clientId' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'createdAt' => $user->created_at,
+                'password' => $user->password,
             ];
         }
 
