@@ -1,27 +1,37 @@
 package pt.ipleiria.estg.dei.fastwheels.parsers;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import pt.ipleiria.estg.dei.fastwheels.model.User;
+
 public class LoginParser {
 
-    public static String parseLoginData(String response) {
+    public static User parseLoginData(String response) {
 
-        String token = "";
+        User userData = null;
 
         try {
             JSONObject fetchData = new JSONObject(response);
-            String fetchUserToken = fetchData.getString("token");
 
+            String token = fetchData.getString("token");
+            String name = fetchData.getString("username");
+            int id = fetchData.getInt("id");
+            String email = fetchData.getString("email");
+            String phone = fetchData.getString("phone");
+            String balance = fetchData.getString("balance");
+            String iban = fetchData.getString("iban");
 
-            token = fetchUserToken;
-            System.out.println("Token a ver: " + token);
+            System.out.println("------> userData: " + fetchData);
+
+            userData = new User(token, id, name, email, phone, balance, iban);
         } catch (JSONException e) {
             e.printStackTrace();
 
         }
-
-        return token;
+        return userData;
     }
-
 }
