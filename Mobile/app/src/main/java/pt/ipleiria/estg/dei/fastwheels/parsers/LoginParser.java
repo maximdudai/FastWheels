@@ -28,8 +28,6 @@ public class LoginParser {
             System.out.println("------> userData: " + fetchData);
 
             userData = new User(token, id, name, email, phone, balance, iban);
-
-
         } catch (JSONException e) {
             e.printStackTrace();
 

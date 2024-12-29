@@ -9,6 +9,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -113,10 +116,8 @@ public class SingletonFastWheels {
             @Override
             public void onResponse(String response) {
                 User user = LoginParser.parseLoginData(response);
-                System.out.println("------> user: " + user);
                 if (user != null) {
                     String token = user.getToken(); // Get the token from the User object
-                    System.out.println("------> tokenloginapi: " + token);
                     if (loginListener != null) {
                         loginListener.onValidateLogin(token, username, context);
                     }

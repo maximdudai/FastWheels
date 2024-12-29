@@ -1,5 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
 public class User {
@@ -12,6 +14,7 @@ public class User {
 
     public User(String token, int id, String name, String email, String phone, String balance, String iban) {
         this.id = id;
+        this.token = token;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -72,5 +75,19 @@ public class User {
 
     public void setIban(String iban) {
         this.iban = iban;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "User{" +
+                "token='" + token + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", balance='" + balance + '\'' +
+                ", iban='" + iban + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
