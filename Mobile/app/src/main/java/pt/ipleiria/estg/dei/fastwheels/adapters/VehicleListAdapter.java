@@ -1,3 +1,4 @@
+/*
 package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
@@ -98,3 +99,4 @@ public class VehicleListAdapter extends BaseAdapter {
     }
 
 }
+*/

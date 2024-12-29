@@ -1,5 +1,7 @@
+/*
 package pt.ipleiria.estg.dei.fastwheels.models;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,13 +20,14 @@ public class Vehicle {
     private Timestamp availableTo;
     private String address;
     private String postalCode;
-    private String cidade;
+    private String city;
+    private BigDecimal priceDay;
     private List<VehiclePhoto> vehiclePhotos;
 
 
     public Vehicle(int id, int clientId, String carBrand, String carModel, int carYear, int carDoors,
                    Timestamp createdAt, boolean status, Timestamp availableFrom, Timestamp availableTo,
-                   String address, String postalCode, String cidade, List<VehiclePhoto> vehiclePhotos) {
+                   String address, String postalCode, String city, BigDecimal priceDay, List<VehiclePhoto> vehiclePhotos) {
         this.id = id;
         this.clientId = clientId;
         this.carBrand = carBrand;
@@ -37,9 +40,12 @@ public class Vehicle {
         this.availableTo = availableTo;
         this.address = address;
         this.postalCode = postalCode;
-        this.cidade = cidade;
+        this.city = city;
+        this.priceDay = priceDay;
         this.vehiclePhotos = vehiclePhotos;
     }
+
+
 
     public int getId() {
         return id;
@@ -125,12 +131,20 @@ public class Vehicle {
         this.postalCode = postalCode;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getCity() {
+        return city;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public BigDecimal getPriceDay() {
+        return priceDay;
+    }
+
+    public void setPriceDay(BigDecimal priceDay) {
+        this.priceDay = priceDay;
     }
 
     public List<VehiclePhoto> getVehiclePhotos() {
@@ -141,3 +155,4 @@ public class Vehicle {
         this.vehiclePhotos = vehiclePhotos;
     }
 }
+*/

@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,10 +62,28 @@ public class Helpers {
         }
         datePickerDialog.show();
     }
-
     public interface OnDateSetListener {
         void onDateSet(int year, int month, int day);
     }
     //endregion
+
+    public static boolean validateFieldPrice(EditText editText, String errorMessage) {
+        String priceText = editText.getText().toString();
+        if (TextUtils.isEmpty(priceText)) {
+            editText.setError(errorMessage);
+            return false;
+        }
+        try {
+            BigDecimal price = new BigDecimal(priceText);
+            if (price.compareTo(BigDecimal.ZERO) <= 0) {
+                editText.setError("O valor deve ser maior que zero");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            editText.setError("Formato esperado: 50.00");
+            return false;
+        }
+        return true;
+    }
 
 }

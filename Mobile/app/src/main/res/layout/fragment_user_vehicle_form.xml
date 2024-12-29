@@ -12,46 +12,69 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
-
-        <!-- Marca -->
-        <TextView
-            android:id="@+id/tvMarca"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle_form_marca"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etMarca"
+        <!-- Marca e Modelo -->
+        <LinearLayout
+            android:id="@+id/layoutMarcaModelo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/white"
-            android:textColor="@android:color/white" />
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-        <!-- Modelo -->
-        <TextView
-            android:id="@+id/tvModelo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle_form_modelo"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <!-- Marca -->
+            <LinearLayout
+                android:id="@+id/layoutMarca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etModelo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/white"
-            android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/tvMarca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_form_marca"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etMarca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Modelo -->
+            <LinearLayout
+                android:id="@+id/layoutModelo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvModelo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_form_modelo"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etModelo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <!-- Ano e Número de Portas -->
         <LinearLayout
@@ -282,34 +305,90 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Adicionar Fotografias -->
+
+        <!-- Preço Dia e Fotografia -->
         <LinearLayout
-            android:id="@+id/layoutFotografias"
+            android:id="@+id/layoutPreço_Foto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvSelFoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/vehicle_form_selecionar_fotografias"
-                android:layout_marginEnd="20dp"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            <!-- Preço por dia -->
+            <LinearLayout
+                android:id="@+id/layoutPreco"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ivIcon"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/gallery_icon"
-                android:contentDescription="Galeria de Fotos"
-                android:clickable="true"
-                android:focusable="true"/>
+                <TextView
+                    android:id="@+id/tvPrecoDia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Preço por dia"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etdPriceDay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:ems="7"
+                    android:inputType="numberDecimal"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Adicionar Fotografias -->
+            <LinearLayout
+                android:id="@+id/layoutFoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSelFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_form_selecionar_fotografias"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/gallery_icon"
+                    android:contentDescription="Galeria de Fotos"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
         </LinearLayout>
+
+    <!-- Preço por dia -->
+    <LinearLayout
+        android:id="@+id/layoutListaFotografias"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvListaFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle_form_lista_foto_adicionada"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <!-- Mostrar fotografias -->
         <GridLayout
@@ -321,6 +400,8 @@
             android:orientation="horizontal"
             android:rowCount="1"
             android:layout_marginBottom="30dp"/>
+
+    </LinearLayout>
 
         <!-- Botão Guardar -->
         <Button

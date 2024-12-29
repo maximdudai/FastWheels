@@ -1,3 +1,4 @@
+/*
 package pt.ipleiria.estg.dei.fastwheels.models;
 
 import android.content.ContentValues;
@@ -29,6 +30,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     private static final String ADDRESS = "address";
     private static final String POSTAL_CODE = "postalCode";
     private static final String CITY = "city";
+    private static final String PRICEDAY = "priceDay";
 
     // Tabela carphotos
     private static final String TABLE_VEHICLE_PHOTOS = "carphotos";
@@ -56,7 +58,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 AVAILABLE_TO + " TIMESTAMP NOT NULL, " +
                 ADDRESS + " TEXT NOT NULL, " +
                 POSTAL_CODE + " TEXT NOT NULL, " +
-                CITY + " TEXT NOT NULL" +
+                CITY + " TEXT NOT NULL," +
+                PRICEDAY + " INTEGER NOT NULL " +
                 ");";
 
         String createPhotoTable = "CREATE TABLE " + TABLE_VEHICLE_PHOTOS + " (" +
@@ -90,7 +93,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         values.put(AVAILABLE_TO, vehicle.getAvailableTo().toString());
         values.put(ADDRESS, vehicle.getAddress());
         values.put(POSTAL_CODE, vehicle.getPostalCode());
-        values.put(CITY, vehicle.getCidade());
+        values.put(CITY, vehicle.getCity());
+        values.put(PRICEDAY, vehicle.getPriceDay().toPlainString());
 
         long id = db.insert(TABLE_VEHICLES, null, values); //long: verificar operação for bem-sucedida
         if (id > -1) { //db.insert retorna -1 quando falha
@@ -108,7 +112,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                     vehicle.getAvailableTo(),
                     vehicle.getAddress(),
                     vehicle.getPostalCode(),
-                    vehicle.getCidade(),
+                    vehicle.getCity(),
+                    vehicle.getPriceDay(),
                     vehicle.getVehiclePhotos()
             );
 
@@ -142,3 +147,4 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
     //endregion
 }
+*/

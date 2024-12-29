@@ -1,3 +1,4 @@
+/*
 package pt.ipleiria.estg.dei.fastwheels.models;
 
 import android.content.Context;
@@ -6,6 +7,8 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class SingletonFastWheels {
+
+    // region OK
     private static SingletonFastWheels instance = null;
 
     private final VehicleDbHelper vehicleDbHelper;
@@ -53,5 +56,6 @@ public class SingletonFastWheels {
             }
         }
     }
-
+    // endregion OK
 }
+*/

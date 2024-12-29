@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,17 +33,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import pt.ipleiria.estg.dei.fastwheels.models.SingletonFastWheels;
-import pt.ipleiria.estg.dei.fastwheels.models.Vehicle;
-import pt.ipleiria.estg.dei.fastwheels.models.VehiclePhoto;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class UserVehicleFormFragment extends Fragment {
 
-    private EditText etMarca, etModelo, etAno, etNumPortas, etMorada, etCodigoPostal, etCidade, etDisponivelDe,etDisponivelAte;
+    private EditText etMarca, etModelo, etAno, etNumPortas, etMorada,
+            etCodigoPostal, etCidade, etDisponivelDe,etDisponivelAte, etPrecoDia;
     private Button btnGuardarVeiculo;
 
-    private static final int MIN_ETANO = 1980;
+    private static final int MIN_ETANO = 2000;
     private static final int CURRENT_YEAR_ETANO = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
 
     private Calendar startDateDisponivelDe, startDateDisponivelAte;
@@ -72,6 +74,7 @@ public class UserVehicleFormFragment extends Fragment {
         etCidade = view.findViewById(R.id.etCidade);
         etDisponivelDe = view.findViewById(R.id.etdDisponivelDe);
         etDisponivelAte = view.findViewById(R.id.etdDisponivelAte);
+        etPrecoDia = view.findViewById(R.id.etdPriceDay);
         selectedImagesContainer = view.findViewById(R.id.selectedImagesContainer);
         ivOpenGallery = view.findViewById(R.id.ivIcon);
         selectedImages = new ArrayList<>();
@@ -217,6 +220,7 @@ public class UserVehicleFormFragment extends Fragment {
         if (!Helpers.validateFieldIsNotEmpty(etCidade, "Campo obrigatório")) isValid = false;
         if (!validateFieldDisponivel(etDisponivelDe, startDateDisponivelDe)) isValid = false;
         if (!validateFieldDisponivel(etDisponivelAte, startDateDisponivelAte)) isValid = false;
+        if (!Helpers.validateFieldPrice(etPrecoDia, "Campo obrigatório")) isValid = false;
 
         return isValid;
     }
@@ -277,6 +281,7 @@ public class UserVehicleFormFragment extends Fragment {
             String morada = etMorada.getText().toString();
             String codigoPostal = etCodigoPostal.getText().toString();
             String cidade = etCidade.getText().toString();
+            BigDecimal precoDia = new BigDecimal(etPrecoDia.getText().toString());
 
             // Variáveis de Timestamp
             Timestamp disponivelDe;
@@ -316,13 +321,13 @@ public class UserVehicleFormFragment extends Fragment {
                     modelo,
                     ano,
                     numPortas,
-                    new Timestamp(System.currentTimeMillis()), // createdAt
                     true, // status -> ativo
                     disponivelDe,
                     disponivelAte,
                     morada,
                     codigoPostal,
                     cidade,
+                    precoDia,
                     vehiclePhotos
             );
 
