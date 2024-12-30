@@ -2,7 +2,12 @@
 
 /** @var yii\web\View $this */
 
+use common\models\Client;
+
 $this->title = 'Fast Wheels - Admin Dashboard';
+
+$isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
+
 ?>
 
 <div class="site-index">
@@ -70,20 +75,24 @@ $this->title = 'Fast Wheels - Admin Dashboard';
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Taxes</h2>
+            <?php if (!Yii::$app->user->isGuest && $isUserAdmin): ?>
+                <div class="col-lg-4">
+                    <h2>Taxes</h2>
 
-                <p>Manage taxes for the system.</p>
+                    <p>Manage taxes for the system.</p>
 
-                <p><a class="btn btn-default" href="taxes">Manage Taxes &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Employees</h2>
+                    <p><a class="btn btn-default" href="taxes">Manage Taxes &raquo;</a></p>
+                </div>
 
-                <p>Manage employees for the system.</p>
+                <div class="col-lg-4">
+                    <h2>Employees</h2>
 
-                <p><a class="btn btn-default" href="client/employees">Manage Employees &raquo;</a></p>
-            </div>
+                    <p>Manage employees for the system.</p>
+
+                    <p><a class="btn btn-default" href="client/employees">Manage Employees &raquo;</a></p>
+                </div>
+            <?php endif; ?>
+
             <div class="col-lg-4">
                 <h2>Clients</h2>
 
