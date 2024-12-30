@@ -17,7 +17,7 @@ $this->title = 'Fast Wheels - Admin Dashboard';
                         </div>
                         <i class="bi bi-person fs-1"></i>
                     </div>
-                    <a href="#" class="card-footer text-center text-white bg-primary">More info <i class="bi bi-arrow-right"></i></a>
+                    <a href="client/clients" class="card-footer text-center text-white bg-primary">More info <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -29,7 +29,7 @@ $this->title = 'Fast Wheels - Admin Dashboard';
                         </div>
                         <i class="bi bi-cash fs-1"></i>
                     </div>
-                    <a href="#" class="card-footer text-center text-white bg-success">More info <i class="bi bi-arrow-right"></i></a>
+                    <a href="payment" class="card-footer text-center text-white bg-success">More info <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -41,7 +41,7 @@ $this->title = 'Fast Wheels - Admin Dashboard';
                         </div>
                         <i class="bi bi-calendar-check fs-1"></i>
                     </div>
-                    <a href="#" class="card-footer text-center text-white bg-warning">More info <i class="bi bi-arrow-right"></i></a>
+                    <a href="reservation" class="card-footer text-center text-white bg-warning">More info <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -53,7 +53,7 @@ $this->title = 'Fast Wheels - Admin Dashboard';
                         </div>
                         <i class="bi bi-chat-dots fs-1"></i>
                     </div>
-                    <a href="#" class="card-footer text-center text-white bg-danger">More info <i class="bi bi-arrow-right"></i></a>
+                    <a href="support-ticket" class="card-footer text-center text-white bg-danger">More info <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -65,7 +65,7 @@ $this->title = 'Fast Wheels - Admin Dashboard';
                         </div>
                         <i class="bi bi-car-front fs-1"></i>
                     </div>
-                    <a href="#" class="card-footer text-center text-white bg-info">More info <i class="bi bi-arrow-right"></i></a>
+                    <a href="user-car" class="card-footer text-center text-white bg-info">More info <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -75,21 +75,21 @@ $this->title = 'Fast Wheels - Admin Dashboard';
 
                 <p>Manage taxes for the system.</p>
 
-                <p><a class="btn btn-default" href="/taxes">Manage Taxes &raquo;</a></p>
+                <p><a class="btn btn-default" href="taxes">Manage Taxes &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Employees</h2>
 
                 <p>Manage employees for the system.</p>
 
-                <p><a class="btn btn-default" href="/employees">Manage Employees &raquo;</a></p>
+                <p><a class="btn btn-default" href="client/employees">Manage Employees &raquo;</a></p>
             </div>
             <div class="col-lg-4">
                 <h2>Clients</h2>
 
                 <p>Manage clients for the system.</p>
 
-                <p><a class="btn btn-default" href="/clients">Manage Clients &raquo;</a></p>
+                <p><a class="btn btn-default" href="client/clients">Manage Clients &raquo;</a></p>
             </div>
         </div>
     </div>

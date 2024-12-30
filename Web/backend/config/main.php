@@ -48,7 +48,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'user-car' => 'user-car/index',
+                'supportticket' => 'support-ticket/index',
+                'supportticket/<action>' => 'support-ticket/<action>',
+                'usercar' => 'user-car/index',
+                'usercar/<action>' => 'user-car/<action>',
                 // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
                 [
                     'class' => 'yii\rest\UrlRule',
