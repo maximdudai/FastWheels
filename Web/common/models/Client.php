@@ -165,4 +165,15 @@ class Client extends \yii\db\ActiveRecord
 
         return $client && $client->roleId === 3;
     }
+
+     /**
+     * Finds user by name
+     *
+     * @param string $name
+     * @return static|null
+     */
+    public static function findByName($name)
+    {
+        return static::findOne(['name' => $name]);
+    }
 }
