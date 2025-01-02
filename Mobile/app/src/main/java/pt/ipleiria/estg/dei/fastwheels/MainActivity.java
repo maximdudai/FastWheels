@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import androidx.fragment.app.FragmentManager;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button btnMyVehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
         //loadFragment(new VehicleListFragment());
 
-        //btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
-        //btnMyVehicles.setOnClickListener(v -> {
-        //    Intent intent = new Intent(MainActivity.this, UserVehicles.class);
-        //    startActivity(intent);
-        //});
+        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
+        btnMyVehicles.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            startActivity(intent);
+        });
     }
 
     private void loadFragment(Fragment fragment) {
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /*
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFragment);
         if (fragment instanceof VehicleListFragment) {
@@ -76,4 +80,5 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+    */
 }

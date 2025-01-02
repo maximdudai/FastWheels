@@ -1,3 +1,5 @@
+/*  TODO CORRIGIR
+
 package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+
 
 public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -80,7 +83,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         });
         return view;
     }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
@@ -100,7 +102,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
                 // Filtra os veículos pelo texto digitado
                 for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
-                    if (v.getBrand().toLowerCase().contains(newText.toLowerCase()) ||
+                    if (v.getCarBrand().toLowerCase().contains(newText.toLowerCase()) ||
                             v.getCarModel().toLowerCase().contains(newText.toLowerCase())) {
                         tempVehicles.add(v);
                     }
@@ -280,4 +282,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Adiciona o veículo à lista local (reflete o banco de dados)
         vehicleList.add(newVehicle);
     }
+
 }
+*/

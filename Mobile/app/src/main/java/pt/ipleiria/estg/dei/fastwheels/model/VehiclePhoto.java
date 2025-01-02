@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.fastwheels.models;
+package pt.ipleiria.estg.dei.fastwheels.model;
 
 //model for table CarPhoto
 public class VehiclePhoto {

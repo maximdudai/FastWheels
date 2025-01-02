@@ -1,3 +1,4 @@
+/*
 package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
@@ -113,3 +114,4 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         lvImgVehicle.setAdapter(adapter);
     }
 }
+*/

@@ -15,7 +15,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Assistencia"
+        app:title="Suporte"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
