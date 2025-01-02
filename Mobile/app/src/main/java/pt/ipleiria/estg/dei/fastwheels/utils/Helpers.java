@@ -8,7 +8,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +45,64 @@ public class Helpers {
         return true;
     }
 
+    public static boolean validateFieldAno(EditText editText, int minYear, int maxYear) {
+        String yearet = editText.getText().toString();
+        if (TextUtils.isEmpty(yearet)) {
+            editText.setError("Campo obrigatório");
+            return false;
+        }
+
+        try {
+            int year = Integer.parseInt(yearet);
+
+            if (year < minYear || year > maxYear) {
+                editText.setError("Ano deve estar entre "+minYear+" e "+maxYear);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            editText.setError("Ano inválido");
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validateNumPortas(EditText editText,int minPorta, int maxPorta) {
+        String numPortasStr = editText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(numPortasStr)) {
+            editText.setError("Campo obrigatório");
+            return false;
+        }
+
+        try {
+            int numPortas = Integer.parseInt(numPortasStr);
+
+            if (numPortas < minPorta || numPortas > maxPorta) {
+                editText.setError("Número de portas deve estar entre "+minPorta+" e "+maxPorta);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            editText.setError("Nº de portas inválido");
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateCodigoPostal(EditText editText) {
+        String postalCode = editText.getText().toString().trim();
+        String regex = "^\\d{4}-\\d{3}$"; // Formato ####-###
+
+        if (TextUtils.isEmpty(postalCode)) {
+            editText.setError("Campo obrigatório");
+            return false;
+        } else if (!postalCode.matches(regex)) {
+            editText.setError("Formato inválido. Use ####-###");
+            return false;
+        }
+        return true;
+    }
+
     //region DatePicker
     public static void showDatePickerDialog(Context context, EditText editText,
                                             Calendar minDate, OnDateSetListener listener) {
@@ -67,10 +128,34 @@ public class Helpers {
     }
     //endregion
 
-    public static boolean validateFieldPrice(EditText editText, String errorMessage) {
+    public static boolean validateFieldDisponivel(EditText editText, Calendar minimumDate, Context context) {
+        if (TextUtils.isEmpty(editText.getText())) {
+            editText.setError("Campo obrigatório");
+            return false;
+        }
+
+        try {
+            // Converter a data no formato dd/MM/yyyy para verificar
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("pt-PT"));
+            Date selectedDate = sdf.parse(editText.getText().toString());
+
+            if (selectedDate == null || selectedDate.before(minimumDate.getTime())) {
+                editText.setError("Data inválida");
+                return false;
+            } else {
+                editText.setError(null);
+            }
+        } catch (Exception e) {
+            editText.setError("Data inválida");
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validateFieldPrice(EditText editText) {
         String priceText = editText.getText().toString();
         if (TextUtils.isEmpty(priceText)) {
-            editText.setError(errorMessage);
+            editText.setError("Campo obrigatório");
             return false;
         }
         try {
@@ -79,8 +164,14 @@ public class Helpers {
                 editText.setError("O valor deve ser maior que zero");
                 return false;
             }
+
+            if (price.scale() > 2) { // scale -> nº casas decimais
+                editText.setError("O valor deve ter no máximo 2 casas decimais");
+                return false;
+            }
+
         } catch (NumberFormatException e) {
-            editText.setError("Formato esperado: 50.00");
+            editText.setError("Formato inválido. Use ##.##");
             return false;
         }
         return true;

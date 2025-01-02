@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -261,7 +262,6 @@
                     android:id="@+id/etdDisponivelDe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:ems="10"
@@ -304,7 +304,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
 
         <!-- Preço Dia e Fotografia -->
         <LinearLayout
@@ -368,19 +367,12 @@
                     android:contentDescription="Galeria de Fotos"
                     android:clickable="true"
                     android:focusable="true"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
             </LinearLayout>
         </LinearLayout>
 
-    <!-- Preço por dia -->
-    <LinearLayout
-        android:id="@+id/layoutListaFotografias"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
-
+        <!-- TV Lista fotografia -->
         <TextView
             android:id="@+id/tvListaFoto"
             android:layout_width="match_parent"
@@ -390,7 +382,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <!-- Mostrar fotografias -->
+        <!-- Lista fotografias -->
         <GridLayout
             android:id="@+id/selectedImagesContainer"
             android:layout_width="match_parent"
@@ -400,8 +392,6 @@
             android:orientation="horizontal"
             android:rowCount="1"
             android:layout_marginBottom="30dp"/>
-
-    </LinearLayout>
 
         <!-- Botão Guardar -->
         <Button

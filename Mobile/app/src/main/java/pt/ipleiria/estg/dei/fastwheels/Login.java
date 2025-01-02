@@ -77,17 +77,6 @@ public class Login extends AppCompatActivity implements LoginListener {
         String loginEmail = userEmail.getText().toString();
         String loginPassword = userPassword.getText().toString();
 
-//        if(!Helpers.isPasswordValid(loginPassword)) {
-//            //TODO: custom error handler
-//            showMessage(this, "Invalid Password");
-//            return;
-//        }
-//        if(!Helpers.isEmailValid(loginEmail)) {
-//            //TODO: custom error handler
-//            showMessage(this, "Invalid email address");
-//            return;
-//        }
-
 /*
         if(!Helpers.isPasswordValid(loginPassword)) {
             //TODO: custom error handler

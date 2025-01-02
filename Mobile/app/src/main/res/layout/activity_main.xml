@@ -37,10 +37,4 @@
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btnMeusVeiculos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MeusVeiculos" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

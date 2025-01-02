@@ -64,7 +64,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 ADDRESS + " TEXT NOT NULL, " +
                 POSTAL_CODE + " TEXT NOT NULL, " +
                 CITY + " TEXT NOT NULL," +
-                PRICE_DAY + " INTEGER NOT NULL " +
+                PRICE_DAY + " REAL NOT NULL " +
                 ");";
 
         String createPhotoTable = "CREATE TABLE " + TABLE_VEHICLE_PHOTOS + " (" +
