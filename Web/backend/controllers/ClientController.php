@@ -10,6 +10,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
 use yii\filters\VerbFilter;
+use app\mosquitto\phpMQTT;
+
 
 /**
  * ClientController implements the CRUD actions for Client model.
@@ -44,7 +46,7 @@ class ClientController extends Controller
         $searchModel = new ClientSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        $dataProvider->query->andWhere(['roleId' => 2, 'roleId' => 3]);
+        $dataProvider->query->andWhere(['>=', 'roleId', 2]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -150,7 +152,18 @@ class ClientController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+
+            // update User table
+            $loggedUser = $model->userId;
+            $user = User::findOne(['id' => $loggedUser]);
+
+            $user->username = $model->name;
+            $user->email = $model->email;
+
+            $user->save();
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -187,5 +200,35 @@ class ClientController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public static function publishToMosquitto($topic,$message)
+    {
+        $server = "127.0.0.1";
+        $port = 1883;
+        $username = ""; // set your username
+        $password = ""; // set your password
+        $client_id = "phpMQTT-publisher"; // unique!
+        $mqtt = new phpMQTT($server, $port, $client_id);
+        if ($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->publish($topic, $message, 0);
+            $mqtt->close();
+        } else {
+            file_put_contents("debug.output", "Time out!");
+        }
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+        $newData->name = $this->name;
+        $newData->email = $this->email;
+        $newData->phone = $this->phone;
+        $newData->createdAt = $this->createdAt;
+        $newData->balance = $this->balance;
+        $newData->iban = $this->iban;
     }
 }
