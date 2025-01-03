@@ -30,7 +30,7 @@ class m250103_230230_add_admin_user extends Migration
             'email' => 'admin@example.com',
             'phone' => 'none',
             'roleId' => 3,
-            'createdAt' => time(),
+            'createdAt' => Date('Y-m-d H:i:s'),
             'balance' => 0,
             'iban' => 'none',
             'userId' => 1,
