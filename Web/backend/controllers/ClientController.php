@@ -230,5 +230,8 @@ class ClientController extends Controller
         $newData->createdAt = $this->createdAt;
         $newData->balance = $this->balance;
         $newData->iban = $this->iban;
+
+        $newData = json_encode($newData);
+        $this->publishToMosquitto("client", $newData);
     }
 }
