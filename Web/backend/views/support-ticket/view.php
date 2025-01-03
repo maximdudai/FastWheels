@@ -3,8 +3,13 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+require_once __DIR__ . '/../../../common/utils/ticketstatus.php';
+use function TicketStatus\getTicketStatus;
+
 /** @var yii\web\View $this */
 /** @var common\models\SupportTicket $model */
+
+
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Support Tickets', 'url' => ['index']];
@@ -34,6 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'content',
             'createdAt',
             'closed',
+            'status' => [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return getTicketStatus($model->status);
+                }
+            ],
         ],
     ]) ?>
 

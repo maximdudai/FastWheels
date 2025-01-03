@@ -7,6 +7,7 @@ use backend\models\SupportTicketSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\mosquitto\phpMQTT;
 
 /**
  * SupportTicketController implements the CRUD actions for SupportTicket model.
@@ -61,28 +62,6 @@ class SupportTicketController extends Controller
     }
 
     /**
-     * Creates a new SupportTicket model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new SupportTicket();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Updates an existing SupportTicket model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
@@ -111,7 +90,12 @@ class SupportTicketController extends Controller
      */
     public function actionDelete($id)
     {
+        parent::after
         $this->findModel($id)->delete();
+
+        $myJSON = new \stdClass();
+        $myJSON->id = $id;
+        $this->FazPublishNoMosquitto("DELETE",$myJSON);
 
         return $this->redirect(['index']);
     }
@@ -130,5 +114,44 @@ class SupportTicketController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+
+    public static function publishToMosquitto($topic, $message)
+    {
+        $server = "127.0.0.1";
+        $port = 1883;
+        $username = ""; // set your username
+        $password = ""; // set your password
+        $client_id = "phpMQTT-publisher"; // unique!
+        $mqtt = new phpMQTT($server, $port, $client_id);
+        if ($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->publish($topic, $message, 0);
+            $mqtt->close();
+        } else {
+            file_put_contents("debug.output", "Time out!");
+        }
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+        $newData->name = $this->name;
+        $newData->email = $this->email;
+        $newData->phone = $this->phone;
+        $newData->createdAt = $this->createdAt;
+        $newData->balance = $this->balance;
+        $newData->iban = $this->iban;
+
+        $newData = json_encode($newData);
+        $this->publishToMosquitto("supportticket", $newData);
+
+        if ($insert)
+            $this->FazPublishNoMosquitto("INSERT", $newData);
+        else
+            $this->FazPublishNoMosquitto("UPDATE", $newData);
     }
 }

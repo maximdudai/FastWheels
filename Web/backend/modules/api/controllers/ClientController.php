@@ -102,7 +102,7 @@ class ClientController extends ActiveController
 
         if (!$user->save()) {
             // Log or display validation errors
-            \Yii::error($user->getErrors(), 'signup');
+            throw new \yii\web\BadRequestHttpException('Error creating user');
             return null;
         }
 
@@ -122,7 +122,7 @@ class ClientController extends ActiveController
 
         if(!$client->save()) {
             // Log or display validation errors
-            \Yii::error($client->getErrors(), 'signup');
+            throw new \yii\web\BadRequestHttpException('Error creating user');
             return null;
         }
 

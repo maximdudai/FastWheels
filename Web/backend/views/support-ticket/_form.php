@@ -20,6 +20,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'closed')->textInput() ?>
 
+    <?= 
+        $form->field($model, 'status')->textInput()
+        ->dropDownList(
+            [
+                '0' => "Aberto",
+                '1' => "Em analise",
+                '2' => "A decorrer",
+                '3' => "Em processamento",
+                '4' => "Fechado",
+            ]
+        );
+     ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

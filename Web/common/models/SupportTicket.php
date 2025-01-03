@@ -39,8 +39,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             [['createdAt'], 'safe'],
             [['content'], 'string', 'max' => 1000],
             [['subject'], 'string', 'max' => 144],
-            [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
-            [['reservationId'], 'exist', 'skipOnError' => true, 'targetClass' => Reservation::class, 'targetAttribute' => ['reservationId' => 'id']],
+            [['status'], 'string', 'max' => 256],
         ];
     }
 
@@ -57,6 +56,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             'closed' => 'Closed',
             'subject' => 'Subject',
             'reservationId' => 'Reservation ID',
+            'status' => 'Status',
         ];
     }
 
