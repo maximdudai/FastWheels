@@ -1,4 +1,3 @@
-/*
 package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
@@ -88,13 +87,13 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     }
 
     private void populateVehicleDetails(Vehicle vehicle) {
-        etBrand.setText(vehicle.getBrand());
+        etBrand.setText(vehicle.getCarBrand());
         etModel.setText(vehicle.getCarModel());
         etYear.setText(String.valueOf(vehicle.getCarYear()));
         etDoors.setText(String.valueOf(vehicle.getCarDoors()));
 
         // Preencher os campos de localização
-        etResidence.setText(vehicle.getLocation());
+        etResidence.setText(vehicle.getAddress());
         etPostalCode.setText(vehicle.getPostalCode());
         etCity.setText(vehicle.getCity());
 
@@ -114,4 +113,3 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         lvImgVehicle.setAdapter(adapter);
     }
 }
-*/

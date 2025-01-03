@@ -5,9 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -121,21 +125,34 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                     vehicle.getVehiclePhotos()
             );
 
+            /*
             // Adicionar fotos associadas
             if (vehicle.getVehiclePhotos() != null) {
                 for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-                    VehiclePhoto newPhoto = new VehiclePhoto(0, (int) id, photo.getPhotoUrl());
-                    addPhotoDb(newPhoto);
+                    addPhotoDb(photo);
                 }
             }
+            */
+            // Adicionar fotos associadas ao banco de dados
+            if (vehicle.getVehiclePhotos() != null && !vehicle.getVehiclePhotos().isEmpty()) {
+                for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+                    VehiclePhoto newPhoto = addPhotoDb(photo); // Adiciona foto ao banco
+                    if (newPhoto != null) {
+                        System.out.println("-->TAG foto salva: " + newPhoto.getPhotoUrl());
+                    } else {
+                        System.out.println("-->TAG falha ao salvar foto");
+                    }
+                }
+            } else {
+                System.out.println("-->TAG veículo criado sem fotos");
+            }
+
 
             return newVehicle;
         }
         return null; // Retorna null em caso de falha
     }
 
-
-    //EM TESTE
 
     public boolean editVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
@@ -190,7 +207,13 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_VEHICLES, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
+                //int vehicleId = cursor.getInt(cursor.getColumnIndexOrThrow(ID));
+                //ArrayList<VehiclePhoto> photos = (ArrayList<VehiclePhoto>) getAllPhotosByVehicleId(vehicleId);
+
+                //System.out.println("-->TAG veículo ID: " + vehicleId + ", fotos: " + photos.size());
+
                 Vehicle vehicle = new Vehicle(
+                        //vehicleId,
                         cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(CLIENT_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(CAR_BRAND)),
@@ -204,6 +227,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(POSTAL_CODE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(CITY)),
                         new BigDecimal(cursor.getString(cursor.getColumnIndexOrThrow(PRICE_DAY))),
+                        //photos
                         getAllPhotosByVehicleId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
                 );
                 vehicles.add(vehicle);
@@ -227,6 +251,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         if (id > -1) {
             return new VehiclePhoto((int) id, photo.getCarId(), photo.getPhotoUrl());
         }
+        System.out.println("-->TAG salvando foto para veículo ID: " + photo.getCarId());
         return null;
     }
 
@@ -247,9 +272,12 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 photos.add(new VehiclePhoto(
-                        cursor.getInt(0),
-                        cursor.getInt(1),
-                        cursor.getString(2)
+                        //cursor.getInt(0),
+                        //cursor.getInt(1),
+                        //cursor.getString(2)
+                        cursor.getInt(cursor.getColumnIndexOrThrow(PHOTO_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(PHOTO_CAR_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(PHOTO_URL))
                 ));
             } while (cursor.moveToNext());
         }

@@ -31,13 +31,10 @@
             android:name=".UserProfile"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-        <!--
         <activity
             android:name=".VehicleDetailsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-        -->
-
         <activity
             android:name=".Register"
             android:exported="false" />
