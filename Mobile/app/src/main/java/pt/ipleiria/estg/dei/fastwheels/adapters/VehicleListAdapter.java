@@ -137,7 +137,7 @@ public class VehicleListAdapter extends BaseAdapter {
             tvMarca.setText(vehicle.getCarBrand());
             tvModelo.setText(vehicle.getCarModel());
             tvAno.setText(String.valueOf(vehicle.getCarYear()));
-            tvNPortas.setText(vehicle.getCarDoors());
+            tvNPortas.setText("" + vehicle.getCarDoors());
             tvEstado.setText(vehicle.isStatus() ? "Ativo" : "Inativo");
         }
 
