@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Class m241211_225549_add_field_cidade_to_userCars_table
+ * Class m241211_225549_add_field_cidade_to_usercars_table
  */
-class m241211_225549_add_field_cidade_to_userCars_table extends Migration
+class m241211_225549_add_field_cidade_to_usercars_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addColumn('{{%userCars}}', 'city', $this->string(30)->notNull());
+        $this->addColumn('{{%usercars}}', 'city', $this->string(30)->notNull());
     }
 
     /**
@@ -20,7 +20,7 @@ class m241211_225549_add_field_cidade_to_userCars_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('{{%userCars}}', 'city');
+        $this->dropColumn('{{%usercars}}', 'city');
     }
 
 }

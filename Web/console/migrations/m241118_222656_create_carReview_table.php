@@ -6,7 +6,7 @@ use yii\db\Migration;
  * Handles the creation of table `{{%carreviews}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%userCars}}`
+ * - `{{%usercars}}`
  */
 class m241118_222656_create_carreviews_table extends Migration
 {
@@ -29,12 +29,12 @@ class m241118_222656_create_carreviews_table extends Migration
             'carId'
         );
 
-        // add foreign key for table `{{%userCars}}`
+        // add foreign key for table `{{%usercars}}`
         $this->addForeignKey(
             '{{%fk-carreviews-carId}}',
             '{{%carreviews}}',
             'carId',
-            '{{%userCars}}',
+            '{{%usercars}}',
             'id',
             'CASCADE'
         );
@@ -45,7 +45,7 @@ class m241118_222656_create_carreviews_table extends Migration
      */
     public function safeDown()
     {
-        // drops foreign key for table `{{%userCars}}`
+        // drops foreign key for table `{{%usercars}}`
         $this->dropForeignKey(
             '{{%fk-carreviews-carId}}',
             '{{%carreviews}}'
