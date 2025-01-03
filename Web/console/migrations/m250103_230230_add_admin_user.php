@@ -1,5 +1,6 @@
 <?php
 
+use common\models\User;
 use yii\db\Migration;
 
 /**
@@ -33,7 +34,7 @@ class m250103_230230_add_admin_user extends Migration
             'createdAt' => Date('Y-m-d H:i:s'),
             'balance' => 0,
             'iban' => 'none',
-            'userId' => 1,
+            'userId' => User::findByUsername('admin')->id,
         ]);
         
     }
