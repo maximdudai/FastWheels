@@ -90,12 +90,7 @@ class SupportTicketController extends Controller
      */
     public function actionDelete($id)
     {
-        parent::after
         $this->findModel($id)->delete();
-
-        $myJSON = new \stdClass();
-        $myJSON->id = $id;
-        $this->FazPublishNoMosquitto("DELETE",$myJSON);
 
         return $this->redirect(['index']);
     }
@@ -119,12 +114,13 @@ class SupportTicketController extends Controller
 
     public static function publishToMosquitto($topic, $message)
     {
-        $server = "127.0.0.1";
-        $port = 1883;
-        $username = ""; // set your username
-        $password = ""; // set your password
-        $client_id = "phpMQTT-publisher"; // unique!
+        $server = "54.229.223.123"; // AWS IP address
+        $port = 1883; 
+        $username = ""; // set your username if needed
+        $password = ""; // set your password if needed
+        $client_id = "phpMQTT-publisher"; // unique client ID
         $mqtt = new phpMQTT($server, $port, $client_id);
+        
         if ($mqtt->connect(true, NULL, $username, $password)) {
             $mqtt->publish($topic, $message, 0);
             $mqtt->close();
@@ -132,6 +128,7 @@ class SupportTicketController extends Controller
             file_put_contents("debug.output", "Time out!");
         }
     }
+    
 
     public function afterSave($insert, $changedAttributes)
     {
@@ -147,11 +144,20 @@ class SupportTicketController extends Controller
         $newData->iban = $this->iban;
 
         $newData = json_encode($newData);
-        $this->publishToMosquitto("supportticket", $newData);
 
         if ($insert)
-            $this->FazPublishNoMosquitto("INSERT", $newData);
+            $this->FazPublishNoMosquitto("SUPPORTTICKET:INSERT", $newData);
         else
-            $this->FazPublishNoMosquitto("UPDATE", $newData);
+            $this->FazPublishNoMosquitto("SUPPORTTICKET:UPDATE", $newData);
+    }
+
+    public function afterDelete() {
+        parent::afterDelete();
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+
+        $jsonData = json_encode($newData);
+        $this->FazPublishNoMosquitto("SUPPORTTICKET:DELETE", $jsonData);
     }
 }
