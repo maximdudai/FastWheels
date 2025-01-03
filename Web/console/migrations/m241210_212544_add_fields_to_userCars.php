@@ -5,11 +5,12 @@ use yii\db\Migration;
 /**
  * Class usercars
  */
-class m241210_212544_add_fields_to_userCars extends Migration
+class m241210_212544_add_fields_to_usercars extends Migration
 {
     /**
      * {@inheritdoc}
      */
+
     public function safeUp()
     {
         $this->addColumn('{{%usercars}}', 'morada', $this->string(200)->notNull());
