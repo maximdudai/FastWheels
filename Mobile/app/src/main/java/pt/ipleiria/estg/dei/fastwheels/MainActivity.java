@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //loadFragment(new VehicleListFragment());
+        loadFragment(new VehicleListFragment());
 
         btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
         btnMyVehicles.setOnClickListener(v -> {

@@ -178,15 +178,14 @@ public class UserVehicleFormFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == REQUEST_MEDIA_PERMISSION) {
-            //Autorizado -> abrir galeria
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery.launch("image/*");
             } else {
-                //Negado -> abrir mensagem erro
                 Helpers.showMessage(getContext(), "Permissão para aceder a galeria negada!");
             }
         }
     }
+
     //endregion
 
     //region GALERIA -> ADICIONAR/ REMOVER FOTOGRAFIAS
@@ -262,7 +261,8 @@ public class UserVehicleFormFragment extends Fragment {
         if (!validateFields() || !validatePhotos()) {
             return;
         }
-        try{
+        try {
+            // Extract vehicle data from form
             String marca = etMarca.getText().toString();
             String modelo = etModelo.getText().toString();
             int ano = Integer.parseInt(etAno.getText().toString());
@@ -272,66 +272,45 @@ public class UserVehicleFormFragment extends Fragment {
             String cidade = etCidade.getText().toString();
             BigDecimal precoDia = new BigDecimal(etPrecoDia.getText().toString());
 
-            // Variáveis de Timestamp
-            Timestamp disponivelDe;
-            Timestamp disponivelAte;
+            Timestamp disponivelDe, disponivelAte;
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("pt-PT"));
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("pt-PT"));
 
-            //region Formatar Timestamp da etDisponivelDe e etDisponivelAte
-            try {
-                // Configurar formatador para data de entrada (dd/MM/yyyy) e saída (yyyy-MM-dd)
-                SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("pt-PT"));
-                SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.forLanguageTag("pt-PT"));
+            Date disponivelDeDate = inputFormat.parse(etDisponivelDe.getText().toString());
+            Date disponivelAteDate = inputFormat.parse(etDisponivelAte.getText().toString());
 
-                // Converter e formatar as datas
-                Date disponivelDeDate = inputFormat.parse(etDisponivelDe.getText().toString());
-                Date disponivelAteDate = inputFormat.parse(etDisponivelAte.getText().toString());
+            String disponivelDeFormatted = outputFormat.format(disponivelDeDate);
+            String disponivelAteFormatted = outputFormat.format(disponivelAteDate);
 
-                String disponivelDeFormatted = outputFormat.format(disponivelDeDate);
-                String disponivelAteFormatted = outputFormat.format(disponivelAteDate);
+            disponivelDe = Timestamp.valueOf(disponivelDeFormatted + " 00:00:00");
+            disponivelAte = Timestamp.valueOf(disponivelAteFormatted + " 00:00:00");
 
-                // Criar objetos Timestamp com o formato correto
-                disponivelDe = Timestamp.valueOf(disponivelDeFormatted + " 00:00:00");
-                disponivelAte = Timestamp.valueOf(disponivelAteFormatted + " 00:00:00");
-            }catch (Exception e) {
-                Log.e("DateConversionError", "Erro ao converter datas: " + e.getMessage());
+            // Create new vehicle (ID is 0 because it will be auto-generated)
+            Vehicle newVehicle = new Vehicle(0, 1, marca, modelo, ano, numPortas, true, disponivelDe, disponivelAte, morada, codigoPostal, cidade, precoDia, new ArrayList<>());
+
+            // Save vehicle to database and get the inserted ID
+            long vehicleId = SingletonFastWheels.getInstance(getContext()).addVehicleDb(newVehicle);
+            if (vehicleId <= 0) {
+                Log.e("SaveVehicleError", "Failed to save vehicle");
                 return;
             }
-            //endregion
+            newVehicle.setId((int) vehicleId);  // Set the vehicle ID
 
-            ArrayList<VehiclePhoto> vehiclePhotos = new ArrayList<>();
+            // Save photos with correct carId
             for (Uri uri : selectedImages) {
-                vehiclePhotos.add(new VehiclePhoto(0, 0, uri.toString()));
+                VehiclePhoto vehiclePhoto = new VehiclePhoto(0, (int) vehicleId, uri.toString());
+                SingletonFastWheels.getInstance(getContext()).addVehiclePhoto((int)vehicleId, uri.toString());
             }
 
-            Vehicle newVehicle = new Vehicle(
-                    0, // ID gerado automaticamente
-                    1, // TODO clientId ALTERAR
-                    marca,
-                    modelo,
-                    ano,
-                    numPortas,
-                    true, // status -> ativo
-                    disponivelDe,
-                    disponivelAte,
-                    morada,
-                    codigoPostal,
-                    cidade,
-                    precoDia,
-                    vehiclePhotos
-            );
-
-            // Adicionar o veículo à BD através do Singleton
-            SingletonFastWheels.getInstance(requireContext()).addVehicleDb(newVehicle);
-
-            Helpers.showMessage (getContext(),"Veículo adicionado com sucesso!");
-
+            Helpers.showMessage(getContext(), "Veículo adicionado com sucesso!");
             if (getActivity() instanceof UserVehicles) {
-                getActivity().getSupportFragmentManager().popBackStack(); // Fecha UserVehicleFormFragment
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment()); // Chama UserVehicleListFragment
+                getActivity().getSupportFragmentManager().popBackStack();
+                ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment());
             }
 
         } catch (Exception e) {
-        Log.e("SaveVehicleError", "Erro ao salvar veículo: " + e.getMessage());
+            Log.e("SaveVehicleError", "Erro ao salvar veículo: " + e.getMessage());
         }
     }
+
 }

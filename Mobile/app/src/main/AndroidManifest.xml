@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- <=Android 12-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- >=Android 13-->
 
+
     <!--  Internet Access (API requests)  -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -31,13 +32,10 @@
             android:name=".UserProfile"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-        <!--
         <activity
             android:name=".VehicleDetailsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-        -->
-
         <activity
             android:name=".Register"
             android:exported="false" />
