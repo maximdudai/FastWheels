@@ -1,17 +1,13 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 
-import android.location.Location;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
-
 //model for table UserCar
 public class Vehicle {
 
-    private final int id;
+    private int id;
     private final int clientId;
     private String carBrand;
     private String carModel;
@@ -48,6 +44,9 @@ public class Vehicle {
     }
 
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }
@@ -150,7 +149,13 @@ public class Vehicle {
 
     public void setVehiclePhotos(List<VehiclePhoto> vehiclePhotos) {
         this.vehiclePhotos = vehiclePhotos;
+
+        System.out.println("-->TAG VehiclePhotos set:");
+        for (VehiclePhoto photo : vehiclePhotos) {
+            System.out.println("--> Photo: ID: " + photo.getId() + ", Car ID: " + photo.getCarId() + ", URL: " + photo.getPhotoUrl());
+        }
     }
+
 
     /*
     * **********************CODIGO ANTES UNIFORMIZAR**********************************

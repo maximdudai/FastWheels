@@ -83,9 +83,9 @@ public class SingletonFastWheels {
     }
 
     // Adicionar veículo ao banco de dados e à lista
-    public void addVehicleDb(Vehicle vehicle) {
+    public long addVehicleDb(Vehicle vehicle) {
         if (vehicleDbHelper == null) {
-            return;  // Se nao estiver inicializado sai
+            return -1;  // Se nao estiver inicializado sai
         }
 
         Vehicle auxVehicle = vehicleDbHelper.addVehicleDb(vehicle); // Adicionar à bd através do Helper
@@ -97,6 +97,7 @@ public class SingletonFastWheels {
         } else {
             System.err.println("Erro ao adicionar veículo!");
         }
+        return auxVehicle.getId();
     }
 
     public void editVehicleDb(Vehicle vehicle) {

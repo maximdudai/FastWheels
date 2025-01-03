@@ -2,8 +2,11 @@ package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,10 +27,11 @@ import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 
 public class VehicleListAdapter extends BaseAdapter {
 
-    private Context context;
+    private static Context context;
     private LayoutInflater inflater;
     private ArrayList<Vehicle> vehicles;
     private int layoutResourceId; // Layout a ser utilizado
@@ -115,60 +120,26 @@ public class VehicleListAdapter extends BaseAdapter {
             tvNPortas = view.findViewById(R.id.tvListaNPortasTitulo);
             tvEstado = view.findViewById(R.id.tvListaEstado);
         }
-
         public void update(Vehicle vehicle) {
-            // Verificar se o veículo possui fotos
-            if (vehicle.getVehiclePhotos() != null && !vehicle.getVehiclePhotos().isEmpty()) {
-                String photoUrl = vehicle.getVehiclePhotos().get(0).getPhotoUrl();
-                System.out.println("-->TAG carregando foto: " + photoUrl);
-                Glide.with(ivVeiculo.getContext())
-                        .load(photoUrl)
-                        .error(R.drawable.gallery_icon) // Exibir ícone padrão em caso de erro
-                        .into(ivVeiculo);
-            } else {
-                // Exibir uma imagem padrão se não houver fotos
-                System.out.println("-->TAG nenhum veiculo encontrado com foto");
-                Glide.with(ivVeiculo.getContext())
-                        .load(R.drawable.gallery_icon) // Placeholder para veículos sem fotos
+
+            if (!vehicle.getVehiclePhotos().isEmpty()) {
+                VehiclePhoto firstPhoto = vehicle.getVehiclePhotos().get(0);  // Get the first photo object
+                String photoUrl = firstPhoto.getPhotoUrl();  // Get the URL string
+                Uri photoUri = Uri.parse(photoUrl);
+
+                // Load the image using Glide
+                Glide.with(context)
+                        .load(photoUri)  // Pass the URI object
+                        .placeholder(R.drawable.car_test)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(ivVeiculo);
             }
-
 
             tvMarca.setText(vehicle.getCarBrand());
             tvModelo.setText(vehicle.getCarModel());
             tvAno.setText(String.valueOf(vehicle.getCarYear()));
-            tvNPortas.setText("" + vehicle.getCarDoors());
+            tvNPortas.setText(String.valueOf(vehicle.getCarDoors()));
             tvEstado.setText(vehicle.isStatus() ? "Ativo" : "Inativo");
         }
-
-        //TODO REMOVER ABAIXO
-        private String getRealPathFromURI(Context context, Uri uri) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            if (cursor == null) {
-                return uri.getPath(); // Fallback
-            }
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            String path = cursor.getString(idx);
-            cursor.close();
-            return path;
-        }
-
-        private String copyToInternalStorage(Context context, Uri uri, String fileName) throws IOException {
-            InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            File file = new File(context.getFilesDir(), fileName);
-            FileOutputStream outputStream = new FileOutputStream(file);
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-
-            inputStream.close();
-            outputStream.close();
-            return file.getAbsolutePath();
-        }
-
     }
 }

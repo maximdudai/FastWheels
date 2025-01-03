@@ -20,7 +20,7 @@ import java.util.List;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
 
     private final SQLiteDatabase db;
 
@@ -125,27 +125,27 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                     vehicle.getVehiclePhotos()
             );
 
-            /*
+
             // Adicionar fotos associadas
             if (vehicle.getVehiclePhotos() != null) {
                 for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
                     addPhotoDb(photo);
+                    System.out.println("---> addPhotoDb: " + photo.toString());
                 }
             }
-            */
             // Adicionar fotos associadas ao banco de dados
-            if (vehicle.getVehiclePhotos() != null && !vehicle.getVehiclePhotos().isEmpty()) {
-                for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-                    VehiclePhoto newPhoto = addPhotoDb(photo); // Adiciona foto ao banco
-                    if (newPhoto != null) {
-                        System.out.println("-->TAG foto salva: " + newPhoto.getPhotoUrl());
-                    } else {
-                        System.out.println("-->TAG falha ao salvar foto");
-                    }
-                }
-            } else {
-                System.out.println("-->TAG veículo criado sem fotos");
-            }
+//            if (vehicle.getVehiclePhotos() != null && !vehicle.getVehiclePhotos().isEmpty()) {
+//                for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+//                    VehiclePhoto newPhoto = addPhotoDb(photo); // Adiciona foto ao banco
+//                    if (newPhoto != null) {
+//                        System.out.println("-->TAG foto salva: " + newPhoto.getPhotoUrl());
+//                    } else {
+//                        System.out.println("-->TAG falha ao salvar foto");
+//                    }
+//                }
+//            } else {
+//                System.out.println("-->TAG veículo criado sem fotos");
+//            }
 
 
             return newVehicle;
@@ -250,10 +250,12 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         long id = db.insert(TABLE_VEHICLE_PHOTOS, null, values);
         if (id > -1) {
             return new VehiclePhoto((int) id, photo.getCarId(), photo.getPhotoUrl());
+        } else {
+            System.out.println("-->TAG Failed to save photo for vehicle ID: " + photo.getCarId());
+            return null;
         }
-        System.out.println("-->TAG salvando foto para veículo ID: " + photo.getCarId());
-        return null;
     }
+
 
 
     //EM TESTE
@@ -269,21 +271,24 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_VEHICLE_PHOTOS, new String[]{PHOTO_ID, PHOTO_CAR_ID, PHOTO_URL},
                 PHOTO_CAR_ID + " = ?", new String[]{String.valueOf(vehicleId)}, null, null, null);
 
+
         if (cursor.moveToFirst()) {
             do {
-                photos.add(new VehiclePhoto(
-                        //cursor.getInt(0),
-                        //cursor.getInt(1),
-                        //cursor.getString(2)
-                        cursor.getInt(cursor.getColumnIndexOrThrow(PHOTO_ID)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(PHOTO_CAR_ID)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(PHOTO_URL))
-                ));
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(PHOTO_ID));
+                int carId = cursor.getInt(cursor.getColumnIndexOrThrow(PHOTO_CAR_ID));
+                String url = cursor.getString(cursor.getColumnIndexOrThrow(PHOTO_URL));
+
+
+                photos.add(new VehiclePhoto(id, carId, url));
             } while (cursor.moveToNext());
+        } else {
+            System.out.println("---> Debug: No photos found for Vehicle ID: " + vehicleId);
         }
+
         cursor.close();
         return photos;
     }
+
 
     //endregion
 
