@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Class usercars
  */
-class usercars extends Migration
+class m241210_212544_add_fields_to_userCars extends Migration
 {
     /**
      * {@inheritdoc}
