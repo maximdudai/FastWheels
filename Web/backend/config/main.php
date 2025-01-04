@@ -78,7 +78,20 @@ return [
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                     ],
-                ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/reservation',
+                    'extraPatterns' => [
+                        'GET {id}/index' => 'index',
+                        'POST create' => 'create',
+                        'PUT {id}/update' => 'update',
+                        'DELETE {id}/delete' => 'delete',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ],
             ],
         ],
     ],
