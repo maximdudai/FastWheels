@@ -13,6 +13,20 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Imagem Eliminar Registo -->
+        <ImageView
+            android:id="@+id/ivEliminar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/delete"
+            android:contentDescription="Eliminar Registo"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="right"
+            android:visibility="gone"/>
+
         <!-- Marca e Modelo -->
         <LinearLayout
             android:id="@+id/layoutMarcaModelo"
