@@ -136,13 +136,13 @@ class SupportTicketController extends Controller
 
         $newData = new \stdClass();
         $newData->id = $this->id;
-        $newData->name = $this->name;
-        $newData->email = $this->email;
-        $newData->phone = $this->phone;
+        $newData->clientId = $this->clientId;
+        $newData->content = $this->content;
+        $newData->subject = $this->subject;
         $newData->createdAt = $this->createdAt;
-        $newData->balance = $this->balance;
-        $newData->iban = $this->iban;
-
+        $newData->closed = $this->closed;
+        $newData->status = $this->status;
+        
         $newData = json_encode($newData);
 
         if ($insert)
