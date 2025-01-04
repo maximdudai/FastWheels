@@ -58,6 +58,7 @@ return [
                     'controller' => 'api/client',
                     'extraPatterns' => [
                         'POST login' => 'login',
+                        'POST register' => 'register',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
