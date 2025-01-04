@@ -3,34 +3,79 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
+import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+
 public class UserVehicleListFragment extends Fragment {
 
-   public UserVehicleListFragment() {
+    private ListView lvVehicles;
+    private ArrayList<Vehicle> vehicleList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    public UserVehicleListFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_vehicle_list, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //Infla o layout do fragmento
+        View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
-        // Botão para formulário do uservehicle
-        FloatingActionButton fabAddVehicle = view.findViewById(R.id.fabAddVehicle);
-        fabAddVehicle.setOnClickListener(v -> {
-            // Ir formulário do uservehicle
+        // Configuração do SwipeRefreshLayout
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+
+        // Configuração da ListView
+        lvVehicles = view.findViewById(R.id.lvImgVehicle);
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
+
+        lvVehicles.setOnItemClickListener((adapterView, itemView, position, id) -> {
+            Vehicle selectedVehicle = vehicleList.get(position); // Obter o veículo selecionado
+
+            UserVehicleFormFragment formFragment = new UserVehicleFormFragment();
+
+            // Passar os dados do veículo como argumentos
+            Bundle args = new Bundle();
+            args.putInt("VEHICLE_ID", selectedVehicle.getId());
+            formFragment.setArguments(args);
+
+            // Navegar para o formulário
+            if (getActivity() instanceof UserVehicles) {
+                ((UserVehicles) getActivity()).loadFragment(formFragment);
+            }
+        });
+
+
+        // Configurar o FloatingActionButton
+        FloatingActionButton fabSaveVehicle = view.findViewById(R.id.fabSaveVehicle);
+        fabSaveVehicle.setVisibility(View.VISIBLE); // Torna o botão visível
+        fabSaveVehicle.setOnClickListener(v -> {
+            // Navega para o formulário do UserVehicle
             if (getActivity() instanceof UserVehicles) {
                 ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment());
             }
         });
 
         return view;
+    }
+
+    public void onRefresh() {
+        // Atualiza a lista ao realizar "pull to refresh"
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

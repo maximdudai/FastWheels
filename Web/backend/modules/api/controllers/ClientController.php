@@ -64,4 +64,88 @@ class ClientController extends ActiveController
             'message' => 'Invalid username or password',
         ];
     }
+
+    public function actionRegister() {
+        if(!\Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
+
+        $receivedUser = \Yii::$app->request->post();
+
+        // waiting for:
+
+        //name
+        //email
+        //pass
+
+        if (!isset($receivedUser['username']) || !isset($receivedUser['password']) || !isset($receivedUser['email'])) {
+            throw new \yii\web\BadRequestHttpException('Please provide all required fields');
+        }
+
+        $username = $receivedUser['username'];
+        $email = $receivedUser['email'];
+        $password = $receivedUser['password'];
+
+        if (!$this->validate()) {
+            return null;
+        }
+    
+        // Create and save user in User table
+        $user = new User();
+        $user->username = $username;
+        $user->email = $email;
+        $user->status = User::STATUS_ACTIVE;
+        $user->setPassword($password);
+        $user->generateAuthKey();
+        $user->generateEmailVerificationToken();
+        $user->status = 10;
+
+        if (!$user->save()) {
+            // Log or display validation errors
+            throw new \yii\web\BadRequestHttpException('Error creating user');
+            return null;
+        }
+
+        $auth = \Yii::$app->authManager;
+        $authorRole = $auth->getRole('client');
+        $auth->assign($authorRole, $user->getId());
+
+        $client = new Client();
+        $client->userId = $user->id;
+        $client->name = $username;
+        $client->email = $email;
+        $client->phone = 'none';
+        $client->roleId = 1;
+        $client->createdAt = date('Y-m-d H:i:s');
+        $client->balance = 0;
+        $client->iban = 'none';
+
+        if(!$client->save()) {
+            // Log or display validation errors
+            throw new \yii\web\BadRequestHttpException('Error creating user');
+            return null;
+        }
+
+        if($client->save() && $this->sendEmail($user)) {
+            $getUserToken = $user->verification_token;
+
+            return [
+                'status' => 'success',
+                'token' => $getUserToken,
+                'username' => $client->name,
+                'id' => $client->id,
+                'email' => $client->email,
+                'phone' => $client->phone,
+                'balance' => $client->balance,
+                'iban' => $client->iban,
+            ];
+        }
+
+        \Yii::$app->response->statusCode = 400;
+
+        return [
+            'status' => 'error',
+            'message' => 'Error creating user',
+        ];
+    }
 }

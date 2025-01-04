@@ -3,30 +3,30 @@
 use yii\db\Migration;
 
 /**
- * Class m241227_202043_add_field_subject_addfk_supportTickets
+ * Class m241227_202043_add_field_subject_addfk_supporttickets
  */
-class m241227_202043_add_field_subject_addfk_supportTickets extends Migration
+class m241227_202043_add_field_subject_addfk_supporttickets extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addColumn('{{%supportTickets}}', 'subject',$this->string(144)->notNull());
+        $this->addColumn('{{%supporttickets}}', 'subject',$this->string(144)->notNull());
 
-        $this->addColumn('{{%supportTickets}}', 'reservationId', $this->integer()->notNull());
+        $this->addColumn('{{%supporttickets}}', 'reservationId', $this->integer()->notNull());
 
         // creates index for column `reservationId`
         $this->createIndex(
-            '{{%idx-supportTickets-reservationId}}',
-            '{{%supportTickets}}',
+            '{{%idx-supporttickets-reservationId}}',
+            '{{%supporttickets}}',
             'reservationId'
         );
 
-        // add foreign key for table `{{%supportTickets}}`
+        // add foreign key for table `{{%supporttickets}}`
         $this->addForeignKey(
-            '{{%fk-supportTickets-reservationId}}',
-            '{{%supportTickets}}',
+            '{{%fk-supporttickets-reservationId}}',
+            '{{%supporttickets}}',
             'reservationId',
             '{{%reservations}}',
             'id',
@@ -40,20 +40,20 @@ class m241227_202043_add_field_subject_addfk_supportTickets extends Migration
      */
     public function safeDown()
     {
-        // drops foreign key for table `{{%supportTickets}}`
+        // drops foreign key for table `{{%supporttickets}}`
         $this->dropForeignKey(
-            '{{%fk-supportTickets-reservationId}}',
-            '{{%supportTickets}}'
+            '{{%fk-supporttickets-reservationId}}',
+            '{{%supporttickets}}'
         );
 
         // drops index for column `reservationId`
         $this->dropIndex(
-            '{{%idx-supportTickets-reservationId}}',
-            '{{%supportTickets}}'
+            '{{%idx-supporttickets-reservationId}}',
+            '{{%supporttickets}}'
         );
 
-        $this->dropColumn('{{%supportTickets}}', 'reservationId');
+        $this->dropColumn('{{%supporttickets}}', 'reservationId');
 
-        $this->dropColumn('{{%supportTickets}}', 'subject');
+        $this->dropColumn('{{%supporttickets}}', 'subject');
     }
 }

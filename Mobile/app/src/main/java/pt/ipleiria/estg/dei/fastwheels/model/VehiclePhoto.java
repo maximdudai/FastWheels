@@ -29,4 +29,9 @@ public class VehiclePhoto {
         this.photoUrl = photoUrl;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Car ID: " + carId + ", Photo URL: " + photoUrl;
+    }
+
 }

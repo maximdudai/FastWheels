@@ -8,7 +8,7 @@ use yii\db\Migration;
  *
  * - `{{%reservations}}`
  * - `{{%clients}}`
- * - `{{%userCars}}`
+ * - `{{%usercars}}`
  */
 class m241118_225843_create_payments_table extends Migration
 {
@@ -68,12 +68,12 @@ class m241118_225843_create_payments_table extends Migration
             'carId'
         );
 
-        // add foreign key for table `{{%userCars}}`
+        // add foreign key for table `{{%usercars}}`
         $this->addForeignKey(
             '{{%fk-payments-carId}}',
             '{{%payments}}',
             'carId',
-            '{{%userCars}}',
+            '{{%usercars}}',
             'id',
             'CASCADE'
         );
@@ -108,7 +108,7 @@ class m241118_225843_create_payments_table extends Migration
             '{{%payments}}'
         );
 
-        // drops foreign key for table `{{%userCars}}`
+        // drops foreign key for table `{{%usercars}}`
         $this->dropForeignKey(
             '{{%fk-payments-carId}}',
             '{{%payments}}'

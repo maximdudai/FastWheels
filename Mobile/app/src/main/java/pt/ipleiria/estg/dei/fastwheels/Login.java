@@ -34,7 +34,7 @@ public class Login extends AppCompatActivity implements LoginListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
 
         userEmail = findViewById(R.id.emailEditText);
         userPassword = findViewById(R.id.passwordEditText);

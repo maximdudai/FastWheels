@@ -3,18 +3,18 @@
 use yii\db\Migration;
 
 /**
- * Class m241217_015132_rename_morada_codigoPostal_cidade_userCars_table
+ * Class m241217_015132_rename_morada_codigoPostal_cidade_usercars_table
  */
-class m241217_015132_rename_morada_codigoPostal_cidade_userCars_table extends Migration
+class m241217_015132_rename_morada_codigoPostal_cidade_usercars_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->renameColumn('{{%userCars}}', 'morada', 'address');
-        $this->renameColumn('{{%userCars}}', 'codigoPostal', 'postalCode');
-        $this->renameColumn('{{%userCars}}', 'city', 'city');
+        $this->renameColumn('{{%usercars}}', 'morada', 'address');
+        $this->renameColumn('{{%usercars}}', 'codigoPostal', 'postalCode');
+        $this->renameColumn('{{%usercars}}', 'city', 'city');
     }
 
     /**
@@ -22,9 +22,9 @@ class m241217_015132_rename_morada_codigoPostal_cidade_userCars_table extends Mi
      */
     public function safeDown()
     {
-        $this->renameColumn('{{%userCars}}', 'address', 'morada');
-        $this->renameColumn('{{%userCars}}', 'postalCode', 'codigoPostal');
-        $this->renameColumn('{{%userCars}}', 'city', 'city');
+        $this->renameColumn('{{%usercars}}', 'address', 'morada');
+        $this->renameColumn('{{%usercars}}', 'postalCode', 'codigoPostal');
+        $this->renameColumn('{{%usercars}}', 'city', 'city');
     }
 
 }

@@ -3,19 +3,19 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%carReviews}}`.
+ * Handles the creation of table `{{%carreviews}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%userCars}}`
+ * - `{{%usercars}}`
  */
-class m241118_222656_create_carReviews_table extends Migration
+class m241118_222656_create_carreviews_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%carReviews}}', [
+        $this->createTable('{{%carreviews}}', [
             'id' => $this->primaryKey(),
             'carId' => $this->integer()->notNull(),
             'comment' => $this->string(300)->notNull(),
@@ -24,17 +24,17 @@ class m241118_222656_create_carReviews_table extends Migration
 
         // creates index for column `carId`
         $this->createIndex(
-            '{{%idx-carReviews-carId}}',
-            '{{%carReviews}}',
+            '{{%idx-carreviews-carId}}',
+            '{{%carreviews}}',
             'carId'
         );
 
-        // add foreign key for table `{{%userCars}}`
+        // add foreign key for table `{{%usercars}}`
         $this->addForeignKey(
-            '{{%fk-carReviews-carId}}',
-            '{{%carReviews}}',
+            '{{%fk-carreviews-carId}}',
+            '{{%carreviews}}',
             'carId',
-            '{{%userCars}}',
+            '{{%usercars}}',
             'id',
             'CASCADE'
         );
@@ -45,18 +45,18 @@ class m241118_222656_create_carReviews_table extends Migration
      */
     public function safeDown()
     {
-        // drops foreign key for table `{{%userCars}}`
+        // drops foreign key for table `{{%usercars}}`
         $this->dropForeignKey(
-            '{{%fk-carReviews-carId}}',
-            '{{%carReviews}}'
+            '{{%fk-carreviews-carId}}',
+            '{{%carreviews}}'
         );
 
         // drops index for column `carId`
         $this->dropIndex(
-            '{{%idx-carReviews-carId}}',
-            '{{%carReviews}}'
+            '{{%idx-carreviews-carId}}',
+            '{{%carreviews}}'
         );
 
-        $this->dropTable('{{%carReviews}}');
+        $this->dropTable('{{%carreviews}}');
     }
 }
