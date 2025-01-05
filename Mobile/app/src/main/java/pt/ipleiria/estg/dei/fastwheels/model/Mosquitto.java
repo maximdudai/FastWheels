@@ -1,0 +1,96 @@
+package pt.ipleiria.estg.dei.fastwheels.model;
+
+import android.content.Context;
+import android.util.Log;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
+
+public class Mosquitto {
+    private MqttClient mqttClient;
+    private static Mosquitto instance;
+    public static final String MQTT_CLIENT = MqttClient.generateClientId();
+    private MosquittoListener mosquittoListener;
+
+    public static synchronized Mosquitto getInstance(Context context) {
+        if(instance == null) {
+            instance = new Mosquitto(context);
+        }
+        return instance;
+    }
+
+    public Mosquitto(Context context) {
+
+        try {
+            mqttClient = new MqttClient(Constants.MQTT_HOST, MQTT_CLIENT);
+
+            mqttClient.setCallback(new MqttCallback() {
+                @Override
+                public void connectionLost(Throwable cause) {
+
+                }
+
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+                }
+
+                @Override
+                public void deliveryComplete(IMqttDeliveryToken token) {
+
+                }
+            });
+
+        } catch (MqttException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void connect() {
+        try {
+            mqttClient.connect();
+            System.out.println("-> FW_MQTT: Mosquitto connected to the broker!");
+            subscribe(Constants.MQTT_RESERVATION_CREATE);
+            subscribe(Constants.MQTT_RESERVATION_UPDATE);
+            subscribe(Constants.MQTT_SUPPORTTICKET_CREATE);
+            subscribe(Constants.MQTT_SUPPORTTICKET_UPDATE);
+            subscribe(Constants.MQTT_CARREVIEW_CREATE);
+
+        } catch (MqttException e) {
+            Log.e("FW_MQTT", "Error connecting to the broker!", e);
+        }
+    }
+
+    public void disconnect() {
+        try {
+           if(!mqttClient.isConnected())
+               return;
+
+           mqttClient.disconnect();
+        } catch (MqttException e) {
+            Log.e("FW_MQTT", "Error connecting to the broker!", e);
+        }
+    }
+
+    public void subscribe(String topic) {
+        try {
+            if(!mqttClient.isConnected())
+                return;
+
+            mqttClient.subscribe(topic);
+            Log.d("FW_MQTT", "Subscribed to: " + topic);
+        } catch (MqttException e) {
+            Log.e("FW_MQTT", "Error connecting to the broker!", e);
+        }
+    }
+    public void setMosquittoListener(MosquittoManager mqttManager) {
+        this.mosquittoListener = mqttManager;
+    }
+}
