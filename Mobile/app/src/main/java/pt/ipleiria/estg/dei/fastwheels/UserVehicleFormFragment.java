@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
@@ -58,6 +59,8 @@ public class UserVehicleFormFragment extends Fragment {
     private ArrayList<Uri> selectedImages;
     private static final int REQUEST_MEDIA_PERMISSION = 100;
     private static final int MAX_IMAGES = 3;
+
+    private List<String> displayedImages = new ArrayList<>();
 
     public UserVehicleFormFragment() {
         // Required empty public constructor
@@ -97,7 +100,7 @@ public class UserVehicleFormFragment extends Fragment {
             if (vehicleId != -1) {
                 loadVehicleDataByID(vehicleId);
 
-                ivEliminarVeiculo.setOnClickListener(v -> confirmAndRemoveVehicle(vehicleId));
+                ivEliminarVeiculo.setOnClickListener(v -> RemoveVehicle(vehicleId));
             }
         }
 
@@ -212,44 +215,70 @@ public class UserVehicleFormFragment extends Fragment {
             uri -> {
                 if (uri != null) {
                     if (selectedImages.size() < MAX_IMAGES) {
-                        selectedImages.add(uri);
-                        addImageToContainer(uri);
+                        addImage(uri);
                     }
                 }
             }
     );
 
-    // Adicionar fotografia ao container
-    private void addImageToContainer(Uri uri) {
-        ImageView imageView = new ImageView(getContext());
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.width = 0;
-        params.height = 600;
-        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
-        params.setMargins(8, 8, 8, 8);
-        imageView.setLayoutParams(params);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    //region GESTAO IMAGECONTAINER - APENAS VISUAL
+    private void refreshImageContainer() {
+        displayedImages.clear();
 
-        // Carregar a imagem
-        Glide.with(this)
-                .load(uri)
-                .error(R.drawable.gallery_icon) // Adicione um ícone de erro se necessário
-                .into(imageView);
+        selectedImagesContainer.removeAllViews(); // Limpa o contêiner
 
-        // Ação ao tocar na fotografia
-        imageView.setOnClickListener(v -> {
+        for (Uri uri : selectedImages) {
+            displayedImages.add(uri.toString());
+
+            ImageView imageView = new ImageView(getContext());
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = 600;
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            params.setMargins(8, 8, 8, 8);
+            imageView.setLayoutParams(params);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            // Carregar a imagem com Glide
+            Glide.with(this)
+                    .load(uri)
+                    .error(R.drawable.gallery_icon) // Ícone de erro
+                    .into(imageView);
+
+            // Configurar clique para remoção
+            imageView.setOnClickListener(v -> removeImage(uri));
+
+            // Adiciona a imagem ao contêiner visual
+            selectedImagesContainer.addView(imageView);
+        }
+    }
+
+    private void addImage(Uri uri) {
+        if (!selectedImages.contains(uri)) {
+            selectedImages.add(uri); // Adiciona a imagem à lista
+            refreshImageContainer(); // Atualiza a interface
+        } else {
+            Helpers.showMessage(getContext(), "Esta imagem já foi adicionada!");
+        }
+    }
+
+    private void removeImage(Uri uri) {
+        if (selectedImages.contains(uri)) {
             new AlertDialog.Builder(getContext())
                     .setMessage("Pretende remover a fotografia?")
                     .setPositiveButton("Sim", (dialog, which) -> {
-                        selectedImages.remove(uri);
-                        selectedImagesContainer.removeView(imageView);
-                        Helpers.showMessage(getContext(), "Fotografia removida");
+                        selectedImages.remove(uri); // Remove a imagem da lista
+                        refreshImageContainer(); // Atualiza a interface
                     })
-                    .setNegativeButton("Não", null) // Não faz nada
+                    .setNegativeButton("Não", null)
                     .show();
-        });
-        selectedImagesContainer.addView(imageView);
+        } else {
+            Helpers.showMessage(getContext(), "Erro ao remover: Imagem não encontrada!");
+        }
     }
+    //endregion
+
+
     //endregion
 
     //region VALIDACAO CAMPOS FORM
@@ -290,6 +319,7 @@ public class UserVehicleFormFragment extends Fragment {
             etMorada.setText(vehicle.getAddress());
             etCodigoPostal.setText(vehicle.getPostalCode());
             etCidade.setText(vehicle.getCity());
+            etPrecoDia.setText(vehicle.getPriceDay().toPlainString());
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("pt-PT"));
             if (vehicle.getAvailableFrom() != null) {
@@ -299,32 +329,57 @@ public class UserVehicleFormFragment extends Fragment {
                 etDisponivelAte.setText(dateFormat.format(vehicle.getAvailableTo()));
             }
 
-            etPrecoDia.setText(vehicle.getPriceDay().toPlainString());
+            // Limpar e recarregar as fotos
+            selectedImages.clear();  // Limpa a lista local
+            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+                String photoUrl = photo.getPhotoUrl();
+                selectedImages.add(Uri.parse(photoUrl)); // Adiciona cada URI à lista
+            }
+            refreshImageContainer(); // Atualiza o contêiner visual
 
 //            // Fotos associadas
 //            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
 //                String photoUrl = photo.getPhotoUrl();
-//                addImageToContainer(Uri.parse(photoUrl));
+//                addImage(Uri.parse(photoUrl));
 //            }
 
-            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-                Uri photoUri = Uri.parse(photo.getPhotoUrl());
-                if (!selectedImages.contains(photoUri)) {
-                    selectedImages.add(photoUri);
-                    addImageToContainer(photoUri);
-                }
-            }
+//            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+//                Uri photoUri = Uri.parse(photo.getPhotoUrl());
+//                if (!selectedImages.contains(photoUri)) {
+//                    selectedImages.add(photoUri);
+//                    addImageToContainer(photoUri);
+//                }
+//            }
 
         } else {
             Helpers.showMessage(getContext(), "Veículo não encontrado!");
         }
     }
 
+
+    //sincronizar a lista de imagens locais (selectedImages) e o contêiner visual (selectedImagesContainer)
+    // com os dados armazenados na base de dados para um veículo específico (vehicleId)
+    private void resyncPhotos(int vehicleId) {
+        Vehicle vehicle = SingletonFastWheels.getInstance(getContext()).getVehicleById(vehicleId);
+        if (vehicle != null) {
+            // Atualizar lista local de imagens
+            selectedImages.clear();
+            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+                selectedImages.add(Uri.parse(photo.getPhotoUrl()));
+            }
+
+            // Atualizar contêiner visual
+            refreshImageContainer();
+        }
+    }
+
+
     private void saveVehicle() {
         if (!validateFields() || !validatePhotos()) {
             return;
         }
         try {
+            //region componentes
             String marca = etMarca.getText().toString();
             String modelo = etModelo.getText().toString();
             int ano = Integer.parseInt(etAno.getText().toString());
@@ -346,66 +401,74 @@ public class UserVehicleFormFragment extends Fragment {
 
             disponivelDe = Timestamp.valueOf(disponivelDeFormatted + " 00:00:00");
             disponivelAte = Timestamp.valueOf(disponivelAteFormatted + " 00:00:00");
+            //endregion
 
+
+            SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
             Bundle args = getArguments();
             int vehicleId = args != null ? args.getInt("VEHICLE_ID", -1) : -1;
 
-            Vehicle newVehicle = new Vehicle(vehicleId, 1, marca, modelo, ano, numPortas, true, disponivelDe,
-                    disponivelAte, morada, codigoPostal, cidade, precoDia, new ArrayList<>());
-
-            SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
-
+            // Adicionar Novo Veículo
             if (vehicleId == -1) {
-                // Adicionar novo veiculo
+                // Adicionar novo veículo
+                Vehicle newVehicle = new Vehicle(vehicleId, 1, marca, modelo, ano, numPortas, true,
+                        disponivelDe, disponivelAte, morada, codigoPostal, cidade, precoDia, new ArrayList<>());
                 long newVehicleId = singleton.addVehicleDb(newVehicle);
+
                 if (newVehicleId > 0) {
                     newVehicle.setId((int) newVehicleId);
-
-                    // Guarda fotos novo veiculo
                     for (Uri uri : selectedImages) {
                         singleton.addVehiclePhoto(newVehicle.getId(), uri.toString());
                     }
-
                     Helpers.showMessage(getContext(), "Veículo adicionado com sucesso!");
                 } else {
                     Helpers.showMessage(getContext(), "Erro ao adicionar veículo!");
                 }
             } else {
-                // Atualiza veiculo
-                boolean updated = singleton.editVehicleDb(newVehicle);
-                if (updated) {
-                    // Atualiza fotos veiculo
-                    for (Uri uri : selectedImages) {
-                        singleton.addVehiclePhoto(vehicleId, uri.toString());
-                    }
+                // Atualizar veículo existente
+                Vehicle updatedVehicle = new Vehicle(vehicleId, 1, marca, modelo, ano, numPortas, true,
+                        disponivelDe, disponivelAte, morada, codigoPostal, cidade, precoDia, new ArrayList<>());
+                boolean updated = singleton.editVehicleDb(updatedVehicle);
 
+                if (updated) {
+                    // Sincronizar fotos
+                    List<VehiclePhoto> currentPhotos = singleton.getVehicleById(vehicleId).getVehiclePhotos();
+                    for (VehiclePhoto photo : currentPhotos) {
+                        if (!selectedImages.contains(Uri.parse(photo.getPhotoUrl()))) {
+                            singleton.removeVehiclePhotoDB(photo.getId());
+                        }
+                    }
+                    for (Uri uri : selectedImages) {
+                        if (currentPhotos.stream().noneMatch(photo -> photo.getPhotoUrl().equals(uri.toString()))) {
+                            singleton.addVehiclePhoto(vehicleId, uri.toString());
+                        }
+                    }
                     Helpers.showMessage(getContext(), "Veículo atualizado com sucesso!");
                 } else {
                     Helpers.showMessage(getContext(), "Erro ao atualizar veículo!");
                 }
             }
 
+            // Navegar de volta para a Lista de Veículos
             if (getActivity() instanceof UserVehicles) {
-                getActivity().getSupportFragmentManager().popBackStack();
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment());
+                ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
             }
-
         } catch (Exception e) {
             Log.e("Error", "Erro ao salvar veículo: " + e.getMessage());
         }
     }
 
-    private void confirmAndRemoveVehicle(int vehicleId) {
+    private void RemoveVehicle(int vehicleId) {
         new AlertDialog.Builder(requireContext())
                 .setMessage("Pretende eliminar o registo deste veículo?")
                 .setPositiveButton("Sim", (dialog, which) -> {
                     SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
                     singleton.removeVehicleDb(vehicleId);
-                    Helpers.showMessage(getContext(), "Veículo eliminado com sucesso!");
+                    Helpers.showMessage(getContext(), "Veículo e fotos eliminados com sucesso!");
 
                     if (getActivity() instanceof UserVehicles) {
                         getActivity().getSupportFragmentManager().popBackStack();
-                        ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment());
+                        ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment(),"UserVehicleListFragment");
                     }
                 })
                 .setNegativeButton("Não", null)

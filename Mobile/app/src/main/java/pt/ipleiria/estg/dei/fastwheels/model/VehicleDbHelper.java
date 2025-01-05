@@ -85,7 +85,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //region MÉTODOS GERIR Vehicle
+    //region METODOS GERIR VEHICLE
     public Vehicle addVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
         values.put(CLIENT_ID, vehicle.getClientId());
@@ -151,6 +151,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
 
     public boolean removeVehicleDb(int id) {
+//        removeAllPhotosByVehicleIdDB(id);
+
         return db.delete(TABLE_VEHICLES, ID + " = ?", new String[]{String.valueOf(id)}) > 0;
     }
 
@@ -209,7 +211,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
     //endregion
 
-    //region MÉTODOS GERIR VehiclePhoto
+    //region METODOS GERIR VEHICLEPHOTO
     // Adicionar uma nova foto
     public VehiclePhoto addPhotoDb(VehiclePhoto photo) {
         ContentValues values = new ContentValues();
@@ -229,6 +231,12 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     public boolean removePhotoDb(int photoId) {
         return db.delete(TABLE_VEHICLE_PHOTOS, PHOTO_ID + " = ?", new String[]{String.valueOf(photoId)}) > 0;
     }
+
+    // Remover todas fotos de um veiculo
+    public boolean removeAllPhotosByVehicleIdDB(int vehicleId) {
+        return db.delete(TABLE_VEHICLE_PHOTOS, PHOTO_CAR_ID + " = ?", new String[]{String.valueOf(vehicleId)}) > 0;
+    }
+
 
     // Obter todas as fotos de um veículo
     public List<VehiclePhoto> getAllPhotosByVehicleId(int vehicleId) {

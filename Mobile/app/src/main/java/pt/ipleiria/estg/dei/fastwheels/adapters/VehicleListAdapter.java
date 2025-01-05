@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
 import pt.ipleiria.estg.dei.fastwheels.UserVehicleFormFragment;
@@ -122,7 +123,7 @@ public class VehicleListAdapter extends BaseAdapter {
                 // Load the image using Glide
                 Glide.with(context)
                         .load(photoUri)  // Pass the URI object
-                        .placeholder(R.drawable.car_test)
+                        .placeholder(R.drawable.gallery_icon)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(ivVeiculo);
             }
@@ -132,6 +133,13 @@ public class VehicleListAdapter extends BaseAdapter {
             tvAno.setText(String.valueOf(vehicle.getCarYear()));
             tvNPortas.setText(String.valueOf(vehicle.getCarDoors()));
             tvEstado.setText(vehicle.isStatus() ? "Ativo" : "Inativo");
+        }
+    }
+
+    public void updateVehicles(ArrayList<Vehicle> updatedVehicles) {
+        if (!this.vehicles.equals(updatedVehicles)) {
+            this.vehicles.clear();  // Limpa a lista atual
+            this.vehicles.addAll(updatedVehicles);  // Adiciona os veículos atualizados
         }
     }
 }

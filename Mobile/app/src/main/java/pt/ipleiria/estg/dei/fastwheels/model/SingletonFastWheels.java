@@ -57,6 +57,7 @@ public class SingletonFastWheels {
     }
     // endregion
 
+    //region METODOS GERIR VEHICLE
     // Obter veículo específico pelo ID
     public Vehicle getVehicleById(int id) {
         for (Vehicle vehicle : vehicles) {
@@ -123,6 +124,9 @@ public class SingletonFastWheels {
         return filteredList;
     }
 
+    //endregion
+
+    //region METODOS GERIR VEHICLEPHOTO
     // Adicionar foto associada a um veículo
     public void addVehiclePhoto(int vehicleId, String photoUrl) {
         VehiclePhoto newPhoto = vehicleDbHelper.addPhotoDb(new VehiclePhoto(0, vehicleId, photoUrl));
@@ -134,13 +138,25 @@ public class SingletonFastWheels {
         }
     }
 
-    public void removeVehiclePhoto(int photoId) {
+    // Remover uma foto
+    public void removeVehiclePhotoDB(int photoId) {
         if (vehicleDbHelper.removePhotoDb(photoId)) {
             System.out.println("Foto removida com sucesso!");
         } else {
             System.err.println("Erro ao remover foto!");
         }
     }
+
+    // Remover todas fotos de um veiculo
+    public void removeAllVehiclePhotosBD(int vehicleId) {
+        if (vehicleDbHelper.removeAllPhotosByVehicleIdDB(vehicleId)) {
+            System.out.println("Todas as fotos do veículo foram removidas com sucesso!");
+        } else {
+            System.err.println("Erro ao remover fotos do veículo!");
+        }
+    }
+
+    //endregion
 
     //region #LoginListener
 
