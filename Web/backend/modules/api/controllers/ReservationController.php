@@ -24,7 +24,7 @@ class ReservationController extends ActiveController
         'index',
         'view',
         'count',
-        'list'
+        'list', 'create'
       ],
       'auth' => [$this, 'authintercept']
     ];

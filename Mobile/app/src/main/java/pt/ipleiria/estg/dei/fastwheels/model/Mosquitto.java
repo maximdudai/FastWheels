@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
@@ -28,25 +29,23 @@ public class Mosquitto {
     public Mosquitto(Context context) {
 
         try {
-            mqttClient = new MqttClient(Constants.MQTT_HOST, MQTT_CLIENT);
-
+            mqttClient = new MqttClient(Constants.MQTT_HOST, MQTT_CLIENT, new MemoryPersistence());
             mqttClient.setCallback(new MqttCallback() {
                 @Override
                 public void connectionLost(Throwable cause) {
-
+                    // Handle connection loss
                 }
 
                 @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-
+                public void messageArrived(String topic, MqttMessage message) {
+                    // Handle message arrival
                 }
 
                 @Override
                 public void deliveryComplete(IMqttDeliveryToken token) {
-
+                    // Handle delivery completion
                 }
             });
-
         } catch (MqttException e) {
             throw new RuntimeException(e);
         }

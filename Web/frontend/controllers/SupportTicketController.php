@@ -26,7 +26,9 @@ class SupportTicketController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'create' => ['POST'],
+                        'update' => ['PUT'],
+                        'delete' => ['DELETE'],
                     ],
                 ],
             ]
@@ -83,7 +85,7 @@ class SupportTicketController extends Controller
             $model->subject = 'subject';
             $model->createdAt = date('Y-m-d H:i:s');
             $model->closed = 0;
-            $model->status = 0;
+            $model->status = '0';
 
             if ($model->load($this->request->post()) && $model->save()) {
 
