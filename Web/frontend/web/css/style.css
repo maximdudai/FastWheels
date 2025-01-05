@@ -1,4 +1,5 @@
-/* --------------------Estilo Geral Log In------------------ */
+/* ---------------------------LOG IN------------------------ */
+/* ------------------------Estilo Geral--------------------- */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #121212;
@@ -158,7 +159,6 @@ body {
     background-color: #505050;
 }
 
-/* Links adicionais */
 .login-link {
     font-size: 14px;
     color: #b0b0b0;
@@ -405,3 +405,92 @@ body {
 .logout-btn:hover {
     color: #ddd;
 }
+
+/* --------------------Vehicles------------------ */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #333;
+    color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.card-image img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.card-rating-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #ffdd57;
+}
+
+.price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.car-name {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    color: #ffdd57;
+}
+
+.location {
+    font-size: 0.9rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.year-trips,
+.availability {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 5px;
+}
+
+.card-favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    color: #ff4b5c;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.2);
+}
+

@@ -7,6 +7,7 @@ use frontend\models\UserCarSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * UserCarController implements the CRUD actions for UserCar model.
@@ -130,5 +131,41 @@ class UserCarController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function actionFavorite()
+    {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'You need to be logged in to add cars to favorites.');
+            return $this->redirect(['/site/login']);
+        }
+
+        $carId = Yii::$app->request->post('carId');
+        $userId = Yii::$app->user->id;
+
+        if (!$carId || !$userId) {
+            Yii::$app->session->setFlash('error', 'Invalid request.');
+            return $this->redirect(['index']);
+        }
+
+        $exists = \common\models\Favorite::find()
+            ->where(['userId' => $userId, 'carId' => $carId])
+            ->exists();
+
+        if ($exists) {
+            Yii::$app->session->setFlash('warning', 'This car is already in your favorites.');
+            return $this->redirect(['index']);
+        }
+
+        $favorite = new \common\models\Favorite();
+        $favorite->userId = $userId;
+        $favorite->carId = $carId;
+
+        if ($favorite->save()) {
+            Yii::$app->session->setFlash('success', 'Car added to favorites!');
+        } else {
+            Yii::$app->session->setFlash('error', 'Failed to add car to favorites.');
+        }
+
+        return $this->redirect(['index']);
     }
 }
