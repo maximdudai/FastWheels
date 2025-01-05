@@ -186,6 +186,16 @@ class ReservationController extends ActiveController
         }
     }
 
+    public function afterAction($action, $result)
+    {
+      parent::afterAction($action, $result);
+
+      if($action->id == 'create') {
+        ReservationController::publishToMosquitto("RESERVATION:CREATE", "hello world from create");
+      }
+    }
+
+
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
