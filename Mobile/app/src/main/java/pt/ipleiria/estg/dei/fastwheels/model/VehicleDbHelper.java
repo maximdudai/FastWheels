@@ -5,13 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -89,7 +85,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //region MÉTODOS GERIR Vehicle
+    //region METODOS GERIR VEHICLE
     public Vehicle addVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
         values.put(CLIENT_ID, vehicle.getClientId());
@@ -125,34 +121,16 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                     vehicle.getVehiclePhotos()
             );
 
-
             // Adicionar fotos associadas
             if (vehicle.getVehiclePhotos() != null) {
                 for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
                     addPhotoDb(photo);
-                    System.out.println("---> addPhotoDb: " + photo.toString());
                 }
             }
-            // Adicionar fotos associadas ao banco de dados
-//            if (vehicle.getVehiclePhotos() != null && !vehicle.getVehiclePhotos().isEmpty()) {
-//                for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-//                    VehiclePhoto newPhoto = addPhotoDb(photo); // Adiciona foto ao banco
-//                    if (newPhoto != null) {
-//                        System.out.println("-->TAG foto salva: " + newPhoto.getPhotoUrl());
-//                    } else {
-//                        System.out.println("-->TAG falha ao salvar foto");
-//                    }
-//                }
-//            } else {
-//                System.out.println("-->TAG veículo criado sem fotos");
-//            }
-
-
             return newVehicle;
         }
         return null; // Retorna null em caso de falha
     }
-
 
     public boolean editVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
@@ -173,6 +151,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
 
     public boolean removeVehicleDb(int id) {
+//        removeAllPhotosByVehicleIdDB(id);
+
         return db.delete(TABLE_VEHICLES, ID + " = ?", new String[]{String.valueOf(id)}) > 0;
     }
 
@@ -207,13 +187,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_VEHICLES, null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                //int vehicleId = cursor.getInt(cursor.getColumnIndexOrThrow(ID));
-                //ArrayList<VehiclePhoto> photos = (ArrayList<VehiclePhoto>) getAllPhotosByVehicleId(vehicleId);
-
-                //System.out.println("-->TAG veículo ID: " + vehicleId + ", fotos: " + photos.size());
-
                 Vehicle vehicle = new Vehicle(
-                        //vehicleId,
                         cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(CLIENT_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(CAR_BRAND)),
@@ -227,7 +201,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(POSTAL_CODE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(CITY)),
                         new BigDecimal(cursor.getString(cursor.getColumnIndexOrThrow(PRICE_DAY))),
-                        //photos
                         getAllPhotosByVehicleId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
                 );
                 vehicles.add(vehicle);
@@ -236,11 +209,9 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         cursor.close();
         return vehicles;
     }
-
     //endregion
 
-
-    //region MÉTODOS GERIR VehiclePhoto
+    //region METODOS GERIR VEHICLEPHOTO
     // Adicionar uma nova foto
     public VehiclePhoto addPhotoDb(VehiclePhoto photo) {
         ContentValues values = new ContentValues();
@@ -256,13 +227,16 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         }
     }
 
-
-
-    //EM TESTE
     // Remover uma foto
     public boolean removePhotoDb(int photoId) {
         return db.delete(TABLE_VEHICLE_PHOTOS, PHOTO_ID + " = ?", new String[]{String.valueOf(photoId)}) > 0;
     }
+
+    // Remover todas fotos de um veiculo
+    public boolean removeAllPhotosByVehicleIdDB(int vehicleId) {
+        return db.delete(TABLE_VEHICLE_PHOTOS, PHOTO_CAR_ID + " = ?", new String[]{String.valueOf(vehicleId)}) > 0;
+    }
+
 
     // Obter todas as fotos de um veículo
     public List<VehiclePhoto> getAllPhotosByVehicleId(int vehicleId) {
@@ -288,151 +262,5 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         cursor.close();
         return photos;
     }
-
-
     //endregion
-
-
-    /*
-    * **********************CODIGO ANTES UNIFORMIZAR**********************************
-
-    private static final String DB_NAME = "dbVehicles";
-    private static final int DB_VERSION = 3;
-
-    private final SQLiteDatabase db;
-
-    private static final String TABLE_NAME = "vehicles";
-    private static final String ID = "id";
-    private static final String BRAND = "brand";
-    private static final String MODEL = "model";
-    private static final String YEAR = "year";
-    private static final String DOORS = "doors";
-    private static final String LOCATION = "location";
-    private static final String AVAILABLE_FROM = "available_from";
-    private static final String AVAILABLE_TO = "available_to";
-
-    public VehicleDbHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
-        this.db = getWritableDatabase();
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String createVehicleTable = "CREATE TABLE " + TABLE_NAME + " (" +
-                ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                BRAND + " TEXT NOT NULL, " +
-                MODEL + " TEXT NOT NULL, " +
-                YEAR + " INTEGER NOT NULL, " +
-                DOORS + " INTEGER NOT NULL, " +
-                LOCATION + " TEXT, " +
-                AVAILABLE_FROM + " TEXT, " +
-                AVAILABLE_TO + " TEXT);";
-
-        db.execSQL(createVehicleTable);
-    }
-
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        this.onCreate(db);
-    }
-
-    public Vehicle addVehicleDb(Vehicle vehicle) {
-        ContentValues values = new ContentValues();
-        values.put(BRAND, vehicle.getBrand());
-        values.put(MODEL, vehicle.getCarModel());
-        values.put(YEAR, vehicle.getCarYear());
-        values.put(DOORS, vehicle.getCarDoors());
-        values.put(LOCATION, vehicle.getLocation());
-        if (vehicle.getAvailableFrom() != null) {
-            values.put(AVAILABLE_FROM, vehicle.getAvailableFrom().toString());
-        }
-        if (vehicle.getAvailableTo() != null) {
-            values.put(AVAILABLE_TO, vehicle.getAvailableTo().toString());
-        }
-
-        long id = this.db.insert(TABLE_NAME, null, values);
-        if (id > -1) {
-            vehicle.setId((int) id);
-            return vehicle;
-        }
-        return null;
-    }
-
-    public boolean editVehicleDb(Vehicle vehicle) {
-        ContentValues values = new ContentValues();
-        values.put(BRAND, vehicle.getBrand());
-        values.put(MODEL, vehicle.getCarModel());
-        values.put(YEAR, vehicle.getCarYear());
-        values.put(DOORS, vehicle.getCarDoors());
-        values.put(LOCATION, vehicle.getLocation());
-        if (vehicle.getAvailableFrom() != null) {
-            values.put(AVAILABLE_FROM, vehicle.getAvailableFrom().toString());
-        }
-        if (vehicle.getAvailableTo() != null) {
-            values.put(AVAILABLE_TO, vehicle.getAvailableTo().toString());
-        }
-
-        return this.db.update(TABLE_NAME, values, ID + " = ?", new String[]{String.valueOf(vehicle.getId())}) > 0;
-    }
-
-    public boolean removeVehicleDb(int id) {
-        return this.db.delete(TABLE_NAME, ID + " = ?", new String[]{String.valueOf(id)}) == 1;
-    }
-
-    public Vehicle getVehicleById(int id) {
-        Cursor cursor = this.db.query(TABLE_NAME, null, ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            Vehicle vehicle = new Vehicle();
-            vehicle.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
-            vehicle.setBrand(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
-            vehicle.setCarModel(cursor.getString(cursor.getColumnIndexOrThrow(MODEL)));
-            vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
-            vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
-
-            String location = cursor.getString(cursor.getColumnIndexOrThrow(LOCATION));
-            vehicle.setLocation(location);
-
-            String availableFrom = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_FROM));
-            String availableTo = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_TO));
-            if (availableFrom != null) vehicle.setAvailableFrom(java.sql.Timestamp.valueOf(availableFrom));
-            if (availableTo != null) vehicle.setAvailableTo(java.sql.Timestamp.valueOf(availableTo));
-
-            cursor.close();
-            return vehicle;
-        }
-        return null;
-    }
-
-    public ArrayList<Vehicle> getAllVehiclesDb() {
-        ArrayList<Vehicle> vehicles = new ArrayList<>();
-
-        Cursor cursor = this.db.query(TABLE_NAME, null, null, null, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Vehicle vehicle = new Vehicle();
-                vehicle.setId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)));
-                vehicle.setBrand(cursor.getString(cursor.getColumnIndexOrThrow(BRAND)));
-                vehicle.setCarModel(cursor.getString(cursor.getColumnIndexOrThrow(MODEL)));
-                vehicle.setCarYear(cursor.getInt(cursor.getColumnIndexOrThrow(YEAR)));
-                vehicle.setCarDoors(cursor.getInt(cursor.getColumnIndexOrThrow(DOORS)));
-
-                String location = cursor.getString(cursor.getColumnIndexOrThrow(LOCATION));
-                vehicle.setLocation(location);
-
-                String availableFrom = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_FROM));
-                String availableTo = cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_TO));
-                if (availableFrom != null) vehicle.setAvailableFrom(java.sql.Timestamp.valueOf(availableFrom));
-                if (availableTo != null) vehicle.setAvailableTo(java.sql.Timestamp.valueOf(availableTo));
-
-                vehicles.add(vehicle);
-            } while (cursor.moveToNext());
-        }
-
-        return vehicles;
-    }
-
-    *****************************************************************************   */
 }

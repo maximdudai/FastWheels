@@ -1,12 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
+import pt.ipleiria.estg.dei.fastwheels.UserVehicleFormFragment;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 
@@ -117,20 +110,22 @@ public class VehicleListAdapter extends BaseAdapter {
             tvMarca = view.findViewById(R.id.tvListaMarca);
             tvModelo = view.findViewById(R.id.tvListaModelo);
             tvAno = view.findViewById(R.id.tvListaAno);
-            tvNPortas = view.findViewById(R.id.tvListaNPortasTitulo);
+            tvNPortas = view.findViewById(R.id.tvListaNPortas);
             tvEstado = view.findViewById(R.id.tvListaEstado);
         }
         public void update(Vehicle vehicle) {
 
             if (!vehicle.getVehiclePhotos().isEmpty()) {
                 VehiclePhoto firstPhoto = vehicle.getVehiclePhotos().get(0);  // Get the first photo object
+                System.out.println("--->DEBUG firstPhoto: " + firstPhoto);
                 String photoUrl = firstPhoto.getPhotoUrl();  // Get the URL string
+                System.out.println("--->DEBUG photoUrl: " + photoUrl);
                 Uri photoUri = Uri.parse(photoUrl);
 
                 // Load the image using Glide
                 Glide.with(context)
                         .load(photoUri)  // Pass the URI object
-                        .placeholder(R.drawable.car_test)
+                        .placeholder(R.drawable.gallery_icon)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(ivVeiculo);
             }
