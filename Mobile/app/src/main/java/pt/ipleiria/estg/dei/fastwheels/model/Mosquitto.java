@@ -28,24 +28,25 @@ public class Mosquitto {
                 public void connectionLost(Throwable cause) {
                     Log.d("FW_MQTT", "Connection lost: ", cause);
 
-                    while(!mqttClient.isConnected()) {
+                    while (!mqttClient.isConnected()) {
                         connect();
-
                         try {
-                            Thread.sleep(2000);
-                        } catch (Exception e) {
-                            Thread.currentThread().interrupt();
+                            Thread.sleep(2000);  // Sleep before retrying
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
                         }
                     }
-
                 }
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) {
-                    Log.d("FW_MQTT", "Message coming from: " + topic);
-
-                    if(mosquittoListener != null) {
-                        mosquittoListener.onMosquittoReceiveData(topic, String.valueOf(message));
+                    try {
+                        Log.d("FW_MQTT", "Message arrived from: " + topic);
+                        if (mosquittoListener != null) {
+                            mosquittoListener.onMosquittoReceiveData(topic, new String(message.getPayload()));
+                        }
+                    } catch (Exception e) {
+                        Log.e("FW_MQTT", "Error processing message: " + e.getMessage());
                     }
                 }
 
@@ -98,7 +99,7 @@ public class Mosquitto {
             if(!mqttClient.isConnected())
                 return;
 
-            mqttClient.subscribe(topic);
+            mqttClient.subscribe(topic, 1);
             Log.d("FW_MQTT", "Subscribed to: " + topic);
         } catch (MqttException e) {
             Log.e("FW_MQTT", "Error connecting to the broker!", e);

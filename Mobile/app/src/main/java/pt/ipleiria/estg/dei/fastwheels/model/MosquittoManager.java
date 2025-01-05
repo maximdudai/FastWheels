@@ -30,18 +30,21 @@ public class MosquittoManager implements MosquittoListener {
             case Constants.MQTT_SUPPORTTICKET_CREATE:
             case Constants.MQTT_SUPPORTTICKET_UPDATE:
                 Support createSupport = SupportParser.parseSupportData(data);
-                new Notification("Support Ticket", "support ticket ID: " + createSupport.getId());
+                String supportMessage = "New Update about your support ticket, please check it on our web platform";
+                new Notification("Support Ticket", supportMessage);
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    Toast.makeText(context, "Message received from " + topic, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, supportMessage, Toast.LENGTH_SHORT).show();
                 });
                 break;
 
             case Constants.MQTT_RESERVATION_CREATE:
             case Constants.MQTT_RESERVATION_UPDATE:
                 Reservation createReservation = ReservationParser.parseReservationData(data);
-                new Notification("Reservation", "New reservation has beed created");
+                String reservationMessage = "New Update about your reservation, please check it on our web platform";
+
+                new Notification("Reservation", reservationMessage);
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    Toast.makeText(context, "Message received from " + topic, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, reservationMessage, Toast.LENGTH_SHORT).show();
                 });
 
                 break;

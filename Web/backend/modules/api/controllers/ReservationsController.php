@@ -221,7 +221,7 @@ class ReservationsController extends ActiveController
 {
     $result = parent::afterAction($action, $result);
 
-    if ($action->id == 'create') {
+    if ($action->id == 'create' || $action->id == 'update') {
         ReservationsController::publishToMosquitto("RESERVATION:CREATE", json_encode($result));
     }
 
