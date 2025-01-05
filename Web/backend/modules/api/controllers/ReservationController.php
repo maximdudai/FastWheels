@@ -2,11 +2,7 @@
 
 namespace backend\modules\api\controllers;
 
-use app\mosquitto\phpMQTT;
-require_once __DIR__ . "/../../mosquitto/phpMQTT.php";
-
-
-
+use Bluerhinos\phpMQTT;
 use common\models\Reservation;
 use common\models\User;
 use Yii;
