@@ -3,7 +3,8 @@
 namespace backend\modules\api\controllers;
 
 use app\mosquitto\phpMQTT;
-require_once '@app/mosquitto/phpMQTT.php';
+require_once __DIR__ . "/../../mosquitto/phpMQTT.php";
+
 
 
 use common\models\Reservation;
