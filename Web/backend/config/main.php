@@ -81,13 +81,14 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/reservation',
+                    'controller' => 'api/reservations',
                     'extraPatterns' => [
                         'GET {id}/index' => 'index',
                         'POST create' => 'create',
-                        'PUT {id}/update' => 'update',
-                        'DELETE {id}/delete' => 'delete',
+                        'PUT {id}' => 'update',
+                        'DELETE {id}' => 'delete',
                     ],
+
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                     ],
