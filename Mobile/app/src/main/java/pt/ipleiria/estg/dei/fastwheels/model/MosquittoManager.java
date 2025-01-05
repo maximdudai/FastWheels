@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
@@ -22,7 +23,9 @@ public class MosquittoManager implements MosquittoListener {
 
     @Override
     public void onMosquittoReceiveData(String topic, String data) {
+        Log.d("FW_MQTT", "Received data from" + topic);
         switch (topic) {
+
 
             case Constants.MQTT_SUPPORTTICKET_CREATE:
             case Constants.MQTT_SUPPORTTICKET_UPDATE:
@@ -35,7 +38,6 @@ public class MosquittoManager implements MosquittoListener {
             case Constants.MQTT_RESERVATION_UPDATE:
                 Reservation createReservation = ReservationParser.parseReservationData(data);
                 new Notification("Reservation", "New reservation has beed created");
-                System.out.println("---> MQTT: " + topic);
                 break;
 
             case Constants.MQTT_CARREVIEW_CREATE:

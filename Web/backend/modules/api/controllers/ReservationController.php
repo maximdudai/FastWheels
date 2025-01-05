@@ -169,7 +169,7 @@ class ReservationController extends ActiveController
 
   public static function publishToMosquitto($topic, $message)
     {
-        $server = "54.229.223.123"; // AWS IP address
+        $server = "127.0.0.1"; // AWS IP address
         $port = 1883; 
         $username = ""; // set your username if needed
         $password = ""; // set your password if needed
