@@ -24,4 +24,18 @@ public class UserVehicles extends AppCompatActivity {
                 .addToBackStack(null) // Voltar para o fragmento anterior
                 .commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentUserVehicleManager);
+
+        if (currentFragment instanceof UserVehicleListFragment) {
+            // Encerra a atividade se o fragmento atual for UserVehicleListFragment
+            super.onBackPressed();
+            finish();
+        }  else {
+            // Volta para o fragmento anterior
+            getSupportFragmentManager().popBackStack();
+        }
+    }
 }

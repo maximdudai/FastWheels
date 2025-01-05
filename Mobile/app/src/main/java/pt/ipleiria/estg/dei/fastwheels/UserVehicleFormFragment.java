@@ -222,7 +222,7 @@ public class UserVehicleFormFragment extends Fragment {
             }
     );
 
-    //region GESTAO IMAGECONTAINER - APENAS VISUAL
+    //region GESTAO IMAGECONTAINER
     private void refreshImageContainer() {
         System.out.println("--->DEBUG refreshImageContainer called");
 
@@ -257,7 +257,6 @@ public class UserVehicleFormFragment extends Fragment {
             }
         }
     }
-
 
     private void addImage(Uri uri) {
         if (!selectedImages.contains(uri)) {
@@ -348,22 +347,7 @@ public class UserVehicleFormFragment extends Fragment {
                 String photoUrl = photo.getPhotoUrl();
                 selectedImages.add(Uri.parse(photoUrl)); // Adiciona cada URI à lista
             }
-            refreshImageContainer(); // Atualiza o contêiner visual
-
-//            // Fotos associadas
-//            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-//                String photoUrl = photo.getPhotoUrl();
-//                addImage(Uri.parse(photoUrl));
-//            }
-
-//            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-//                Uri photoUri = Uri.parse(photo.getPhotoUrl());
-//                if (!selectedImages.contains(photoUri)) {
-//                    selectedImages.add(photoUri);
-//                    addImageToContainer(photoUri);
-//                }
-//            }
-
+            refreshImageContainer(); // Atualiza o conteiner visual
         } else {
             Helpers.showMessage(getContext(), "Veículo não encontrado!");
         }

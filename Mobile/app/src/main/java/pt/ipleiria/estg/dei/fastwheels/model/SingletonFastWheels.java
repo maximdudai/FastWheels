@@ -138,15 +138,6 @@ public class SingletonFastWheels {
         }
     }
 
-    // Remover uma foto
-    public void removeVehiclePhotoDB(int photoId) {
-        if (vehicleDbHelper.removePhotoDb(photoId)) {
-            System.out.println("Foto removida com sucesso!");
-        } else {
-            System.err.println("Erro ao remover foto!");
-        }
-    }
-
     // Remover todas fotos de um veiculo
     public void removeAllVehiclePhotosBD(int vehicleId) {
         if (vehicleDbHelper.removeAllPhotosByVehicleIdDB(vehicleId)) {

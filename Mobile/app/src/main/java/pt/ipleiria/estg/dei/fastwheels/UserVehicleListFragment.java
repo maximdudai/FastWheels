@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,7 +22,6 @@ public class UserVehicleListFragment extends Fragment {
 
     private ListView lvVehicles;
     private ArrayList<Vehicle> vehicleList;
-//    private SwipeRefreshLayout swipeRefreshLayout;
 
     public UserVehicleListFragment() {
         // Required empty public constructor
@@ -76,7 +76,6 @@ public class UserVehicleListFragment extends Fragment {
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
         // Atualiza o adaptador da ListView
-        VehicleListAdapter adapter = (VehicleListAdapter) lvVehicles.getAdapter();
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
     }
 
