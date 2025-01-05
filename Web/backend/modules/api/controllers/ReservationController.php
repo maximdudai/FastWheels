@@ -3,6 +3,9 @@
 namespace backend\modules\api\controllers;
 
 use app\mosquitto\phpMQTT;
+require_once '@app/mosquitto/phpMQTT.php';
+
+
 use common\models\Reservation;
 use common\models\User;
 use Yii;
@@ -176,8 +179,6 @@ class ReservationController extends ActiveController
         $client_id = "phpMQTT-publisher-" . uniqid();
 
         $mqtt = new phpMQTT($server, $port, $client_id);
-        
-        file_put_contents("/var/www/html/FastWheels/Web/debug.output", "Connecting to $server on port $port\n", FILE_APPEND);
 
         if ($mqtt->connect(true, NULL, $username, $password)) {
             $mqtt->publish($topic, $message, 0);
