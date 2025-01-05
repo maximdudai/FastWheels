@@ -177,8 +177,10 @@ class ReservationController extends ActiveController
         $mqtt = new phpMQTT($server, $port, $client_id);
         
         if ($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->subscribe($topic, 0);
             $mqtt->publish($topic, $message, 0);
             $mqtt->close();
+            $mqtt->disconnect();
         } else {
             file_put_contents("debug.output", "Time out!");
         }
