@@ -18,7 +18,7 @@ use Yii;
  * @property float $feeValue
  * @property float $carValue
  *
- * @property Usercar $car
+ * @property UserCar $car
  * @property Client $client
  * @property Payment[] $payments
  * @property Supportticket[] $supporttickets
@@ -43,7 +43,7 @@ class Reservation extends \yii\db\ActiveRecord
             [['clientId', 'carId', 'filled'], 'integer'],
             [['dateStart', 'dateEnd', 'createAt'], 'safe'],
             [['value', 'feeValue', 'carValue'], 'number'],
-            [['carId'], 'exist', 'skipOnError' => true, 'targetClass' => Usercar::class, 'targetAttribute' => ['carId' => 'id']],
+            [['carId'], 'exist', 'skipOnError' => true, 'targetClass' => UserCar::class, 'targetAttribute' => ['carId' => 'id']],
             [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
         ];
     }
@@ -74,7 +74,7 @@ class Reservation extends \yii\db\ActiveRecord
      */
     public function getCar()
     {
-        return $this->hasOne(Usercar::class, ['id' => 'carId']);
+        return $this->hasOne(UserCar::class, ['id' => 'carId']);
     }
 
     /**

@@ -5,6 +5,7 @@ import android.content.Context;
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
+import pt.ipleiria.estg.dei.fastwheels.parsers.ReservationParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.SupportParser;
 
 public class MosquittoManager implements MosquittoListener {
@@ -32,7 +33,9 @@ public class MosquittoManager implements MosquittoListener {
 
             case Constants.MQTT_RESERVATION_CREATE:
             case Constants.MQTT_RESERVATION_UPDATE:
-
+                Reservation createReservation = ReservationParser.parseReservationData(data);
+                new Notification("Reservation", "New reservation has beed created");
+                System.out.println("---> MQTT: " + topic);
                 break;
 
             case Constants.MQTT_CARREVIEW_CREATE:

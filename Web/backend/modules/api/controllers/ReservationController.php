@@ -73,7 +73,6 @@ class ReservationController extends ActiveController
       throw new UnauthorizedHttpException('Invalid token');
     }
 
-    // Create a new UserCar model
     $model = new Reservation();
 
     // Load data into the model and validate
