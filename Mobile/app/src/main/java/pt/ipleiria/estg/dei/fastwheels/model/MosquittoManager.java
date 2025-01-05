@@ -32,7 +32,7 @@ public class MosquittoManager implements MosquittoListener {
 
             case Constants.MQTT_RESERVATION_CREATE:
             case Constants.MQTT_RESERVATION_UPDATE:
-              
+
                 break;
 
             case Constants.MQTT_CARREVIEW_CREATE:
