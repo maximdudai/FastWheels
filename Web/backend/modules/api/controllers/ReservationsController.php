@@ -218,13 +218,16 @@ class ReservationsController extends ActiveController
 
  
   public function afterAction($action, $result)
-  {
+{
     $result = parent::afterAction($action, $result);
+
+    if ($action->id == 'create') {
+        ReservationsController::publishToMosquitto("RESERVATION:CREATE", json_encode($result));
+    }
 
     // Ensure the result is returned so that the response isn't null
     return $result;
-  }
-
+}
 
 
   public function afterSave($insert, $changedAttributes)
