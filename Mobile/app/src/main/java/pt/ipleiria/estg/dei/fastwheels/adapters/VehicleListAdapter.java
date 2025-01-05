@@ -117,7 +117,9 @@ public class VehicleListAdapter extends BaseAdapter {
 
             if (!vehicle.getVehiclePhotos().isEmpty()) {
                 VehiclePhoto firstPhoto = vehicle.getVehiclePhotos().get(0);  // Get the first photo object
+                System.out.println("--->DEBUG firstPhoto: " + firstPhoto);
                 String photoUrl = firstPhoto.getPhotoUrl();  // Get the URL string
+                System.out.println("--->DEBUG photoUrl: " + photoUrl);
                 Uri photoUri = Uri.parse(photoUrl);
 
                 // Load the image using Glide
@@ -133,13 +135,6 @@ public class VehicleListAdapter extends BaseAdapter {
             tvAno.setText(String.valueOf(vehicle.getCarYear()));
             tvNPortas.setText(String.valueOf(vehicle.getCarDoors()));
             tvEstado.setText(vehicle.isStatus() ? "Ativo" : "Inativo");
-        }
-    }
-
-    public void updateVehicles(ArrayList<Vehicle> updatedVehicles) {
-        if (!this.vehicles.equals(updatedVehicles)) {
-            this.vehicles.clear();  // Limpa a lista atual
-            this.vehicles.addAll(updatedVehicles);  // Adiciona os veículos atualizados
         }
     }
 }

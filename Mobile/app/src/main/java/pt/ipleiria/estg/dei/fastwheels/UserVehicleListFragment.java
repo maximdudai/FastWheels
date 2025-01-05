@@ -77,14 +77,7 @@ public class UserVehicleListFragment extends Fragment {
 
         // Atualiza o adaptador da ListView
         VehicleListAdapter adapter = (VehicleListAdapter) lvVehicles.getAdapter();
-        if (adapter == null) {
-            // Se o adaptador ainda não foi configurado, cria um novo
-            lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
-        } else {
-            // Atualiza os dados no adaptador existente
-            adapter.updateVehicles(vehicleList);
-            adapter.notifyDataSetChanged();
-        }
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
     }
 
     @Override
