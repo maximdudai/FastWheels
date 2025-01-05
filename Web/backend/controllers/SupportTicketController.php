@@ -128,7 +128,6 @@ class SupportTicketController extends Controller
             file_put_contents("debug.output", "Time out!");
         }
     }
-    
 
     public function afterSave($insert, $changedAttributes)
     {
@@ -146,7 +145,7 @@ class SupportTicketController extends Controller
         $newData = json_encode($newData);
 
         if ($insert)
-            $this->FazPublishNoMosquitto("SUPPORTTICKET:INSERT", $newData);
+            $this->FazPublishNoMosquitto("SUPPORTTICKET:CREATE", $newData);
         else
             $this->FazPublishNoMosquitto("SUPPORTTICKET:UPDATE", $newData);
     }

@@ -2,6 +2,7 @@
 
 namespace backend\modules\api\controllers;
 
+use Bluerhinos\phpMQTT;
 use common\models\Reservation;
 use common\models\User;
 use Yii;
@@ -11,25 +12,54 @@ use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UnauthorizedHttpException;
 
-class ReservationController extends ActiveController
+class ReservationsController extends ActiveController
 {
   public $modelClass = 'common\models\Reservation';
 
   public function behaviors()
   {
     $behaviors = parent::behaviors();
+
+    // Add authentication
     $behaviors['authenticator'] = [
       'class' => HttpBasicAuth::className(),
-      'except' => [
-        'index',
-        'view',
-        'count',
-        'list'
-      ],
       'auth' => [$this, 'authintercept']
     ];
+
+    // Access control for HTTP methods
+    $behaviors['access'] = [
+      'class' => \yii\filters\AccessControl::class,
+      'rules' => [
+        [
+          'allow' => true,
+          'actions' => ['index', 'view', 'count', 'list'],
+          'verbs' => ['GET'],
+          'roles' => ['?', '@'],  // No authentication required for these actions
+        ],
+        [
+          'allow' => true,
+          'actions' => ['create'],
+          'verbs' => ['POST'],
+          'roles' => ['@'], // Authentication required for these actions
+        ],
+        [
+          'allow' => true,
+          'actions' => ['update'],
+          'verbs' => ['PUT'],
+          'roles' => ['@'], // Authentication required for these actions
+        ],
+        [
+          'allow' => true,
+          'actions' => ['delete'],
+          'verbs' => ['DELETE'],
+          'roles' => ['@'], // Authentication required for these actions
+        ],
+      ],
+    ];
+
     return $behaviors;
   }
+
 
   public function authintercept($username, $password)
   {
@@ -43,6 +73,12 @@ class ReservationController extends ActiveController
     throw new \yii\web\ForbiddenHttpException('Unauthorized', 403);
   }
 
+
+  public function actionIndex($id)
+  {
+    return Reservation::findOne($id);
+  }
+
   public function actionCount()
   {
     return ['count' => Reservation::find()->count()];
@@ -53,10 +89,6 @@ class ReservationController extends ActiveController
     return Reservation::find()->all();
   }
 
-  public function actionIndex($id)
-  {
-    return Reservation::findOne($id);
-  }
 
   public function actionCreate()
   {
@@ -73,7 +105,6 @@ class ReservationController extends ActiveController
       throw new UnauthorizedHttpException('Invalid token');
     }
 
-    // Create a new UserCar model
     $model = new Reservation();
 
     // Load data into the model and validate
@@ -165,5 +196,72 @@ class ReservationController extends ActiveController
       'status' => 'error',
       'errors' => $model->errors,
     ];
+  }
+
+  public static function publishToMosquitto($topic, $message)
+  {
+    $server = "127.0.0.1"; // AWS IP address
+    $port = 1883;
+    $username = ""; // set your username if needed
+    $password = ""; // set your password if needed
+    $client_id = "phpMQTT-publisher-" . uniqid();
+
+    $mqtt = new phpMQTT($server, $port, $client_id);
+
+    if ($mqtt->connect(true, NULL, $username, $password)) {
+      $mqtt->publish($topic, $message, 0);
+      $mqtt->close();
+    } else {
+      file_put_contents("debug.output", "Time out!");
+    }
+  }
+
+ 
+  public function afterAction($action, $result)
+{
+    $result = parent::afterAction($action, $result);
+
+    if ($action->id == 'create' || $action->id == 'update') {
+        ReservationsController::publishToMosquitto("RESERVATION:CREATE", json_encode($result));
+    }
+
+    // Ensure the result is returned so that the response isn't null
+    return $result;
+}
+
+
+  public function afterSave($insert, $changedAttributes)
+  {
+    parent::afterSave($insert, $changedAttributes);
+
+    $newData = new \stdClass();
+    $newData->id = $this->id;
+    $newData->clientId = $this->clientId;
+    $newData->carId = $this->carId;
+    $newData->dateStart = $this->dateStart;
+    $newData->dateEnd = $this->dateEnd;
+    $newData->createAt = $this->createAt;
+    $newData->filled = $this->filled;
+    $newData->value = $this->value;
+    $newData->feeValue = $this->feeValue;
+    $newData->carValue = $this->carValue;
+
+    $newData = json_encode($newData);
+
+    if ($insert)
+      ReservationsController::publishToMosquitto("RESERVATION:CREATE", $newData);
+    else
+      ReservationsController::publishToMosquitto("RESERVATION:UPDATE", $newData);
+  }
+
+  public function afterDelete()
+  {
+    parent::afterDelete();
+
+    $newData = new \stdClass();
+    $newData->id = $this->id;
+
+    $jsonData = json_encode($newData);
+    ReservationsController::publishToMosquitto("RESERVATION:DELETE", $jsonData);
   }
 }

@@ -24,7 +24,9 @@ class ReservationController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'create' => ['POST'],
+                        'update' => ['PUT'],
+                        'delete' => ['DELETE'],
                     ],
                 ],
             ]

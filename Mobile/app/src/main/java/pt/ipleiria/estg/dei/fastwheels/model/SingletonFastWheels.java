@@ -32,11 +32,20 @@ public class SingletonFastWheels {
     // listeners
     private LoginListener loginListener;
 
+    // Mosquitto
+    private static Mosquitto mosquitto = null;
+    private static MosquittoManager mosquittoManager = null;
+
     // Método para obter a instância única do Singleton
     public static synchronized SingletonFastWheels getInstance(Context context) {
         if (instance == null) {
             instance = new SingletonFastWheels(context);
             volleyQueue = Volley.newRequestQueue(context);
+            mosquitto = new Mosquitto(context);
+            mosquitto.connect();
+            mosquittoManager = new MosquittoManager(context.getApplicationContext());
+            mosquitto.setMosquittoListener(mosquittoManager);
+
         }
         return instance;
     }
