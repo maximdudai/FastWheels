@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 public class UserVehicles extends AppCompatActivity {
@@ -13,14 +14,13 @@ public class UserVehicles extends AppCompatActivity {
         setContentView(R.layout.activity_user_vehicles);
 
         if (savedInstanceState == null) {
-            loadFragment(new UserVehicleListFragment());
+            loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
         }
     }
 
-
-    public void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentUserVehicleManager, fragment)
+                .replace(R.id.fragmentUserVehicleManager, fragment, tag)
                 .addToBackStack(null) // Voltar para o fragmento anterior
                 .commit();
     }
