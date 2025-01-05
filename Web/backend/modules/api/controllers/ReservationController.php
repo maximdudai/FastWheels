@@ -2,6 +2,7 @@
 
 namespace backend\modules\api\controllers;
 
+use app\mosquitto\phpMQTT;
 use common\models\Reservation;
 use common\models\User;
 use Yii;
@@ -165,4 +166,52 @@ class ReservationController extends ActiveController
       'errors' => $model->errors,
     ];
   }
+
+  public static function publishToMosquitto($topic, $message)
+    {
+        $server = "54.229.223.123"; // AWS IP address
+        $port = 1883; 
+        $username = ""; // set your username if needed
+        $password = ""; // set your password if needed
+        $client_id = "phpMQTT-publisher"; // unique client ID
+        $mqtt = new phpMQTT($server, $port, $client_id);
+        
+        if ($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->publish($topic, $message, 0);
+            $mqtt->close();
+        } else {
+            file_put_contents("debug.output", "Time out!");
+        }
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+        $newData->clientId = $this->clientId;
+        $newData->content = $this->content;
+        $newData->subject = $this->subject;
+        $newData->createdAt = $this->createdAt;
+        $newData->closed = $this->closed;
+        $newData->status = $this->status;
+        
+        $newData = json_encode($newData);
+
+        if ($insert)
+            $this->FazPublishNoMosquitto("RESERVATION:CREATE", $newData);
+        else
+            $this->FazPublishNoMosquitto("RESERVATION:UPDATE", $newData);
+    }
+
+    public function afterDelete() {
+        parent::afterDelete();
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+
+        $jsonData = json_encode($newData);
+        $this->FazPublishNoMosquitto("RESERVATION:DELETE", $jsonData);
+    }
 }
