@@ -19,13 +19,6 @@ public class Mosquitto {
     public static final String MQTT_CLIENT = MqttClient.generateClientId();
     private MosquittoListener mosquittoListener;
 
-    public static synchronized Mosquitto getInstance(Context context) {
-        if(instance == null) {
-            instance = new Mosquitto(context);
-        }
-        return instance;
-    }
-
     public Mosquitto(Context context) {
 
         try {
@@ -33,12 +26,27 @@ public class Mosquitto {
             mqttClient.setCallback(new MqttCallback() {
                 @Override
                 public void connectionLost(Throwable cause) {
-                    // Handle connection loss
+                    Log.d("FW_MQTT", "Connection lost: ", cause);
+
+                    while(!mqttClient.isConnected()) {
+                        connect();
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (Exception e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+
                 }
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) {
-                    // Handle message arrival
+                    Log.d("FW_MQTT", "Message coming from: " + topic);
+
+                    if(mosquittoListener != null) {
+                        mosquittoListener.onMosquittoReceiveData(topic, String.valueOf(message));
+                    }
                 }
 
                 @Override
@@ -50,6 +58,13 @@ public class Mosquitto {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static synchronized Mosquitto getInstance(Context context) {
+        if(instance == null) {
+            instance = new Mosquitto(context);
+        }
+        return instance;
     }
 
     public void connect() {

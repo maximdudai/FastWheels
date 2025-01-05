@@ -173,16 +173,18 @@ class ReservationController extends ActiveController
         $port = 1883; 
         $username = ""; // set your username if needed
         $password = ""; // set your password if needed
-        $client_id = "phpMQTT-publisher"; // unique client ID
+        $client_id = "phpMQTT-publisher-" . uniqid();
+
         $mqtt = new phpMQTT($server, $port, $client_id);
         
+        file_put_contents("/var/www/html/FastWheels/Web/debug.output", "Connecting to $server on port $port\n", FILE_APPEND);
+
         if ($mqtt->connect(true, NULL, $username, $password)) {
-            $mqtt->subscribe($topic, 0);
             $mqtt->publish($topic, $message, 0);
             $mqtt->close();
-            $mqtt->disconnect();
         } else {
             file_put_contents("debug.output", "Time out!");
+            
         }
     }
 
@@ -193,27 +195,32 @@ class ReservationController extends ActiveController
         $newData = new \stdClass();
         $newData->id = $this->id;
         $newData->clientId = $this->clientId;
-        $newData->content = $this->content;
-        $newData->subject = $this->subject;
-        $newData->createdAt = $this->createdAt;
-        $newData->closed = $this->closed;
-        $newData->status = $this->status;
-        
+        $newData->carId = $this->carId;
+        $newData->dateStart = $this->dateStart;
+        $newData->dateEnd = $this->dateEnd;
+        $newData->createAt = $this->createAt;
+        $newData->filled = $this->filled;
+        $newData->value = $this->value;
+        $newData->feeValue = $this->feeValue;
+        $newData->carValue = $this->carValue;
+
         $newData = json_encode($newData);
 
         if ($insert)
-            $this->FazPublishNoMosquitto("RESERVATION:CREATE", $newData);
+            ReservationController::publishToMosquitto("RESERVATION:CREATE", $newData);
         else
-            $this->FazPublishNoMosquitto("RESERVATION:UPDATE", $newData);
+            ReservationController::publishToMosquitto("RESERVATION:UPDATE", $newData);
+          
     }
 
-    public function afterDelete() {
+    public function afterDelete()
+    {
         parent::afterDelete();
 
         $newData = new \stdClass();
         $newData->id = $this->id;
 
         $jsonData = json_encode($newData);
-        $this->FazPublishNoMosquitto("RESERVATION:DELETE", $jsonData);
+        ReservationController::publishToMosquitto("RESERVATION:DELETE", $jsonData);
     }
 }

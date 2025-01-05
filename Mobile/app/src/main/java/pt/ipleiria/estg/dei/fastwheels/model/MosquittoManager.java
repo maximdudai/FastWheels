@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.fastwheels.model;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
@@ -31,16 +32,20 @@ public class MosquittoManager implements MosquittoListener {
             case Constants.MQTT_SUPPORTTICKET_UPDATE:
                 Support createSupport = SupportParser.parseSupportData(data);
                 new Notification("Support Ticket", "New update has been placed about your support ticket, please visit out platform to see!");
-
+                Toast.makeText(context, "support ticket data", Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.MQTT_RESERVATION_CREATE:
             case Constants.MQTT_RESERVATION_UPDATE:
                 Reservation createReservation = ReservationParser.parseReservationData(data);
                 new Notification("Reservation", "New reservation has beed created");
+                Toast.makeText(context, "Reservation data", Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.MQTT_CARREVIEW_CREATE:
+                break;
+
+            default:
                 break;
         }
     }
