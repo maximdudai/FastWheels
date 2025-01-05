@@ -3,11 +3,11 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,7 +22,6 @@ public class UserVehicleListFragment extends Fragment {
 
     private ListView lvVehicles;
     private ArrayList<Vehicle> vehicleList;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
     public UserVehicleListFragment() {
         // Required empty public constructor
@@ -33,9 +32,9 @@ public class UserVehicleListFragment extends Fragment {
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
-        // Configuração do SwipeRefreshLayout
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+//        // Configuração do SwipeRefreshLayout
+//        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         // Configuração da ListView
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
@@ -54,7 +53,7 @@ public class UserVehicleListFragment extends Fragment {
 
             // Navegar para o formulário
             if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(formFragment);
+                ((UserVehicles) getActivity()).loadFragment(formFragment,"UserVehicleFormFragment");
             }
         });
 
@@ -65,17 +64,24 @@ public class UserVehicleListFragment extends Fragment {
         fabSaveVehicle.setOnClickListener(v -> {
             // Navega para o formulário do UserVehicle
             if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment());
+                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment(),"UserVehicleFormFragment");
             }
         });
 
         return view;
     }
 
-    public void onRefresh() {
-        // Atualiza a lista ao realizar "pull to refresh"
+    public void reloadVehicleList() {
+        // Recarrega a lista de veículos do banco de dados
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+
+        // Atualiza o adaptador da ListView
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
-        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadVehicleList(); // Recarrega a lista sempre que o fragmento é retomado
     }
 }
