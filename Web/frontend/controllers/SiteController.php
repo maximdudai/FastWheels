@@ -89,8 +89,12 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $carPhotos = \common\models\CarPhoto::find()->with('car')->all();
+        return $this->render('index', [
+            'carPhotos' => $carPhotos,
+        ]);
     }
+
 
     /**
      * Logs in a user.
