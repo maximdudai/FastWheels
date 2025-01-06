@@ -29,6 +29,7 @@ use Yii;
  * @property Payment[] $payments
  * @property Reservation[] $reservations
  */
+
 class UserCar extends \yii\db\ActiveRecord
 {
     /**

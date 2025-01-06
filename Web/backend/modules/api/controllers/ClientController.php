@@ -86,9 +86,6 @@ class ClientController extends ActiveController
         $email = $receivedUser['email'];
         $password = $receivedUser['password'];
 
-        if (!$this->validate()) {
-            return null;
-        }
     
         // Create and save user in User table
         $user = new User();
@@ -126,7 +123,7 @@ class ClientController extends ActiveController
             return null;
         }
 
-        if($client->save() && $this->sendEmail($user)) {
+        if($client->save()) {
             $getUserToken = $user->verification_token;
 
             return [
@@ -147,5 +144,51 @@ class ClientController extends ActiveController
             'status' => 'error',
             'message' => 'Error creating user',
         ];
+    }
+
+    public function actionUpdate() {
+        if(!\Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
+
+        $receivedUser = \Yii::$app->request->post();
+
+        $id = $receivedUser['id'];
+
+        $clientModel = Client::findModel($id);
+
+        // if ($clientModel->load($this->request->post())) {
+
+        //     // update User table
+        //     $loggedUser = $clientModel->userId;
+
+        //     $user->username = $clientModel->name;
+        //     $user->email = $clientModel->email;
+
+        //     $user->save();
+        //     $clientModel->save();
+        // }
+
+        // $clientUser = User::findOne(['id' => $clientModel->userId]);
+
+        // if($user->save()) {
+        //     return [
+        //         'status' => 'success',
+        //         'token' => $clientUser->verification_token,
+        //         'username' => $user->name,
+        //         'id' => $user->id,
+        //         'email' => $user->email,
+        //         'phone' => $user->phone,
+        //         'balance' => $user->balance,
+        //         'iban' => $user->iban,
+        //     ];     
+        // } else {
+        //     \Yii::$app->response->statusCode = 400;
+
+        //     return [
+        //         'status' => 'error',
+        //         'message' => 'Error updating user',
+        //     ];
+        // }
     }
 }

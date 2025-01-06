@@ -59,6 +59,8 @@ return [
                     'extraPatterns' => [
                         'POST login' => 'login',
                         'POST register' => 'register',
+                        'PUT {id}/update' => 'update',
+                        'DELETE {id}/delete' => 'delete',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
