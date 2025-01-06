@@ -48,13 +48,17 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'user-car' => 'user-car/index',
-                // 'user-car/<action:\w+>/<id:\d+>' => 'user-car/<action>',
+                'supportticket' => 'support-ticket/index',
+                'supportticket/<action>' => 'support-ticket/<action>',
+                'usercar' => 'user-car/index',
+                'usercar/<action>' => 'user-car/<action>',
+                // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/client',
                     'extraPatterns' => [
                         'POST login' => 'login',
+                        'POST register' => 'register',
                     ],
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
@@ -74,7 +78,21 @@ return [
                     'tokens' => [
                         '{id}' => '<id:\\d+>',
                     ],
-                ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/reservations',
+                    'extraPatterns' => [
+                        'GET {id}/index' => 'index',
+                        'POST create' => 'create',
+                        'PUT {id}' => 'update',
+                        'DELETE {id}' => 'delete',
+                    ],
+
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ],
             ],
         ],
     ],

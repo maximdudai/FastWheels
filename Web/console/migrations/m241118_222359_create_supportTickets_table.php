@@ -3,19 +3,19 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%supportTickets}}`.
+ * Handles the creation of table `{{%supporttickets}}`.
  * Has foreign keys to the tables:
  *
  * - `{{%clients}}`
  */
-class m241118_222359_create_supportTickets_table extends Migration
+class m241118_222359_create_supporttickets_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%supportTickets}}', [
+        $this->createTable('{{%supporttickets}}', [
             'id' => $this->primaryKey(),
             'clientId' => $this->integer()->notNull(),
             'content' => $this->string(1000)->notNull(),
@@ -25,15 +25,15 @@ class m241118_222359_create_supportTickets_table extends Migration
 
         // creates index for column `clientId`
         $this->createIndex(
-            '{{%idx-supportTickets-clientId}}',
-            '{{%supportTickets}}',
+            '{{%idx-supporttickets-clientId}}',
+            '{{%supporttickets}}',
             'clientId'
         );
 
         // add foreign key for table `{{%clients}}`
         $this->addForeignKey(
-            '{{%fk-supportTickets-clientId}}',
-            '{{%supportTickets}}',
+            '{{%fk-supporttickets-clientId}}',
+            '{{%supporttickets}}',
             'clientId',
             '{{%clients}}',
             'id',
@@ -48,16 +48,16 @@ class m241118_222359_create_supportTickets_table extends Migration
     {
         // drops foreign key for table `{{%clients}}`
         $this->dropForeignKey(
-            '{{%fk-supportTickets-clientId}}',
-            '{{%supportTickets}}'
+            '{{%fk-supporttickets-clientId}}',
+            '{{%supporttickets}}'
         );
 
         // drops index for column `clientId`
         $this->dropIndex(
-            '{{%idx-supportTickets-clientId}}',
-            '{{%supportTickets}}'
+            '{{%idx-supporttickets-clientId}}',
+            '{{%supporttickets}}'
         );
 
-        $this->dropTable('{{%supportTickets}}');
+        $this->dropTable('{{%supporttickets}}');
     }
 }

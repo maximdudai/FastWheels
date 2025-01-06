@@ -3,19 +3,19 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%userCars}}`.
+ * Handles the creation of table `{{%usercars}}`.
  * Has foreign keys to the tables:
  *
  * - `{{%clients}}`
  */
-class m241118_222507_create_userCars_table extends Migration
+class m241118_222507_create_usercars_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%userCars}}', [
+        $this->createTable('{{%usercars}}', [
             'id' => $this->primaryKey(),
             'clientId' => $this->integer()->notNull(),
             'carBrand' => $this->string(80)->notNull(),
@@ -30,15 +30,15 @@ class m241118_222507_create_userCars_table extends Migration
 
         // creates index for column `clientId`
         $this->createIndex(
-            '{{%idx-userCars-clientId}}',
-            '{{%userCars}}',
+            '{{%idx-usercars-clientId}}',
+            '{{%usercars}}',
             'clientId'
         );
 
         // add foreign key for table `{{%clients}}`
         $this->addForeignKey(
-            '{{%fk-userCars-clientId}}',
-            '{{%userCars}}',
+            '{{%fk-usercars-clientId}}',
+            '{{%usercars}}',
             'clientId',
             '{{%clients}}',
             'id',
@@ -53,16 +53,16 @@ class m241118_222507_create_userCars_table extends Migration
     {
         // drops foreign key for table `{{%clients}}`
         $this->dropForeignKey(
-            '{{%fk-userCars-clientId}}',
-            '{{%userCars}}'
+            '{{%fk-usercars-clientId}}',
+            '{{%usercars}}'
         );
 
         // drops index for column `clientId`
         $this->dropIndex(
-            '{{%idx-userCars-clientId}}',
-            '{{%userCars}}'
+            '{{%idx-usercars-clientId}}',
+            '{{%usercars}}'
         );
 
-        $this->dropTable('{{%userCars}}');
+        $this->dropTable('{{%usercars}}');
     }
 }

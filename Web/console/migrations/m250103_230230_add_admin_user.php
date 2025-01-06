@@ -1,11 +1,12 @@
 <?php
 
+use common\models\User;
 use yii\db\Migration;
 
 /**
- * Class m241115_195725_add_admin_user
+ * Class m250103_230230_add_admin_user
  */
-class m241115_195725_add_admin_user extends Migration
+class m250103_230230_add_admin_user extends Migration
 {
     /**
      * {@inheritdoc}
@@ -24,6 +25,18 @@ class m241115_195725_add_admin_user extends Migration
             'created_at' => time(),
             'updated_at' => time(),
         ]);
+
+        $this->insert('{{%clients}}', [
+            'name' => 'admin',
+            'email' => 'admin@example.com',
+            'phone' => 'none',
+            'roleId' => 3,
+            'createdAt' => Date('Y-m-d H:i:s'),
+            'balance' => 0,
+            'iban' => 'none',
+            'userId' => User::findByUsername('admin')->id,
+        ]);
+        
     }
 
     /**
@@ -32,6 +45,7 @@ class m241115_195725_add_admin_user extends Migration
     public function safeDown()
     {
         $this->delete('{{%user}}', ['username' => 'admin']);
+        $this->delete('{{%clients}}', ['name' => 'admin']);
 
         return false;
     }
@@ -45,7 +59,7 @@ class m241115_195725_add_admin_user extends Migration
 
     public function down()
     {
-        echo "m241115_195725_add_admin_user cannot be reverted.\n";
+        echo "m250103_230230_add_admin_user cannot be reverted.\n";
 
         return false;
     }

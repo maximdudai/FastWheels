@@ -1,4 +1,4 @@
-package pt.ipleiria.estg.dei.fastwheels.models;
+package pt.ipleiria.estg.dei.fastwheels.model;
 
 //model for table CarPhoto
 public class VehiclePhoto {
@@ -27,6 +27,11 @@ public class VehiclePhoto {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Car ID: " + carId + ", Photo URL: " + photoUrl;
     }
 
 }

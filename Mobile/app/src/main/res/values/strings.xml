@@ -31,7 +31,7 @@
     <string name="vehicle_form_disponivel_de">Disponível de</string>
     <string name="vehicle_form_disponivel_ate">Disponível até</string>
     <string name="vehicle_form_btn_guardar">Guardar</string>
-    <string name="vehicle_form_selecionar_fotografias">Selecionar Fotografia(s)</string>
+    <string name="vehicle_form_selecionar_fotografias">Adicionar fotografia</string>
     <string name="vehicle_form_codigo_postal">Código Postal</string>
     <string name="vehicle_list_marca">"Marca: "</string>
     <string name="vehicle_list_modelo">"Modelo: "</string>
@@ -42,4 +42,5 @@
     <string name="vehicle_image">Fotos do veículo</string>
     <string name="ndopen">ndOpen</string>
     <string name="ndclose">ndClose</string>
+    <string name="vehicle_form_lista_foto_adicionada">Lista fotografia(s) adicionadas</string>
 </resources>

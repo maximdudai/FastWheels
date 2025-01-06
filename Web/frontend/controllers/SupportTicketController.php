@@ -26,7 +26,9 @@ class SupportTicketController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'create' => ['POST'],
+                        'update' => ['PUT'],
+                        'delete' => ['DELETE'],
                     ],
                 ],
             ]
@@ -73,13 +75,18 @@ class SupportTicketController extends Controller
     public function actionCreate()
     {
         $model = new SupportTicket();
-
-        $model->clientId = \Yii::$app->user->id;
-        $model->createdAt = date('Y-m-d H:i:s');
-        $model->closed = 0;
+   
 
         if ($this->request->isPost) {
             
+            $model->clientId = \Yii::$app->user->id;
+            $model->reservationId = 1;
+            $model->content = 'content';
+            $model->subject = 'subject';
+            $model->createdAt = date('Y-m-d H:i:s');
+            $model->closed = 0;
+            $model->status = '0';
+
             if ($model->load($this->request->post()) && $model->save()) {
 
                 return $this->redirect(['view', 'id' => $model->id]);

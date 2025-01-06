@@ -30,6 +30,7 @@ import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
+
 public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ListView lvVehicles;
@@ -62,25 +63,22 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         availableTo = null;
         locationFilter = null;
 
-        // Add test vehicle
-        //addNewVehicle();
-
         // Configuração da ListView
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
 
         lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showMessage(getContext(), "Clicked position: " + i + ", ID: " + l);
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Vehicle selectedVehicle = vehicleList.get(position); // Obter o veículo selecionado
+                showMessage(getContext(), "Clicked position: " + position + ", ID: " + id);
 
                 Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
-                intent.putExtra("VEHICLE_ID", (int) l);
+                intent.putExtra("VEHICLE_ID", selectedVehicle.getId());
                 startActivity(intent);
             }
         });
         return view;
     }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
@@ -100,14 +98,14 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
                 // Filtra os veículos pelo texto digitado
                 for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
-                    if (v.getBrand().toLowerCase().contains(newText.toLowerCase()) ||
+                    if (v.getCarBrand().toLowerCase().contains(newText.toLowerCase()) ||
                             v.getCarModel().toLowerCase().contains(newText.toLowerCase())) {
                         tempVehicles.add(v);
                     }
                 }
 
                 // Atualiza o adaptador com os resultados da pesquisa
-                lvVehicles.setAdapter(new VehicleListAdapter(getContext(), tempVehicles));
+                lvVehicles.setAdapter(new VehicleListAdapter(getContext(), tempVehicles, R.layout.vehicle_list_item));
                 return true;
             }
         });
@@ -159,7 +157,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         ArrayList<Vehicle> allVehicles = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
         // Atualizar o adaptador da ListView com todos os veículos
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), allVehicles));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), allVehicles, R.layout.vehicle_list_item));
     }
 
 
@@ -170,7 +168,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
                 filteredList.add(v);
             }
         }
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList, R.layout.vehicle_list_item));
     }
 
     private void filterByAvailableFrom(Timestamp startDate) {
@@ -180,7 +178,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
                 filteredList.add(v);
             }
         }
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList, R.layout.vehicle_list_item));
     }
 
     private void filterByAvailableTo(Timestamp endDate) {
@@ -190,20 +188,20 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
                 filteredList.add(v);
             }
         }
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList, R.layout.vehicle_list_item));
     }
 
     private void filterByLocation(String location) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
         for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
 
-            if ((v.getLocation() != null && v.getLocation().toLowerCase().contains(location.toLowerCase())) ||
+            if ((v.getAddress() != null && v.getAddress().toLowerCase().contains(location.toLowerCase())) ||
                     (v.getPostalCode() != null && v.getPostalCode().toLowerCase().contains(location.toLowerCase())) ||
                     (v.getCity() != null && v.getCity().toLowerCase().contains(location.toLowerCase()))) {
                 filteredList.add(v);
             }
         }
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList, R.layout.vehicle_list_item));
     }
 
 
@@ -251,33 +249,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     public void onRefresh() {
         // Atualiza a lista ao realizar "pull to refresh"
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
         swipeRefreshLayout.setRefreshing(false);
-    }
-
-    private void addNewVehicle() {
-        // Cria um novo veículo com todos os dados necessários
-        Vehicle newVehicle = new Vehicle();
-
-        // Definindo valores para os atributos obrigatórios
-        newVehicle.setId(0); // Define um ID padrão (ou gere um ID único se necessário)
-        newVehicle.setClientId(123); // Substitua por um ID válido de cliente
-        newVehicle.setBrand("Datsun"+" ");
-        newVehicle.setCarModel("Velho");
-        newVehicle.setCarYear(1945);
-        newVehicle.setCarDoors(2); // Número de portas
-        newVehicle.setCreatedAt(new Timestamp(System.currentTimeMillis())); // Data atual como criada
-        newVehicle.setStatus(true); // Status disponível
-        newVehicle.setAvailableFrom(new Timestamp(System.currentTimeMillis())); // Disponível agora
-        newVehicle.setAvailableTo(new Timestamp(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000L)); // Disponível por 7 dias
-        newVehicle.setLocation("Rua Exemplo, 123"); // Exemplo de residência
-        newVehicle.setPostalCode("1234-567"); // Exemplo de código postal
-        newVehicle.setCity("Lisboa"); // Exemplo de cidade
-
-        // Adiciona o novo veículo à base de dados do Singleton
-        SingletonFastWheels.getInstance(getContext()).addVehicleDb(newVehicle);
-
-        // Adiciona o veículo à lista local (reflete o banco de dados)
-        vehicleList.add(newVehicle);
     }
 }

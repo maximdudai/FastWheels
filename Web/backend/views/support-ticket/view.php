@@ -3,15 +3,20 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+require_once __DIR__ . '/../../../common/utils/ticketstatus.php';
+use function TicketStatus\getTicketStatus;
+
 /** @var yii\web\View $this */
-/** @var common\models\Localization $model */
+/** @var common\models\SupportTicket $model */
+
+
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Localizations', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Support Tickets', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="localization-view">
+<div class="support-ticket-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,10 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'carId',
-            'locationCity',
-            'locationX',
-            'locationY',
+            'clientId',
+            'content',
+            'createdAt',
+            'closed',
+            'status' => [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return getTicketStatus($model->status);
+                }
+            ],
         ],
     ]) ?>
 
