@@ -147,8 +147,9 @@ class UserCarController extends Controller
             return $this->redirect(['index']);
         }
 
+        // Adjusting to use `clientId` instead of `userId`
         $exists = \common\models\Favorite::find()
-            ->where(['userId' => $userId, 'carId' => $carId])
+            ->where(['clientId' => $userId, 'carId' => $carId])
             ->exists();
 
         if ($exists) {
@@ -157,7 +158,7 @@ class UserCarController extends Controller
         }
 
         $favorite = new \common\models\Favorite();
-        $favorite->userId = $userId;
+        $favorite->clientId = $userId; // Use clientId
         $favorite->carId = $carId;
 
         if ($favorite->save()) {

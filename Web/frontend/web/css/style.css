@@ -415,14 +415,15 @@ body {
 }
 
 .card {
-    background: #333;
+    background: #2b2b2b;
     color: #fff;
     border-radius: 10px;
     padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-image img {
@@ -456,7 +457,7 @@ body {
 .car-name {
     font-size: 1.2rem;
     margin: 10px 0;
-    color: #ffdd57;
+    color: #4a90e2;
 }
 
 .location {
@@ -468,8 +469,7 @@ body {
     margin-bottom: 10px;
 }
 
-.year-trips,
-.availability {
+.year, .doors, .availability-from, .availability-to {
     font-size: 0.9rem;
     color: #bbb;
     margin-bottom: 5px;
@@ -494,3 +494,17 @@ body {
     transform: scale(1.2);
 }
 
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-link {
+    text-decoration: none;
+    display: block;
+}
+
+.card-link:hover .card {
+    transform: scale(1.02);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
