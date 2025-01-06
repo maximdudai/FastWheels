@@ -55,7 +55,7 @@ return [
                 // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/client',
+                    'controller' => 'api/clients',
                     'extraPatterns' => [
                         'POST login' => 'login',
                         'POST register' => 'register',
@@ -87,7 +87,7 @@ return [
                     'extraPatterns' => [
                         'GET {id}/index' => 'index',
                         'POST create' => 'create',
-                        'PUT {id}' => 'update',
+                        'PUT {id}/update' => 'update',
                         'DELETE {id}' => 'delete',
                     ],
 
