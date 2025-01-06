@@ -215,19 +215,18 @@ class ReservationsController extends ActiveController
       file_put_contents("debug.output", "Time out!");
     }
   }
-
  
   public function afterAction($action, $result)
-{
-    $result = parent::afterAction($action, $result);
+  {
+      $result = parent::afterAction($action, $result);
 
-    if ($action->id == 'create' || $action->id == 'update') {
-        ReservationsController::publishToMosquitto("RESERVATION:CREATE", json_encode($result));
-    }
+      if ($action->id == 'create' || $action->id == 'update') {
+          ReservationsController::publishToMosquitto("RESERVATION:CREATE", json_encode($result));
+      }
 
-    // Ensure the result is returned so that the response isn't null
-    return $result;
-}
+      // Ensure the result is returned so that the response isn't null
+      return $result;
+  }
 
 
   public function afterSave($insert, $changedAttributes)
