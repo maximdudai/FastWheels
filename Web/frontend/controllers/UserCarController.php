@@ -43,6 +43,8 @@ class UserCarController extends Controller
         $searchModel = new UserCarSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $dataProvider->query->with('carphotos');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -148,7 +150,6 @@ class UserCarController extends Controller
             return $this->redirect(['index']);
         }
 
-        // Adjusting to use `clientId` instead of `userId`
         $exists = \common\models\Favorite::find()
             ->where(['clientId' => $userId, 'carId' => $carId])
             ->exists();
@@ -159,7 +160,7 @@ class UserCarController extends Controller
         }
 
         $favorite = new \common\models\Favorite();
-        $favorite->clientId = $userId; // Use clientId
+        $favorite->clientId = $userId;
         $favorite->carId = $carId;
         $favorite->createdAt = date("Y/m/d H/m/s");
 

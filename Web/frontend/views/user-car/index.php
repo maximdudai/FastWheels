@@ -16,35 +16,49 @@ $this->title = 'Available Cars';
     <div class="cards-container">
         <?php foreach ($dataProvider->models as $car): ?>
             <div class="card">
-                <?= Html::a(
-                    '<h2 class="car-name">' . Html::encode($car->carBrand . ' ' . $car->carModel) . '</h2>
-                    
-                    <div class="year">
-                        <span><strong>Year:</strong> ' . Html::encode($car->carYear) . '</span>
+                <a href="<?= Url::to(['user-car/view', 'id' => $car->id]) ?>" class="card-link">
+                    <div class="card-content">
+                        <div class="card-image">
+                            <?= Html::img($car->getFirstPhoto(), ['alt' => 'Car Photo']) ?>
+                        </div>
+                        <div class="car-name-location">
+                            <h2 class="car-name"><?= Html::encode($car->carBrand . ' ' . $car->carModel) ?></h2>
+                        </div>
+                        <div class="details">
+                            <div class="year">
+                                <strong>Year:</strong> <span><?= Html::encode($car->carYear) ?></span>
+                            </div>
+                            <div class="doors">
+                                <strong>Doors:</strong> <span><?= Html::encode($car->carDoors) ?></span>
+                            </div>
+                            <div class="reviews">
+                                <strong>Reviews:</strong>
+                                <span><?= !empty($car->carreviews)
+                                        ? number_format(array_sum(array_column($car->carreviews, 'rating')) / count($car->carreviews), 1)
+                                        : '0.0' ?></span>
+                            </div>
+                            <div class="location">
+                                <strong>Location:</strong> <span><?= Html::encode($car->address) ?></span>
+                            </div>
+                            <div class="availability">
+                                <strong>Start:</strong> <span><?= date('Y-m-d', strtotime($car->availableFrom)) ?></span>
+                            </div>
+                            <div class="availability">
+                                <strong>End:</strong> <span><?= date('Y-m-d', strtotime($car->availableTo)) ?></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="doors">
-                        <span><strong>Doors:</strong> ' . Html::encode($car->carDoors) . '</span>
-                    </div>
-                    <div class="availability-from">
-                        <span><strong>From:</strong> ' . Html::encode($car->availableFrom) . '</span>
-                    </div>
-                    <div class="availability-to">
-                        <span><strong>To:</strong> ' . Html::encode($car->availableTo) . '</span>
-                    </div>',
-                    ['user-car/view', 'id' => $car->id],
-                    ['class' => 'card-link', 'encode' => false]
-                ) ?>
-
+                </a>
                 <div class="card-favorite">
                     <?php if (Yii::$app->user->isGuest): ?>
                         <?= Html::button('❤', [
-                            'class' => 'favorite-btn active-favorite',
+                            'class' => 'favorite-btn',
                             'onclick' => "alert('You need to log in to add to favorites.'); window.location.href = '" . Url::to(['/site/login']) . "';",
                         ]) ?>
                     <?php else: ?>
                         <?= Html::beginForm(['user-car/favorite'], 'post') ?>
                         <?= Html::hiddenInput('carId', $car->id) ?>
-                        <?= Html::submitButton('❤', ['class' => 'favorite-btn active-favorite']) ?>
+                        <?= Html::submitButton('❤', ['class' => 'favorite-btn']) ?>
                         <?= Html::endForm() ?>
                     <?php endif; ?>
                 </div>

@@ -3,6 +3,8 @@ return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@uploads' => '/uploads',
+        '@carphotos' => '@uploads/carphotos',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -15,4 +17,3 @@ return [
         ],
     ],
 ];
-
