@@ -12,16 +12,8 @@ $this->title = $model->carBrand . ' ' . $model->carModel;
 <div class="user-car-view">
     <div class="view-card-container">
         <div class="view-card">
-            <!-- Imagem com botão Favorite -->
             <div class="view-card-image">
-                <?php
-                $photos = $model->carphotos;
-                if (!empty($photos)) {
-                    echo Html::img($photos[0]->photoPath, ['alt' => 'Car Photo']);
-                } else {
-                    echo Html::img('/path/to/default-image.jpg', ['alt' => 'Default Car Photo']);
-                }
-                ?>
+                <?= Html::img($model->getFirstPhoto(), ['alt' => 'Car Photo']) ?>
                 <div class="card-favorite">
                     <?php if (Yii::$app->user->isGuest): ?>
                         <?= Html::button('❤', [

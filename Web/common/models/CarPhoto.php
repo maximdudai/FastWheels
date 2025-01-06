@@ -57,4 +57,10 @@ class CarPhoto extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Usercar::class, ['id' => 'carId']);
     }
+
+    public function getPhotoPath()
+    {
+        return Yii::getAlias('@web') . '/uploads/carphotos/' . $this->photoUrl;
+    }
+
 }

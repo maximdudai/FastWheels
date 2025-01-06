@@ -42,6 +42,8 @@ class UserCarController extends Controller
         $searchModel = new UserCarSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $dataProvider->query->with('carphotos');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

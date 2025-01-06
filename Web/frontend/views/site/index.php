@@ -22,25 +22,48 @@ $this->title = 'Fast Wheels';
 
     <div id="main-content">
         <h2 id="gallery-title">Our Vehicles</h2>
-        <div id="vehicle-carousel">
-            <div id="carousel-inner">
+        <div id="vehicle-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
                 <?php foreach ($carPhotos as $index => $photo): ?>
                     <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                        <img src="<?= Yii::getAlias('@web') . '/' . $photo->photoUrl ?>" alt="Car Photo">
+                        <img src="<?= Yii::getAlias('@carphotos') . '/' . $photo->photoUrl ?>" class="d-block w-100" alt="Car Photo">
                         <div class="carousel-caption">
-                            <h5><?= $photo->car->name ?? 'Unnamed Vehicle' ?></h5>
+                            <h5><?= $photo->car->carBrand . ' ' . $photo->car->carModel ?? 'Unnamed Vehicle' ?></h5>
                             <p>Choose this car for your next adventure!</p>
                         </div>
                     </div>
                 <?php endforeach; ?>
+
+                <?php if (empty($carPhotos)): ?>
+                    <?php
+                    $defaultImages = [
+                        Yii::getAlias('@uploads') . '/default_nocar.jpg',
+                        Yii::getAlias('@uploads') . '/default_nocar2.jpg',
+                        Yii::getAlias('@uploads') . '/default_nocar3.jpg',
+                    ];
+                    ?>
+                    <?php foreach ($defaultImages as $index => $defaultImage): ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <img src="<?= $defaultImage ?>" class="d-block w-100" alt="Default Car Photo <?= $index + 1 ?>">
+                            <div class="carousel-caption">
+                                <h5>No Vehicles Available</h5>
+                                <p>Example Default Image <?= $index + 1 ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
-            <a id="carousel-prev" href="#vehicle-carousel" role="button" data-bs-slide="prev">
-                <span>Previous</span>
-            </a>
-            <a id="carousel-next" href="#vehicle-carousel" role="button" data-bs-slide="next">
-                <span>Next</span>
-            </a>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#vehicle-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#vehicle-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
+
 
         <div id="gallery-footer">
             <p id="gallery-description">

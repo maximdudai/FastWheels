@@ -83,6 +83,16 @@ class UserCar extends \yii\db\ActiveRecord
         return $this->hasMany(Carphoto::class, ['carId' => 'id']);
     }
 
+    public function getFirstPhoto()
+    {
+        $photos = $this->carphotos;
+
+        return !empty($photos)
+            ? Yii::getAlias('@carphotos') . '/' . $photos[0]->photoUrl
+            : Yii::getAlias('@uploads') . '/default_car.jpg';
+    }
+
+
     /**
      * Gets query for [[Carreviews]].
      *
