@@ -701,6 +701,61 @@ body {
     font-size: 0.85rem;
 }
 
+.favorite-card-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.favorite-card {
+    background-color: #1d1d1d;
+    border-radius: 10px;
+    padding: 15px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.card-image {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.car-photo {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.card-favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.favorite-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: red;
+    cursor: pointer;
+}
+
+.card-details {
+    margin-top: 10px;
+}
+
+.card-details h3 {
+    margin-bottom: 10px;
+}
+
+.detail-item {
+    margin-bottom: 8px;
+}
+
+
 @media (max-width: 768px) {
     .view-card {
         max-width: 100%;

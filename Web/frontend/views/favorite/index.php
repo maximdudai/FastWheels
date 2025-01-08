@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
 /** @var frontend\models\FavoriteSearch $searchModel */
@@ -14,33 +15,14 @@ $this->title = 'Favorites';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="favorite-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Favorite', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
+    <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'clientId',
-            'carId',
-            'createdAt',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Favorite $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
+        'itemOptions' => ['class' => 'favorite-card-container'],
+        'layout' => "{items}\n{pager}",
+        'itemView' => function ($model) {
+            return $this->render('_favorite_card', ['model' => $model]);
+        },
     ]); ?>
-
-
 </div>

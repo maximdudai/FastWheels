@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Edit', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <!-- button to going to support-ticket page -->
         <?= Html::a('Support Ticket', ['support-ticket/index', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+
+        <?= Html::a('Favorites', ['/favorite'], ['class' => 'btn btn-warning']) ?>
     </p>
 
 </div>

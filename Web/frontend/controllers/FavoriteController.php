@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use common\models\Favorite;
 use frontend\models\FavoriteSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -39,7 +41,12 @@ class FavoriteController extends Controller
     public function actionIndex()
     {
         $searchModel = new FavoriteSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Favorite::find()->where(['clientId' => Yii::$app->user->id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
