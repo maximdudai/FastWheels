@@ -5,7 +5,9 @@ namespace frontend\controllers;
 use Bluerhinos\phpMQTT;
 use Yii;
 use common\models\Client;
+use common\models\Reservation;
 use common\models\SupportTicket;
+use common\models\UserCar;
 use frontend\models\SupportTicketSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -78,26 +80,30 @@ class SupportTicketController extends Controller
         $model = new SupportTicket();
 
         if ($this->request->isPost) {
-
-            // obter dados recebidos do formulário
             $receivedData = $this->request->post()['SupportTicket'];
 
+            var_dump($receivedData);
+
             $model->clientId = \Yii::$app->user->id;
-            $model->reservationId = 0; // 0 == sem reserva
-            $model->content = 'content';
-            $model->subject = $receivedData['subject'] ?? 'Some subject';
+            $model->content = $receivedData['content'] ?? 'content';
+            $model->subject = $receivedData['subject'] ?? 'No subject';
+
+            $model->reservationId = $receivedData['reservationId'] ?? null;
+
             $model->createdAt = date('Y-m-d H:i:s');
             $model->closed = 0;
             $model->status = '0';
 
             if ($model->load($this->request->post()) && $model->save()) {
-
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+            return;
         }
 
+        
+
         return $this->render('create', [
-            'model' => $model,
+            'model' => $model
         ]);
     }
 

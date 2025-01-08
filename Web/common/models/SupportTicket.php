@@ -34,14 +34,16 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'content', 'createdAt', 'subject', 'reservationId'], 'required'],
+            [['clientId', 'content', 'createdAt', 'subject'], 'required'],  // Exclude 'reservationId'
             [['clientId', 'closed', 'reservationId'], 'integer'],
             [['createdAt'], 'safe'],
             [['content'], 'string', 'max' => 1000],
             [['subject'], 'string', 'max' => 144],
             [['status'], 'string', 'max' => 256],
+            [['reservationId'], 'default', 'value' => null],  // Allow null by default
         ];
     }
+
 
     /**
      * {@inheritdoc}

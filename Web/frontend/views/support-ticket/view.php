@@ -27,15 +27,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'content',
             'createdAt',
+            'content',
+            'subject',
+
             'closed' => [
                 'attribute' => 'closed',
                 'value' => function (SupportTicket $model) {
                     return $model->closed ? 'Yes' : 'No';
                 }
             ],
+
+            // Show reservation only if it's greater than 1
+            [
+                'attribute' => 'reservationId',
+                'value' => function ($model) {
+                    return '#' . $model->reservationId;
+                },
+                'visible' => $model->reservationId >= 1
+            ]
         ],
     ]) ?>
+
 
 </div>

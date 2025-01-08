@@ -12,9 +12,10 @@ class m241227_202043_add_field_subject_addfk_supporttickets extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%supporttickets}}', 'subject',$this->string(144)->notNull());
+        $this->addColumn('{{%supporttickets}}', 'subject', $this->string(144)->notNull());
 
-        $this->addColumn('{{%supporttickets}}', 'reservationId', $this->integer()->notNull());
+        // Allow reservationId to be NULL
+        $this->addColumn('{{%supporttickets}}', 'reservationId', $this->integer()->null());
 
         // creates index for column `reservationId`
         $this->createIndex(
@@ -30,9 +31,8 @@ class m241227_202043_add_field_subject_addfk_supporttickets extends Migration
             'reservationId',
             '{{%reservations}}',
             'id',
-            'CASCADE'
+            'SET NULL' // When reservation is deleted, set reservationId to NULL
         );
-
     }
 
     /**

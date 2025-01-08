@@ -26,9 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <!-- button to going to edit page -->
     <p>
+        <!-- button to going to edit page -->
         <?= Html::a('Edit', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <!-- button to going to support-ticket page -->
+        <?= Html::a('Support Ticket', ['support-ticket/index', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
 </div>
