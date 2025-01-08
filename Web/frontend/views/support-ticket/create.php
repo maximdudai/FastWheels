@@ -5,17 +5,21 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\SupportTicket $model */
 
-$this->title = 'Create Support Ticket';
-$this->params['breadcrumbs'][] = ['label' => 'Support Tickets', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'How can we help';
+
+if (Yii::$app->session->hasFlash('success')) {
+    echo '<div class="alert alert-success">' . Yii::$app->session->getFlash('success') . '</div>';
+}
 ?>
-<div class="support-ticket-create">
+
+<div class="support-ticket-container">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
-        'model' => $model
-    ])
-    ?>
+    <div class="support-ticket-form">
+        <?= $this->render('_form', [
+            'model' => $model
+        ]) ?>
+    </div>
 
 </div>

@@ -1,49 +1,48 @@
 <?php
 
-use common\models\SupportTicket;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var frontend\models\SupportTicketSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Support Tickets';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="support-ticket-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Support Ticket', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="help-center-container">
+        <input type="radio" id="driver-help" name="help-center" checked>
+        <input type="radio" id="owner-help" name="help-center">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+        <div class="help-center-buttons">
+            <label for="driver-help">Driver help center</label>
+            <label for="owner-help">Owner help center</label>
+        </div>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        <div class="help-section driver">
+            <ul>
+                <li>Como posso criar uma conta na plataforma?</li>
+                <li>É possível cancelar uma reserva?</li>
+                <li>O que devo fazer em caso de acidente com o veículo alugado?</li>
+                <li>Existe um limite de quilómetros durante o período de aluguer?</li>
+                <li>Como posso reportar problemas com o veículo antes ou durante o aluguer?</li>
+            </ul>
+        </div>
+        <div class="help-section owner">
+            <ul>
+                <li>Como listar um veículo para aluguer na plataforma?</li>
+                <li>Quais são os métodos de pagamento aceites?</li>
+                <li>Os veículos são verificados pela plataforma antes de serem listados?</li>
+                <li>O que acontece se o veículo for devolvido com danos?</li>
+                <li>Posso definir as condições do aluguer, como limite de quilómetros?</li>
+            </ul>
+        </div>
 
-            'createdAt',
-            'closed' => [
-                'attribute' => 'closed',
-                'value' => function (SupportTicket $model) {
-                    return $model->closed ? 'Yes' : 'No';
-                }
-            ],
-            [
-                'class' => ActionColumn::className(),
-                'template' => '{view} {delete}',
-                'urlCreator' => function ($action, SupportTicket $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
+    </div>
 
+    <div class="button-container">
+        <?= Html::a('Create Support Ticket', ['create'], ['class' => 'btn btn-primary custom-btn']) ?>
+        <?= Html::a('My Tickets', ['view'], ['class' => 'btn btn-primary custom-btn']) ?>
+    </div>
 
 </div>
