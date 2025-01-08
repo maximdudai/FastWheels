@@ -39,6 +39,10 @@ class UserCarController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->request->get('clear') === '1') {
+            return $this->redirect(['index']);
+        }
+
         $searchModel = new UserCarSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 

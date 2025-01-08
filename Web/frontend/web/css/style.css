@@ -531,6 +531,56 @@ body {
     height: 100%;
 }
 
+/* --------------------Filters Index------------------ */
+
+.filter-form {
+    background: #222222;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.filter-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.filter-field input,
+.filter-field a {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #4a90e2;
+    background: #333333;
+    color: #fff;
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.filter-field input:focus,
+.filter-field a:hover {
+    background: #4a90e2;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.8);
+}
+
+.filter-fields input::placeholder {
+    color: #fff;
+    opacity: 1;
+}
+
+.filter-field label {
+    font-size: 1rem;
+    color: #4a90e2;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+
 /* --------------------Vehicle View------------------ */
 .view-card-container {
     display: flex;
