@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,20 +50,45 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        loadFragment(new VehicleListFragment());
+//        loadFragment(new VehicleListFragment());
 
-        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
-        btnMyVehicles.setOnClickListener(v -> {
+//        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
+//        btnMyVehicles.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+//            startActivity(intent);
+//        });
+
+        // region OPCOES MENU
+
+        // MeusVeiculos
+        LinearLayout goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
+        goMeusVeiculos.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserVehicles.class);
             startActivity(intent);
         });
+
+        // TODO Favoritos
+
+
+
+
+        // VeiculosDisponiveis
+        LinearLayout goVeiculosDisponiveis = findViewById(R.id.LayoutMainVeiculosDisp);
+        goVeiculosDisponiveis.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, VehicleListFragment.class);
+            startActivity(intent);
+        });
+
+
+
+        // endregion
     }
 
     private void loadFragment(Fragment fragment) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.contentFragment, fragment)
+                .replace(R.id.layoutPrincipal, fragment)
                 .commit();
     }
 
