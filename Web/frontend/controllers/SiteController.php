@@ -117,7 +117,8 @@ class SiteController extends BaseController
 
             $getRoleId = Client::find()->select('roleId')->where(['name' => $username])->one();
 
-            if ($getRoleId['roleId'] != 1) {
+
+            if (isset($getRoleId['roleId']) && $getRoleId['roleId'] != 1) {
                 // allow only 'client' role
                 Yii::$app->user->logout(); // Log the user out
                 Yii::$app->session->setFlash('error', 'Access denied: You do not have permission to access the front office as employee or admin.');
@@ -125,7 +126,7 @@ class SiteController extends BaseController
             }
 
             // Redirect to home or dashboard
-            return $this->goBack();
+            return $this->redirect(['site/index']);
         }
 
         $model->password = '';
@@ -191,6 +192,7 @@ class SiteController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
             return $this->goHome();
+
         }
 
         return $this->render('signup', [

@@ -85,7 +85,7 @@ class SupportTicketController extends Controller
             $model->clientId = \Yii::$app->user->id;
             $model->reservationId = 0; // 0 == sem reserva
             $model->content = 'content';
-            $model->subject = $receivedData['subject'];
+            $model->subject = $receivedData['subject'] ?? 'Some subject';
             $model->createdAt = date('Y-m-d H:i:s');
             $model->closed = 0;
             $model->status = '0';
