@@ -30,8 +30,8 @@ class SupportTicketController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         // 'create' => ['POST'],
-                        // 'update' => ['POST', 'PUT'],
-                        'delete' => ['DELETE'],
+                        // 'update' => ['PUT'],
+                        // 'delete' => ['DELETE'],
                     ],
                 ],
             ]
@@ -72,10 +72,46 @@ class SupportTicketController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $content = $model->content;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'content' => $content,
         ]);
     }
+
+
+    public function actionStaticView($topic)
+    {
+        $helpTopics = [
+            'driver-create-account' => 'Para criar uma conta, clique em "Registrar" e preencha seus dados.',
+            'driver-cancel-reservation' => 'Você pode cancelar sua reserva até 24 horas antes sem penalidades.',
+            'driver-accident' => 'Em caso de acidente, contate a seguradora e informe o proprietário.',
+            'driver-mileage-limit' => 'O limite de quilometragem depende do proprietário.',
+            'driver-report-issues' => 'Relate problemas imediatamente através do suporte.',
+
+            'owner-list-vehicle' => 'Para listar um veículo, preencha os detalhes na seção de cadastro.',
+            'owner-payment-methods' => 'Aceitamos pagamentos via cartão de crédito, débito, MB Way e transferência.',
+            'owner-vehicle-verification' => 'Verificamos os documentos antes de listar o veículo.',
+            'owner-vehicle-damages' => 'Se houver danos, a seguradora será notificada.',
+            'owner-set-conditions' => 'Você pode definir as condições do aluguel ao listar o veículo.',
+        ];
+
+        if (!isset($helpTopics[$topic])) {
+            throw new NotFoundHttpException('O tópico solicitado não existe.');
+        }
+
+        $content = $helpTopics[$topic];
+
+        return $this->render('view', [
+            'topic' => $topic,
+            'content' => $content,
+        ]);
+    }
+
+
 
     /**
      * Creates a new SupportTicket model.

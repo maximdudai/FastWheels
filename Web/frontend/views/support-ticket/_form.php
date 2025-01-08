@@ -2,7 +2,6 @@
 
 use common\models\Reservation;
 use common\models\UserCar;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -37,15 +36,10 @@ if (!empty($reservationOptions)) {
 <div class="support-ticket-form">
 
     <?php $form = ActiveForm::begin([
-        'action' => $model->isNewRecord ? ['create'] : ['update', 'id' => $model->id],
+        'action' => ['create'], // Define apenas para criação
         'method' => 'post',
         'options' => ['class' => 'custom-form'],
     ]); ?>
-
-
-    <?php if (!$model->isNewRecord): ?>
-        <?= Html::hiddenInput('_method', 'PUT'); ?>
-    <?php endif; ?>
 
     <?= $form->field($model, 'subject', [
         'options' => ['class' => 'form-group custom-field'],
@@ -72,32 +66,9 @@ if (!empty($reservationOptions)) {
         ['class' => 'form-control custom-dropdown', 'prompt' => 'Select a reservation']
     ) ?>
 
-    <?php if (!$model->isNewRecord): ?>
-        <?= Html::hiddenInput('_method', 'PUT') ?>
-    <?php endif; ?>
-
     <div class="form-group">
-        <?= Html::submitButton(
-            $model->isNewRecord ? 'Send' : 'Save',
-            ['class' => 'btn btn-primary custom-button mt-2']
-        ) ?>
+        <?= Html::submitButton('Send', ['class' => 'btn btn-primary custom-button mt-2']) ?>
     </div>
-
-    <?php if (!$model->isNewRecord): ?>
-        <div class="form-group">
-            <?= Html::a(
-                'Delete',
-                ['delete', 'id' => $model->id],
-                [
-                    'class' => 'btn btn-danger custom-button mt-2',
-                    'data' => [
-                        'confirm' => 'Are you sure you want to delete this ticket?',
-                        'method' => 'post',
-                    ],
-                ]
-            ) ?>
-        </div>
-    <?php endif; ?>
 
     <?php ActiveForm::end(); ?>
 

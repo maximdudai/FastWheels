@@ -936,8 +936,6 @@ input#my-tickets:checked ~ .help-section.tickets {
 }
 
 .help-section h2 {
-    font-size: 18px;
-    color: #4a90e2;
     margin-bottom: 15px;
 }
 
@@ -950,6 +948,33 @@ input#my-tickets:checked ~ .help-section.tickets {
     margin-bottom: 10px;
 }
 
+.help-section li a {
+    text-decoration: none;
+    color: #fff;
+    position: relative;
+    padding-left: 20px;
+}
+
+.help-section li a::before {
+    content: '➤';
+    color: #4a90e2;
+    margin-top: 4px;
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.help-section li a:hover::before {
+    color: #357abd;
+}
+
+
+.help-section li a:hover {
+    text-decoration: none;
+    color: #ddd;
+}
+
 #driver-help:checked ~ .help-section.driver {
     display: block;
 }
@@ -957,6 +982,7 @@ input#my-tickets:checked ~ .help-section.tickets {
 #owner-help:checked ~ .help-section.owner {
     display: block;
 }
+
 
 .button-container {
     display: flex;
@@ -985,5 +1011,100 @@ input#my-tickets:checked ~ .help-section.tickets {
 
 .custom-btn:hover {
     background-color: #357abd;
+    transform: scale(1.02);
+}
+
+/* --------------------View Support Tickets------------------ */
+
+.support-ticket-view {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 700px;
+    background-color: #1c1c1c;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    text-align: center;
+    color: #fff;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4a90e2;
+    margin-bottom: 20px;
+}
+
+.ticket-details h2 {
+    font-size: 18px;
+    color: #4a90e2;
+    margin-bottom: 10px;
+}
+
+.ticket-details p {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.button-container .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.button-container .btn:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+/* --------------------View Support Tickets------------------ */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.button-container .btn {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.button-container .btn-secondary {
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+}
+
+.button-container .btn-secondary:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+.button-container .btn-danger {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+}
+
+.button-container .btn-danger:hover {
+    background-color: #c9302c;
     transform: scale(1.02);
 }
