@@ -378,3 +378,27 @@ body {
         font-size: 1em;
     }
 }
+
+#assistance-title {
+    font-size: 1.5rem;
+    color: #4a90e2;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#support-button {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1rem;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+#support-button:hover {
+    background-color: #357abd;
+}

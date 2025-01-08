@@ -2,7 +2,6 @@
 
 use common\models\Reservation;
 use common\models\UserCar;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -10,14 +9,12 @@ use yii\widgets\ActiveForm;
 /** @var common\models\SupportTicket $model */
 /** @var yii\widgets\ActiveForm $form */
 
-
 $reservationOptions = Reservation::find()->where(['clientId' => Yii::$app->user->id])->all();
 
 $reserverCarInfo = [];
 
 if (!empty($reservationOptions)) {
     foreach ($reservationOptions as $reservation) {
-        // Fetch car info for each reservation
         $carInfo = UserCar::find()->where(['id' => $reservation->carId])->one();
         if ($carInfo) {
             $reserverCarInfo[] = $carInfo;
@@ -25,7 +22,7 @@ if (!empty($reservationOptions)) {
     }
 }
 
-$reservationDropdownItems = []; // Add "None" as the first option
+$reservationDropdownItems = [];
 
 if (!empty($reservationOptions)) {
     foreach ($reservationOptions as $index => $reservation) {
@@ -38,26 +35,39 @@ if (!empty($reservationOptions)) {
 
 <div class="support-ticket-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'action' => ['create'], // Define apenas para criação
+        'method' => 'post',
+        'options' => ['class' => 'custom-form'],
+    ]); ?>
 
-    <?= $form->field($model, 'subject')->textInput(['maxlength' => true, 'placeholder' => 'Enter the subject of your ticket']) ?>
+    <?= $form->field($model, 'subject', [
+        'options' => ['class' => 'form-group custom-field'],
+        'inputOptions' => [
+            'class' => 'form-control custom-input',
+            'maxlength' => true,
+            'placeholder' => 'Enter the subject of your ticket',
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'content')->textarea(['maxlength' => true, 'placeholder' => 'Describe your help request', 'style' => 'min-height:10rem;']) ?>
-    <!-- verify if user has one ore more reservation/s, then show info about them  -->
-    <?= 
-        $form->field($model, 'reservationId')->dropDownList(
-            $reservationDropdownItems,
-            ['prompt' => 'Select a reservation'],
-        );
-    ?>
+    <?= $form->field($model, 'content', [
+        'options' => ['class' => 'form-group custom-field'],
+        'inputOptions' => [
+            'class' => 'form-control custom-textarea',
+            'style' => 'min-height:10rem;',
+            'placeholder' => 'Describe your help request',
+        ],
+    ])->textarea() ?>
 
-
-
-
-
+    <?= $form->field($model, 'reservationId', [
+        'options' => ['class' => 'form-group custom-field'],
+    ])->dropDownList(
+        $reservationDropdownItems,
+        ['class' => 'form-control custom-dropdown', 'prompt' => 'Select a reservation']
+    ) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Send', ['class' => 'btn btn-success mt-2']) ?>
+        <?= Html::submitButton('Send', ['class' => 'btn btn-primary custom-button mt-2']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
