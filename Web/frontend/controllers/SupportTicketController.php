@@ -30,8 +30,8 @@ class SupportTicketController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         // 'create' => ['POST'],
-                        'update' => ['PUT'],
-                        'delete' => ['DELETE'],
+                        // 'update' => ['PUT'],
+                        // 'delete' => ['DELETE'],
                     ],
                 ],
             ]
@@ -48,12 +48,19 @@ class SupportTicketController extends Controller
         $searchModel = new SupportTicketSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        //all the support tickets created by logged in user
+        // Todos os tickets criados pelo usuário autenticado
         $dataProvider->query->andWhere(['clientId' => \Yii::$app->user->id]);
+
+        $userTickets = SupportTicket::find()
+            ->where(['clientId' => Yii::$app->user->id])
+            ->select(['id', 'subject'])
+            ->asArray()
+            ->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'userTickets' => $userTickets,
         ]);
     }
 
@@ -65,10 +72,46 @@ class SupportTicketController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $content = $model->content;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'content' => $content,
         ]);
     }
+
+
+    public function actionStaticView($topic)
+    {
+        $helpTopics = [
+            'driver-create-account' => 'Para criar uma conta, clique em "Registrar" e preencha seus dados.',
+            'driver-cancel-reservation' => 'Você pode cancelar sua reserva até 24 horas antes sem penalidades.',
+            'driver-accident' => 'Em caso de acidente, contate a seguradora e informe o proprietário.',
+            'driver-mileage-limit' => 'O limite de quilometragem depende do proprietário.',
+            'driver-report-issues' => 'Relate problemas imediatamente através do suporte.',
+
+            'owner-list-vehicle' => 'Para listar um veículo, preencha os detalhes na seção de cadastro.',
+            'owner-payment-methods' => 'Aceitamos pagamentos via cartão de crédito, débito, MB Way e transferência.',
+            'owner-vehicle-verification' => 'Verificamos os documentos antes de listar o veículo.',
+            'owner-vehicle-damages' => 'Se houver danos, a seguradora será notificada.',
+            'owner-set-conditions' => 'Você pode definir as condições do aluguel ao listar o veículo.',
+        ];
+
+        if (!isset($helpTopics[$topic])) {
+            throw new NotFoundHttpException('O tópico solicitado não existe.');
+        }
+
+        $content = $helpTopics[$topic];
+
+        return $this->render('view', [
+            'topic' => $topic,
+            'content' => $content,
+        ]);
+    }
+
+
 
     /**
      * Creates a new SupportTicket model.
@@ -116,14 +159,24 @@ class SupportTicketController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (($this->request->isPost || $this->request->isPut) && $model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Support ticket updated successfully.');
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Failed to update the ticket. Please check your inputs.');
+            }
+
         }
 
+        $reservationDropdownItems = $this->getReservationDropdownItems();
+
         return $this->render('update', [
-            'model' => $model,
+            'model' => $this->findModel($id),
+            'reservationDropdownItems' => $reservationDropdownItems,
         ]);
     }
+
 
     /**
      * Deletes an existing SupportTicket model.
@@ -154,6 +207,7 @@ class SupportTicketController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 
     public static function publishToMosquitto($topic, $message)
     {
@@ -219,4 +273,20 @@ class SupportTicketController extends Controller
         $jsonData = json_encode($newData);
         SupportTicketController::publishToMosquitto("SUPPORTTICKET:DELETE", $jsonData);
     }
+
+    private function getReservationDropdownItems()
+    {
+        $reservationOptions = Reservation::find()->where(['clientId' => Yii::$app->user->id])->all();
+        $reservationDropdownItems = [];
+
+        foreach ($reservationOptions as $reservation) {
+            $carInfo = UserCar::findOne(['id' => $reservation->carId]);
+            if ($carInfo) {
+                $reservationDropdownItems[$reservation->id] = "Car Model: {$carInfo->carBrand}, Start: {$reservation->dateStart}, End: {$reservation->dateEnd}";
+            }
+        }
+
+        return $reservationDropdownItems;
+    }
+
 }

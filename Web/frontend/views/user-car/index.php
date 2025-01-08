@@ -32,11 +32,11 @@ $this->title = 'Available Cars';
                     'onchange' => 'this.form.submit()',
                 ])->label('Data de Início') ?>
             </div>
-            <!--div class="filter-field">
+            <div class="filter-field">
                 <?= $form->field($searchModel, 'availableTo')->input('date', [
                     'onchange' => 'this.form.submit()',
                 ])->label('Data de Fim') ?>
-            </div-->
+            </div>
             <div class="filter-field">
                 <label for="clear-filters" class="form-label">Limpar Filtros</label>
                 <?= Html::a('Clear Filters', Url::to(['user-car/index']), [

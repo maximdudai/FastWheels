@@ -778,3 +778,333 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* --------------------Create Support Tickets------------------ */
+
+.support-ticket-container {
+    width: 90%;
+    max-width: 700px;
+    background-color: #1c1c1c;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    text-align: center;
+    margin: 50px auto;
+}
+
+.support-ticket-container h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #4a90e2;
+    margin-bottom: 20px;
+}
+
+.support-ticket-form {
+    background-color: #2b2b2b;
+    padding: 20px 20px;
+    border-radius: 15px;
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.support-ticket-form textarea,
+.support-ticket-form input,
+.support-ticket-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #3a3a3a;
+    color: #fff;
+    font-size: 14px;
+    resize: none;
+}
+
+.support-ticket-form .btn-primary {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.support-ticket-form .btn-primary:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+.alert-success {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.support-ticket-form textarea {
+    height: 100px;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .support-ticket-container {
+        padding: 20px;
+    }
+}
+
+/* --------------------Index Support Tickets------------------ */
+.support-ticket-index {
+    text-align: center;
+    margin: 50px auto;
+    width: 90%;
+    max-width: 700px;
+    background-color: #1c1c1c;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #4a90e2;
+    margin-bottom: 20px;
+}
+
+.help-center-container {
+    position: relative;
+    width: 100%;
+    background-color: #2b2b2b;
+    border-radius: 15px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.help-center-buttons {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    border-bottom: 2px solid #4a90e2;
+}
+
+.help-center-buttons label {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    color: #fff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+input#driver-help:checked ~ .help-center-buttons label[for="driver-help"],
+input#owner-help:checked ~ .help-center-buttons label[for="owner-help"],
+input#my-tickets:checked ~ .help-center-buttons label[for="my-tickets"] {
+    background-color: #4a90e2;
+    color: #fff;
+    border-bottom: none;
+}
+
+.help-section {
+    display: none;
+    padding: 20px;
+    color: #fff;
+    text-align: left;
+}
+
+.help-section.tickets {
+    display: none;
+}
+
+input#my-tickets:checked ~ .help-section.tickets {
+    display: block;
+}
+
+.help-section h2 {
+    margin-bottom: 15px;
+}
+
+.help-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.help-section li {
+    margin-bottom: 10px;
+}
+
+.help-section li a {
+    text-decoration: none;
+    color: #fff;
+    position: relative;
+    padding-left: 20px;
+}
+
+.help-section li a::before {
+    content: '➤';
+    color: #4a90e2;
+    margin-top: 4px;
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.help-section li a:hover::before {
+    color: #357abd;
+}
+
+
+.help-section li a:hover {
+    text-decoration: none;
+    color: #ddd;
+}
+
+#driver-help:checked ~ .help-section.driver {
+    display: block;
+}
+
+#owner-help:checked ~ .help-section.owner {
+    display: block;
+}
+
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.custom-btn {
+    flex: 1;
+    margin: 0 5px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+.custom-btn:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+/* --------------------View Support Tickets------------------ */
+
+.support-ticket-view {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 700px;
+    background-color: #1c1c1c;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    text-align: center;
+    color: #fff;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4a90e2;
+    margin-bottom: 20px;
+}
+
+.ticket-details h2 {
+    font-size: 18px;
+    color: #4a90e2;
+    margin-bottom: 10px;
+}
+
+.ticket-details p {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.button-container .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.button-container .btn:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+/* --------------------View Support Tickets------------------ */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.button-container .btn {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.button-container .btn-secondary {
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+}
+
+.button-container .btn-secondary:hover {
+    background-color: #357abd;
+    transform: scale(1.02);
+}
+
+.button-container .btn-danger {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+}
+
+.button-container .btn-danger:hover {
+    background-color: #c9302c;
+    transform: scale(1.02);
+}
