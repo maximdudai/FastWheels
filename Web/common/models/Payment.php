@@ -19,6 +19,7 @@ use Yii;
  * @property Client $client
  * @property Reservation $reserve
  */
+
 class Payment extends \yii\db\ActiveRecord
 {
     /**

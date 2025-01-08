@@ -23,6 +23,7 @@ use Yii;
  * @property Payment[] $payments
  * @property Supportticket[] $supporttickets
  */
+
 class Reservation extends \yii\db\ActiveRecord
 {
     /**
@@ -96,7 +97,6 @@ class Reservation extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Payment::class, ['reserveId' => 'id']);
     }
-
     /**
      * Gets query for [[Supporttickets]].
      *
