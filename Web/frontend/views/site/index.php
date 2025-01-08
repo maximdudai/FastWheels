@@ -1,5 +1,8 @@
 <?php
 
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 /** @var yii\web\View $this */
 /** @var yii\web\User $user */
 /** @var common\models\CarPhoto[] $carPhotos */
@@ -28,8 +31,9 @@ $this->title = 'Fast Wheels';
                     <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                         <img src="<?= Yii::getAlias('@carphotos') . '/' . $photo->photoUrl ?>" class="d-block w-100" alt="Car Photo">
                         <div class="carousel-caption">
-                            <h5><?= $photo->car->carBrand . ' ' . $photo->car->carModel ?? 'Unnamed Vehicle' ?></h5>
+                            <h5><?= Html::encode($photo->car->carBrand . ' ' . $photo->car->carModel ?? 'Unnamed Vehicle') ?></h5>
                             <p>Choose this car for your next adventure!</p>
+                            <a id="explore-button" href="<?= Url::to(['user-car/view', 'id' => $photo->car->id]) ?>" class="btn btn-primary">See</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -47,7 +51,6 @@ $this->title = 'Fast Wheels';
                             <img src="<?= $defaultImage ?>" class="d-block w-100" alt="Default Car Photo <?= $index + 1 ?>">
                             <div class="carousel-caption">
                                 <h5>No Vehicles Available</h5>
-                                <p>Example Default Image <?= $index + 1 ?></p>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -64,13 +67,14 @@ $this->title = 'Fast Wheels';
             </button>
         </div>
 
-
         <div id="gallery-footer">
-            <p id="gallery-description">
-                These photos showcase our vehicle collection, generously shared by our valued users.
-                Join us to share your own vehicle or rent the perfect car for your needs!
+            <h3 id="assistance-title">Need Assistance?</h3>
+            <p id="assistance-description">
+                We are here to help! If you have any questions about renting or listing a vehicle, feel free to reach out to our support center.
+                Our team is dedicated to ensuring your experience is smooth and hassle-free.
             </p>
-            <a id="explore-button" href="user-car/index">Explore All Vehicles</a>
+            <a id="support-button" href="<?= Url::to(['support-ticket/index']) ?>" class="btn btn-secondary">Contact Support</a>
         </div>
+
     </div>
 </div>

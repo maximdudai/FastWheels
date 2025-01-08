@@ -60,7 +60,7 @@ class CarPhoto extends \yii\db\ActiveRecord
 
     public function getPhotoPath()
     {
-        return Yii::getAlias('@web') . '/uploads/carphotos/' . $this->photoUrl;
+        return Yii::getAlias('@web') . '../uploads/car-photos/' . $this->photoUrl;
     }
 
 }
