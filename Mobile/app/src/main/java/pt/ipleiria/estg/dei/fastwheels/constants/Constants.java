@@ -9,5 +9,15 @@ public class Constants {
 
     // API ENDPOINTS
     public static final String API_AUTH = "http://54.229.223.123:8080/api/client/login";
+
+    // MOSQUITTO
+    public static final String MQTT_HOST = "tcp://54.229.223.123:1883";
+    public static final String MQTT_SUPPORTTICKET_UPDATE = "SUPPORTTICKET:UPDATE";
+    public static final String MQTT_SUPPORTTICKET_CREATE = "SUPPORTTICKET:CREATE";
+    public static final String MQTT_RESERVATION_UPDATE = "RESERVATION:UPDATE";
+    public static final String MQTT_RESERVATION_CREATE = "RESERVATION:CREATE";
+    public static final String MQTT_CARREVIEW_CREATE = "CARREVIEW:CREATE";
+
+
 }
 

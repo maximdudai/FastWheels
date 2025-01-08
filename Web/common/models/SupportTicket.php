@@ -12,8 +12,11 @@ use Yii;
  * @property string $content
  * @property string $createdAt
  * @property int|null $closed
+ * @property string $subject
+ * @property int $reservationId
  *
  * @property Client $client
+ * @property Reservation $reservation
  */
 class SupportTicket extends \yii\db\ActiveRecord
 {
@@ -31,13 +34,16 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'content', 'createdAt'], 'required'],
-            [['clientId', 'closed'], 'integer'],
+            [['clientId', 'content', 'createdAt', 'subject'], 'required'],  // Exclude 'reservationId'
+            [['clientId', 'closed', 'reservationId'], 'integer'],
             [['createdAt'], 'safe'],
             [['content'], 'string', 'max' => 1000],
-            [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'userId']],
+            [['subject'], 'string', 'max' => 144],
+            [['status'], 'string', 'max' => 256],
+            [['reservationId'], 'default', 'value' => null],  // Allow null by default
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -50,6 +56,9 @@ class SupportTicket extends \yii\db\ActiveRecord
             'content' => 'Content',
             'createdAt' => 'Created At',
             'closed' => 'Closed',
+            'subject' => 'Subject',
+            'reservationId' => 'Reservation ID',
+            'status' => 'Status',
         ];
     }
 
@@ -61,5 +70,15 @@ class SupportTicket extends \yii\db\ActiveRecord
     public function getClient()
     {
         return $this->hasOne(Client::class, ['id' => 'clientId']);
+    }
+
+    /**
+     * Gets query for [[Reservation]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReservation()
+    {
+        return $this->hasOne(Reservation::class, ['id' => 'reservationId']);
     }
 }

@@ -20,6 +20,14 @@ use Yii;
  * @property string $address
  * @property string $postalCode
  * @property string $city
+ * @property float $priceDay
+ *
+ * @property Carphoto[] $carphotos
+ * @property Carreview[] $carreviews
+ * @property Client $client
+ * @property Favorite[] $favorites
+ * @property Payment[] $payments
+ * @property Reservation[] $reservations
  */
 
 class UserCar extends \yii\db\ActiveRecord
@@ -27,12 +35,9 @@ class UserCar extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
-        return 'userCars';
+        return 'usercars';
     }
 
     /**
@@ -41,13 +46,15 @@ class UserCar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'carBrand', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo', 'address', 'postalCode', 'city'], 'required'],
+            [['clientId', 'carBrand', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo', 'address', 'postalCode', 'city', 'priceDay'], 'required'],
             [['clientId', 'carYear', 'carDoors', 'status'], 'integer'],
             [['createdAt', 'availableFrom', 'availableTo'], 'safe'],
+            [['priceDay'], 'number'],
             [['carBrand'], 'string', 'max' => 80],
             [['carModel', 'city'], 'string', 'max' => 30],
             [['address'], 'string', 'max' => 200],
             [['postalCode'], 'string', 'max' => 10],
+            [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
         ];
     }
 
@@ -70,6 +77,7 @@ class UserCar extends \yii\db\ActiveRecord
             'address' => 'Address',
             'postalCode' => 'Postal Code',
             'city' => 'City',
+            'priceDay' => 'Price Day',
         ];
     }
 
@@ -121,16 +129,6 @@ class UserCar extends \yii\db\ActiveRecord
     public function getFavorites()
     {
         return $this->hasMany(Favorite::class, ['carId' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Localizations]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLocalizations()
-    {
-        return $this->hasMany(Localization::class, ['carId' => 'id']);
     }
 
     /**

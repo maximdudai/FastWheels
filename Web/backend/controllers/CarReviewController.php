@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\CarReview;
 use backend\models\CarReviewSearch;
+use Bluerhinos\phpMQTT;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -130,5 +131,65 @@ class CarReviewController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public static function publishToMosquitto($topic, $message)
+    {
+        $server = "127.0.0.1"; // AWS IP address
+        $port = 1883;
+        $username = ""; // set your username if needed
+        $password = ""; // set your password if needed
+        $client_id = "phpMQTT-publisher-" . uniqid();
+
+        $mqtt = new phpMQTT($server, $port, $client_id);
+
+        if ($mqtt->connect(true, NULL, $username, $password)) {
+            $mqtt->publish($topic, $message, 0);
+            $mqtt->close();
+        } else {
+            file_put_contents("debug.output", "Time out!");
+        }
+    }
+
+    public function afterAction($action, $result)
+    {
+        $result = parent::afterAction($action, $result);
+
+        if ($action->id == 'create' || $action->id == 'update') {
+            CarReviewController::publishToMosquitto("CARREVIEW:CREATE", json_encode($result));
+        }
+
+        // Ensure the result is returned so that the response isn't null
+        return $result;
+    }
+
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+        $newData->carId = $this->carId;
+        $newData->comment = $this->comment;
+        $newData->createdAt = $this->createdAt;
+
+        $newData = json_encode($newData);
+
+        if ($insert)
+            CarReviewController::publishToMosquitto("CARREVIEW:CREATE", $newData);
+        else
+            CarReviewController::publishToMosquitto("CARREVIEW:UPDATE", $newData);
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        $newData = new \stdClass();
+        $newData->id = $this->id;
+
+        $jsonData = json_encode($newData);
+        CarReviewController::publishToMosquitto("CARREVIEW:DELETE", $jsonData);
     }
 }

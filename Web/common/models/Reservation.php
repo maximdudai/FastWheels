@@ -15,11 +15,15 @@ use Yii;
  * @property string|null $createAt
  * @property int|null $filled
  * @property float $value
+ * @property float $feeValue
+ * @property float $carValue
  *
- * @property Usercar $car
+ * @property UserCar $car
  * @property Client $client
  * @property Payment[] $payments
+ * @property Supportticket[] $supporttickets
  */
+
 class Reservation extends \yii\db\ActiveRecord
 {
     /**
@@ -36,11 +40,11 @@ class Reservation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'carId', 'dateStart', 'dateEnd', 'value'], 'required'],
+            [['clientId', 'carId', 'dateStart', 'dateEnd', 'value', 'feeValue', 'carValue'], 'required'],
             [['clientId', 'carId', 'filled'], 'integer'],
             [['dateStart', 'dateEnd', 'createAt'], 'safe'],
-            [['value'], 'number'],
-            [['carId'], 'exist', 'skipOnError' => true, 'targetClass' => Usercar::class, 'targetAttribute' => ['carId' => 'id']],
+            [['value', 'feeValue', 'carValue'], 'number'],
+            [['carId'], 'exist', 'skipOnError' => true, 'targetClass' => UserCar::class, 'targetAttribute' => ['carId' => 'id']],
             [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
         ];
     }
@@ -59,6 +63,8 @@ class Reservation extends \yii\db\ActiveRecord
             'createAt' => 'Create At',
             'filled' => 'Filled',
             'value' => 'Value',
+            'feeValue' => 'Fee Value',
+            'carValue' => 'Car Value',
         ];
     }
 
@@ -69,7 +75,7 @@ class Reservation extends \yii\db\ActiveRecord
      */
     public function getCar()
     {
-        return $this->hasOne(Usercar::class, ['id' => 'carId']);
+        return $this->hasOne(UserCar::class, ['id' => 'carId']);
     }
 
     /**
@@ -90,5 +96,14 @@ class Reservation extends \yii\db\ActiveRecord
     public function getPayments()
     {
         return $this->hasMany(Payment::class, ['reserveId' => 'id']);
+    }
+    /**
+     * Gets query for [[Supporttickets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupporttickets()
+    {
+        return $this->hasMany(Supportticket::class, ['reservationId' => 'id']);
     }
 }

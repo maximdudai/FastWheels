@@ -21,15 +21,6 @@ class ClientController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                'access' => [
-                    'class' => VerbFilter::className(),
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'roles' => ['@'], // @ means authenticated users
-                        ],
-                    ],
-                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

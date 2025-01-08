@@ -1,0 +1,13 @@
+suite_namespace: frontend\tests\acceptance
+actor: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+            url: 'http://fastwheels/frontend/web/index.php'
+            browser: chrome
+            capabilities:
+                goog:chromeOptions:
+                    args: [ ]
+
+        - Yii2:
+            part: init

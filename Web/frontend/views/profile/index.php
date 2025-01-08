@@ -13,6 +13,7 @@ use yii\grid\GridView;
 $this->title = 'Profile';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="client-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

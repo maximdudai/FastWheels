@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use Cassandra\Date;
 use common\models\UserCar;
 use frontend\models\UserCarSearch;
 use yii\web\Controller;
@@ -146,7 +147,7 @@ class UserCarController extends Controller
         }
 
         $carId = Yii::$app->request->post('carId');
-        $userId = Yii::$app->user->id;
+            $userId = Yii::$app->user->id;
 
         if (!$carId || !$userId) {
             Yii::$app->session->setFlash('error', 'Invalid request.');
@@ -165,6 +166,8 @@ class UserCarController extends Controller
         $favorite = new \common\models\Favorite();
         $favorite->clientId = $userId;
         $favorite->carId = $carId;
+        $favorite->createdAt = date("Y/m/d H/m/s");
+
 
         if ($favorite->save()) {
             Yii::$app->session->setFlash('success', 'Car added to favorites!');

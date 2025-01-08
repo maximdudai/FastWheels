@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/secondary_color"
     tools:context=".VehicleListFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,4 +21,17 @@
             android:clickable="true"
             android:focusableInTouchMode="false" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSaveVehicle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:src="@android:drawable/ic_input_add"
+        android:focusable="true"
+        android:backgroundTint="@color/white"
+        app:tint="@color/black"
+        android:visibility="gone"/>
 </FrameLayout>

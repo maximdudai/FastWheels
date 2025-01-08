@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "clients".
@@ -164,5 +165,24 @@ class Client extends \yii\db\ActiveRecord
         $client = self::findOne(['userId' => $userId]);
 
         return $client && $client->roleId === 3;
+    }
+
+     /**
+     * Finds user by name
+     *
+     * @param string $name
+     * @return static|null
+     */
+    public static function findByName($name)
+    {
+        return static::findOne(['name' => $name]);
+    }
+    public static function findModel($id)
+    {
+        if (($model = Client::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
