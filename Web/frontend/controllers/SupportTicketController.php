@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Client;
+use common\models\Reservation;
 use common\models\SupportTicket;
 use frontend\models\SupportTicketSearch;
 use yii\web\Controller;
@@ -76,28 +77,46 @@ class SupportTicketController extends Controller
     {
         $model = new SupportTicket();
 
+        $reservations = \common\models\Reservation::find()
+            ->where(['clientId' => \Yii::$app->user->id])
+            ->all();
+
+        $reservationOptions = [];
+        foreach ($reservations as $reservation) {
+            $reservationOptions[$reservation['id']] = 'Car ID: ' . $reservation['carId'] .
+                ', Date: ' . $reservation['createAt'] .
+                ', Value: $' . $reservation['value'];
+        }
+
+        $hasReservations = !empty($reservationOptions);
+
         if ($this->request->isPost) {
-            
-            // obter dados recebidos do formulário
             $receivedData = $this->request->post()['SupportTicket'];
 
+            var_dump($receivedData);
+
             $model->clientId = \Yii::$app->user->id;
-            $model->reservationId = 0; // 0 == sem reserva
-            $model->content = 'content';
-            $model->subject = $receivedData['subject'];
+            $model->content = $receivedData['content'] ?? 'content';
+            $model->subject = $receivedData['subject'] ?? 'No subject';
+
+            $model->reservationId = $hasReservations ? (int)$receivedData['reservationId'] : null;
+
             $model->createdAt = date('Y-m-d H:i:s');
             $model->closed = 0;
             $model->status = '0';
 
             if ($model->load($this->request->post()) && $model->save()) {
-
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } 
-        
+        }
+
         return $this->render('create', [
             'model' => $model,
+            'reservationOptions' => $reservationOptions,
+            'hasReservations' => $hasReservations,
         ]);
+
+        var_dump($this->request->post());
     }
 
     /**
