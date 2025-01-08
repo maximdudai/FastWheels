@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var frontend\models\UserCarSearch $searchModel */
@@ -11,7 +13,40 @@ $this->title = 'Available Cars';
 
 ?>
 <div class="user-car-index">
-    <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
+    <div class="filter-form">
+        <?php $form = ActiveForm::begin([
+            'method' => 'get',
+            'action' => Url::to(['user-car/index']),
+            'options' => ['data-pjax' => 1],
+        ]); ?>
+
+        <div class="filter-fields">
+            <div class="filter-field">
+                <?= $form->field($searchModel, 'location')->textInput([
+                    'placeholder' => 'Ex: Lisboa, Porto, etc...',
+                    'onchange' => 'this.form.submit()',
+                ])->label('Localização') ?>
+            </div>
+            <div class="filter-field">
+                <?= $form->field($searchModel, 'availableFrom')->input('date', [
+                    'onchange' => 'this.form.submit()',
+                ])->label('Data de Início') ?>
+            </div>
+            <!--div class="filter-field">
+                <?= $form->field($searchModel, 'availableTo')->input('date', [
+                    'onchange' => 'this.form.submit()',
+                ])->label('Data de Fim') ?>
+            </div-->
+            <div class="filter-field">
+                <label for="clear-filters" class="form-label">Limpar Filtros</label>
+                <?= Html::a('Clear Filters', Url::to(['user-car/index']), [
+                    'id' => 'clear-filters',
+                    'class' => 'btn btn-secondary',
+                ]) ?>
+            </div>
+
+        <?php ActiveForm::end(); ?>
+    </div>
 
     <div class="cards-container">
         <?php foreach ($dataProvider->models as $car): ?>
@@ -26,25 +61,25 @@ $this->title = 'Available Cars';
                         </div>
                         <div class="details">
                             <div class="year">
-                                <strong>Year:</strong> <span><?= Html::encode($car->carYear) ?></span>
+                                <strong>Ano:</strong> <span><?= Html::encode($car->carYear) ?></span>
                             </div>
                             <div class="doors">
-                                <strong>Doors:</strong> <span><?= Html::encode($car->carDoors) ?></span>
+                                <strong>Portas:</strong> <span><?= Html::encode($car->carDoors) ?></span>
                             </div>
                             <div class="reviews">
-                                <strong>Reviews:</strong>
+                                <strong>Avaliações:</strong>
                                 <span><?= !empty($car->carreviews)
                                         ? number_format(array_sum(array_column($car->carreviews, 'rating')) / count($car->carreviews), 1)
                                         : '0.0' ?></span>
                             </div>
                             <div class="location">
-                                <strong>Location:</strong> <span><?= Html::encode($car->address) ?></span>
+                                <strong>Localização:</strong> <span><?= Html::encode($car->address) ?></span>
                             </div>
                             <div class="availability">
-                                <strong>Start:</strong> <span><?= date('Y-m-d', strtotime($car->availableFrom)) ?></span>
+                                <strong>Início:</strong> <span><?= date('Y-m-d', strtotime($car->availableFrom)) ?></span>
                             </div>
                             <div class="availability">
-                                <strong>End:</strong> <span><?= date('Y-m-d', strtotime($car->availableTo)) ?></span>
+                                <strong>Fim:</strong> <span><?= date('Y-m-d', strtotime($car->availableTo)) ?></span>
                             </div>
                         </div>
                     </div>

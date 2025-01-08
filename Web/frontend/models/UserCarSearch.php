@@ -11,6 +11,7 @@ use common\models\UserCar;
  */
 class UserCarSearch extends UserCar
 {
+    public $location;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +19,7 @@ class UserCarSearch extends UserCar
     {
         return [
             [['id', 'clientId', 'carYear', 'carDoors', 'status'], 'integer'],
-            [['carBrand', 'carModel', 'createdAt', 'availableFrom', 'availableTo'], 'safe'],
+            [['carBrand', 'carModel', 'createdAt', 'availableFrom', 'availableTo', 'location'], 'safe'],
         ];
     }
 
@@ -42,8 +43,6 @@ class UserCarSearch extends UserCar
     {
         $query = UserCar::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -51,25 +50,30 @@ class UserCarSearch extends UserCar
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        if (!empty($this->availableFrom)) {
+            $query->andFilterWhere(['>=', 'availableFrom', date('Y-m-d', strtotime($this->availableFrom))]);
+        }
+
+        if (!empty($this->availableTo)) {
+            $query->andFilterWhere(['<=', 'availableTo', date('Y-m-d', strtotime($this->availableTo))]);
+        }
+
+
+
         $query->andFilterWhere([
             'id' => $this->id,
-            'clientId' => $this->clientId,
             'carYear' => $this->carYear,
             'carDoors' => $this->carDoors,
-            'createdAt' => $this->createdAt,
-            'status' => $this->status,
-            'availableFrom' => $this->availableFrom,
-            'availableTo' => $this->availableTo,
         ]);
 
         $query->andFilterWhere(['like', 'carBrand', $this->carBrand])
             ->andFilterWhere(['like', 'carModel', $this->carModel]);
+
+        $query->andFilterWhere(['like', 'city', $this->location])
+            ->orFilterWhere(['like', 'address', $this->location]);
 
         return $dataProvider;
     }

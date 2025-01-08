@@ -152,4 +152,5 @@ class UserCar extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Reservation::class, ['carId' => 'id']);
     }
+
 }
