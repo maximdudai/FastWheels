@@ -54,14 +54,12 @@ class UserCarSearch extends UserCar
         }
 
         if (!empty($this->availableFrom)) {
-            $query->andFilterWhere(['>=', 'availableFrom', date('Y-m-d', strtotime($this->availableFrom))]);
+            $query->andFilterWhere(['<=', 'availableFrom', $this->availableFrom]);
         }
 
         if (!empty($this->availableTo)) {
-            $query->andFilterWhere(['<=', 'availableTo', date('Y-m-d', strtotime($this->availableTo))]);
+            $query->andFilterWhere(['>=', 'availableTo', $this->availableTo]);
         }
-
-
 
         $query->andFilterWhere([
             'id' => $this->id,
@@ -72,9 +70,12 @@ class UserCarSearch extends UserCar
         $query->andFilterWhere(['like', 'carBrand', $this->carBrand])
             ->andFilterWhere(['like', 'carModel', $this->carModel]);
 
-        $query->andFilterWhere(['like', 'city', $this->location])
-            ->orFilterWhere(['like', 'address', $this->location]);
+        $query->andFilterWhere(['or',
+            ['like', 'city', $this->location],
+            ['like', 'address', $this->location],
+        ]);
 
         return $dataProvider;
     }
+
 }
