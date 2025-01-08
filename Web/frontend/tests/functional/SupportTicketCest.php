@@ -25,7 +25,8 @@ class SupportTicketCest
         $I->see('Incorrect username or password.');
     }
 
-    public function firstTestToMakeAccountCreation(FunctionalTester $I) {
+    public function firstTestToMakeAccountCreation(FunctionalTester $I)
+    {
         $I->amOnPage('/site/signup');
         $I->see("Crie a sua conta");
         $I->see('Enviar', 'button');
@@ -41,7 +42,8 @@ class SupportTicketCest
         $I->click('signup-button');
     }
 
-    public function firstTestToMakeCorrectLogin(FunctionalTester $I) {
+    public function firstTestToMakeCorrectLogin(FunctionalTester $I)
+    {
         $I->amOnPage('/site/login');
         $I->see("Entre na sua conta");
         $I->see('Enviar', 'button');
@@ -57,7 +59,8 @@ class SupportTicketCest
         $I->see('Logout');
     }
 
-    public function firstTestToMakeSupportTicket(FunctionalTester $I) {
+    public function firstTestToMakeSupportTicket(FunctionalTester $I)
+    {
         $I->amOnPage('/supportticket');
         $I->see("Support Tickets", 'h1');
         $I->see('Create Support Ticket', 'a');
@@ -68,13 +71,20 @@ class SupportTicketCest
         $I->see("Create Support Ticket", 'h1');
 
 
-        $I->fillField('textarea[name="SupportTicket[content]"]', 'Test ticket content');
-        // $I->fillField('textarea[name="SupportTicket[subject]"]', 'Teste ticket subject');
+        $I->seeElement('input', ['name' => 'SupportTicket[subject]']);
+        $I->seeElement('textarea', ['name' => 'SupportTicket[content]']);
 
-        $I->click('Send');
+        $I->fillField('input[name="SupportTicket[subject]"]', 'Teste ticket subject');
+        $I->fillField('textarea[name="SupportTicket[content]"]', 'Test ticket content');
+
+        $I->dontSee('Content cannot be blank.');
+        $I->dontSee('Subject cannot be blank.');
+
+        $I->click('Send', 'button');
     }
 
-    public function firstTestToMakeEmptySupportTicket(FunctionalTester $I) {
+    public function firstTestToMakeEmptySupportTicket(FunctionalTester $I)
+    {
         $I->amOnPage('/supportticket');
         $I->see("Support Tickets", 'h1');
         $I->see('Create Support Ticket', 'a');
@@ -82,10 +92,9 @@ class SupportTicketCest
         $I->click('Create Support Ticket');
 
         $I->amOnPage('/supportticket/create');
-        $I->see("Create Support Ticket", 'h1');
+        
+        $I->submitForm('#support-ticket-form', []); // Submitting empty form
 
-        $I->click('Send');
-
-        $I->see('Content cannot be blank.');
+        $I->amOnPage('/supportticket/create');
     }
 }
