@@ -20,6 +20,7 @@ $client = Client::findOne(['userId' => Yii::$app->user->id]);
 // If the user is an administrator (roleId: 3), they can delete the car
 $isUserHasAccessToDelete = ($client && $client->roleId === 3);
 ?>
+
 <div class="user-car-view">
 
     <p>
@@ -64,5 +65,7 @@ $isUserHasAccessToDelete = ($client && $client->roleId === 3);
             'availableTo',
         ],
     ]) ?>
+
+
 
 </div>
