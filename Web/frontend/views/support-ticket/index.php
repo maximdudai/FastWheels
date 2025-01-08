@@ -3,8 +3,9 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
+/** @var array $userTickets */
 
-$this->title = 'Support Tickets';
+$this->title = 'Most Asked';
 ?>
 <div class="support-ticket-index">
 
@@ -13,10 +14,12 @@ $this->title = 'Support Tickets';
     <div class="help-center-container">
         <input type="radio" id="driver-help" name="help-center" checked>
         <input type="radio" id="owner-help" name="help-center">
+        <input type="radio" id="my-tickets" name="help-center">
 
         <div class="help-center-buttons">
             <label for="driver-help">Driver help center</label>
             <label for="owner-help">Owner help center</label>
+            <label for="my-tickets">My Tickets</label>
         </div>
 
         <div class="help-section driver">
@@ -28,6 +31,7 @@ $this->title = 'Support Tickets';
                 <li>Como posso reportar problemas com o veículo antes ou durante o aluguer?</li>
             </ul>
         </div>
+
         <div class="help-section owner">
             <ul>
                 <li>Como listar um veículo para aluguer na plataforma?</li>
@@ -38,11 +42,21 @@ $this->title = 'Support Tickets';
             </ul>
         </div>
 
+        <div class="help-section tickets">
+            <ul>
+                <?php if (!empty($userTickets)): ?>
+                    <?php foreach ($userTickets as $ticket): ?>
+                        <li><?= Html::encode($ticket['subject']) ?></li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li>No tickets found.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
+
     </div>
 
     <div class="button-container">
         <?= Html::a('Create Support Ticket', ['create'], ['class' => 'btn btn-primary custom-btn']) ?>
-        <?= Html::a('My Tickets', ['view'], ['class' => 'btn btn-primary custom-btn']) ?>
     </div>
-
 </div>

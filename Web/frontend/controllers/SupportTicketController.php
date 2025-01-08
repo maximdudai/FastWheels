@@ -30,7 +30,7 @@ class SupportTicketController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         // 'create' => ['POST'],
-                        'update' => ['PUT'],
+                        // 'update' => ['POST', 'PUT'],
                         'delete' => ['DELETE'],
                     ],
                 ],
@@ -48,12 +48,19 @@ class SupportTicketController extends Controller
         $searchModel = new SupportTicketSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        //all the support tickets created by logged in user
+        // Todos os tickets criados pelo usuário autenticado
         $dataProvider->query->andWhere(['clientId' => \Yii::$app->user->id]);
+
+        $userTickets = SupportTicket::find()
+            ->where(['clientId' => Yii::$app->user->id])
+            ->select(['id', 'subject'])
+            ->asArray()
+            ->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'userTickets' => $userTickets,
         ]);
     }
 
@@ -118,14 +125,24 @@ class SupportTicketController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (($this->request->isPost || $this->request->isPut) && $model->load($this->request->post())) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Support ticket updated successfully.');
+                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Failed to update the ticket. Please check your inputs.');
+            }
+
         }
 
+        $reservationDropdownItems = $this->getReservationDropdownItems();
+
         return $this->render('update', [
-            'model' => $model,
+            'model' => $this->findModel($id),
+            'reservationDropdownItems' => $reservationDropdownItems,
         ]);
     }
+
 
     /**
      * Deletes an existing SupportTicket model.
@@ -156,6 +173,7 @@ class SupportTicketController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 
     public static function publishToMosquitto($topic, $message)
     {
@@ -221,4 +239,20 @@ class SupportTicketController extends Controller
         $jsonData = json_encode($newData);
         SupportTicketController::publishToMosquitto("SUPPORTTICKET:DELETE", $jsonData);
     }
+
+    private function getReservationDropdownItems()
+    {
+        $reservationOptions = Reservation::find()->where(['clientId' => Yii::$app->user->id])->all();
+        $reservationDropdownItems = [];
+
+        foreach ($reservationOptions as $reservation) {
+            $carInfo = UserCar::findOne(['id' => $reservation->carId]);
+            if ($carInfo) {
+                $reservationDropdownItems[$reservation->id] = "Car Model: {$carInfo->carBrand}, Start: {$reservation->dateStart}, End: {$reservation->dateEnd}";
+            }
+        }
+
+        return $reservationDropdownItems;
+    }
+
 }

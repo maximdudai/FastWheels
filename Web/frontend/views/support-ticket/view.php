@@ -1,53 +1,89 @@
 <?php
 
-use common\models\SupportTicket;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\helpers\Url;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
-/** @var common\models\SupportTicket $model */
+/** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var frontend\models\SupportTicketSearch $searchModel */
 
-$this->title = 'Support Ticket ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Support Tickets', 'url' => ['index']];
+$this->title = 'My Support Tickets';
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 ?>
-<div class="support-ticket-view">
+
+<div class="support-ticket-index">
+
+    <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a('Create New Ticket', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'createdAt',
-            'content',
+    <?php Pjax::begin(); ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'createdAt:datetime',
             'subject',
-
-            'closed' => [
+            'content:shortText',
+            [
                 'attribute' => 'closed',
-                'value' => function (SupportTicket $model) {
-                    return $model->closed ? 'Yes' : 'No';
-                }
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return $model->closed ?
+                        '<span class="badge bg-success">Closed</span>' :
+                        '<span class="badge bg-warning">Open</span>';
+                },
+                'filter' => [
+                    0 => 'Open',
+                    1 => 'Closed',
+                ],
             ],
-
-            // Show reservation only if it's greater than 1
             [
                 'attribute' => 'reservationId',
                 'value' => function ($model) {
-                    return '#' . $model->reservationId;
+                    return $model->reservationId ? '#' . $model->reservationId : 'N/A';
                 },
-                'visible' => $model->reservationId >= 1
-            ]
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a(
+                            'View',
+                            Url::to(['view', 'id' => $model->id]),
+                            ['class' => 'btn btn-primary btn-sm']
+                        );
+                    },
+                    'update' => function ($url, $model) {
+                        return Html::a(
+                            'Update',
+                            Url::to(['update', 'id' => $model->id]),
+                            ['class' => 'btn btn-warning btn-sm']
+                        );
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a(
+                            'Delete',
+                            Url::to(['delete', 'id' => $model->id]),
+                            [
+                                'class' => 'btn btn-danger btn-sm',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete this ticket?',
+                                    'method' => 'post',
+                                ],
+                            ]
+                        );
+                    },
+                ],
+            ],
         ],
-    ]) ?>
-
-
+    ]); ?>
+    <?php Pjax::end(); ?>
 </div>
