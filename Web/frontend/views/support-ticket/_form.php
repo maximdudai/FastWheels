@@ -30,7 +30,7 @@ if (!empty($reservationOptions)) {
 <div class="support-ticket-form">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['create'], // Define apenas para criação
+        'action' => ['create'],
         'method' => 'post',
         'options' => ['class' => 'custom-form'],
     ]); ?>

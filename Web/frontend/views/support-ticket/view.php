@@ -12,7 +12,6 @@ $this->title = 'Help Topic';
     <h1 class="page-title"><?= Html::encode($this->title) ?></h1>
 
     <div class="ticket-details">
-        <h2><?= Html::encode(ucwords(str_replace('-', ' ', $topic))) ?></h2>
         <p><?= Html::encode($content) ?></p>
     </div>
 

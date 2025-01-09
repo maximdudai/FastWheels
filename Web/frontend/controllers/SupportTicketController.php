@@ -136,12 +136,10 @@ class SupportTicketController extends Controller
             $model->status = '0';
 
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index', 'id' => $model->id]);
             }
             return;
         }
-
-        
 
         return $this->render('create', [
             'model' => $model
