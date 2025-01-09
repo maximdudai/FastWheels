@@ -1,5 +1,9 @@
 <?php
 
+
+require_once __DIR__ . '/../../../common/utils/getCarBrandById.php';
+use function CarBrand\getCarBrandById;
+
 use common\models\Reservation;
 use common\models\UserCar;
 use yii\helpers\Html;
@@ -11,22 +15,12 @@ use yii\widgets\ActiveForm;
 
 $reservationOptions = Reservation::find()->where(['clientId' => Yii::$app->user->id])->all();
 
-$reserverCarInfo = [];
-
-if (!empty($reservationOptions)) {
-    foreach ($reservationOptions as $reservation) {
-        $carInfo = UserCar::find()->where(['id' => $reservation->carId])->one();
-        if ($carInfo) {
-            $reserverCarInfo[] = $carInfo;
-        }
-    }
-}
-
-$reservationDropdownItems = [];
+$reservationDropdownItems = []; // Add "None" as the first option
 
 if (!empty($reservationOptions)) {
     foreach ($reservationOptions as $index => $reservation) {
-        $carBrand = $reserverCarInfo[$reservation->id]->carBrand ?? 'Not Found';
+        
+        $carBrand = getCarBrandById($reservation->carId);
         $reservationDropdownItems[$reservation->id] = "Car Model: {$carBrand}, Start: {$reservation->dateStart}, End: {$reservation->dateEnd}";
     }
 }

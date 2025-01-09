@@ -125,11 +125,9 @@ class SupportTicketController extends Controller
         if ($this->request->isPost) {
             $receivedData = $this->request->post()['SupportTicket'];
 
-            var_dump($receivedData);
-
             $model->clientId = \Yii::$app->user->id;
-            $model->content = $receivedData['content'] ?? 'content';
-            $model->subject = $receivedData['subject'] ?? 'No subject';
+            $model->content = $receivedData['content'];
+            $model->subject = $receivedData['subject'];
 
             $model->reservationId = $receivedData['reservationId'] ?? null;
 
