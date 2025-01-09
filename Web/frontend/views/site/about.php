@@ -40,7 +40,7 @@ $this->title = 'About Us';
 
         <p class="about-mission">
             At <strong>Fast Wheels</strong>, our mission is simple: to democratize vehicle rentals, making it easier, safer,
-            and more accessible for everyone. <strong>Join us today</strong> and experience the future of car rentals!
+            and more accessible for everyone.<a class="about-join" href="site/login"> Join us today </a> and experience the future of car rentals!
         </p>
     </div>
 </div>

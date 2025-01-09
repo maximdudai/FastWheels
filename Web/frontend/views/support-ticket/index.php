@@ -30,7 +30,7 @@ $this->title = 'Main Tickets';
             <ul>
                 <li><?= Html::a('Como posso criar uma conta na plataforma?', ['static-view', 'topic' => 'driver-create-account']) ?></li>
                 <li><?= Html::a('É possível cancelar uma reserva?', ['static-view', 'topic' => 'driver-cancel-reservation']) ?></li>
-                <li><?= Html::a('O que devo fazer em caso de acidente com o veículo alugado?', ['view', 'topic' => 'driver-accident']) ?></li>
+                <li><?= Html::a('O que devo fazer em caso de acidente com o veículo alugado?', ['static-view', 'topic' => 'driver-accident']) ?></li>
                 <li><?= Html::a('Existe um limite de quilómetros durante o período de aluguer?', ['static-view', 'topic' => 'driver-mileage-limit']) ?></li>
                 <li><?= Html::a('Como posso reportar problemas com o veículo antes ou durante o aluguer?', ['static-view', 'topic' => 'driver-report-issues']) ?></li>
             </ul>

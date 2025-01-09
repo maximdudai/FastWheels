@@ -294,14 +294,12 @@ body {
     outline: 2px solid #4a90e2;
 }
 
-/* Ícones dentro dos campos */
 .signup-form-container .input-group-text {
     background: none;
     border: none;
     color: #b0b0b0;
 }
 
-/* Checkbox */
 .signup-checkbox-container {
     display: flex;
     align-items: center;
@@ -324,7 +322,6 @@ body {
     line-height: 1.5;
 }
 
-/* Botão de Enviar */
 .signup-submit-btn {
     width: 100%;
     padding: 15px;
@@ -341,7 +338,6 @@ body {
     background-color: #505050;
 }
 
-/* Link de Login */
 .signup-login-link {
     font-size: 14px;
     color: #b0b0b0;

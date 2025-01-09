@@ -363,6 +363,10 @@ body {
 .about-mission strong {
     color: #4aade2;
 }
+.about-mission a {
+    text-decoration: none;
+    color: #4aade2;
+}
 
 @media (max-width: 768px) {
     .about-title {
