@@ -3,7 +3,7 @@
 return [
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=fastwheels',
+            'dsn' => 'mysql:host=localhost;dbname=fastwheelstest',
         ],
     ],
 ];

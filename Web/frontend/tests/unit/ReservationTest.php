@@ -70,7 +70,7 @@ class ReservationTest extends \Codeception\Test\Unit
     }
 
     private function createNewUserCar(bool $save = false) {
-        $uniqueString = uniqid();  // Generate a unique string
+        $uniqueString = uniqid(); 
 
 // clientId', 'carBrand', 'carModel', 'carYear', 'carDoors', 'createdAt', 'availableFrom', 'availableTo', 'address', 'postalCode', 'city', 'priceDay'
         $client = $this->createNewClient(true);
@@ -108,7 +108,7 @@ class ReservationTest extends \Codeception\Test\Unit
         $supportTicket->content = 'NewSupportTicketForContent';
         $supportTicket->createdAt = time();
         $supportTicket->subject = 'NewSupportTicketForSubject';
-        $supportTicket->reservationId = 0; // No reservation
+        $supportTicket->reservationId = 0; 
 
         $this->assertTrue($supportTicket->save());
     }
@@ -121,9 +121,15 @@ class ReservationTest extends \Codeception\Test\Unit
         $user->username = 'newuser_' . $uniqueString;
         $user->email = 'emailfornewuser_' . $uniqueString . '@gmail.com';
 
+        $user->setPassword("password_" . $uniqueString);
+        $user->generateAuthKey();
+        $user->generateEmailVerificationToken();
+        $user->created_at = time();
+        $user->updated_at = time();
+
         $client = new Client();
-        $client->name = 'newuser_' . $uniqueString;
-        $client->email = 'emailfornewuser_' . $uniqueString . '@gmail.com';
+        $client->name = $user->username;
+        $client->email = $user->email;
         $client->phone = '112233445';
         $client->roleId = 1;
         $client->createdAt = time();

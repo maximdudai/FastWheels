@@ -8,20 +8,19 @@ use frontend\tests\AcceptanceTester;
 
 class SupportTicketCest
 {
-    // public function firstTestToMakeIncorrectLogin(AcceptanceTester $I)
-    // {
-    //     $I->amOnPage('/site/login');
-    //     $I->see("Entre na sua conta");
-    //     $I->see('Enviar', 'button');
-
-    //     $I->fillField('input[name="LoginForm[username]"]', 'admin');
-    //     $I->fillField('input[name="LoginForm[password]"]', 'admin');
-    //     $I->click('login-button');
-    //     $I->wait(4);
-    //     $I->see('Incorrect username or password.');
-    //     $I->waitForElementVisible('.invalid-feedback', 5); 
-    //     // wait 5 seconds
-    // }
+    public function firstTestToMakeIncorrectLogin(AcceptanceTester $I)
+    {
+        $I->amOnPage('/site/login');
+        $I->see("Entre na sua conta");
+        $I->see('Enviar', 'button');
+        $I->wait(5);
+        $I->fillField('input[name="LoginForm[username]"]', 'admin');
+        $I->fillField('input[name="LoginForm[password]"]', 'admin');
+        $I->click('login-button');
+        $I->wait(5);
+        $I->see('Incorrect username or password.');
+        // wait 5 seconds
+    }
 
     public function firstTestToMakeAccountCreation(AcceptanceTester $I)
     {
@@ -94,7 +93,6 @@ class SupportTicketCest
         $I->fillField('#supportticket-subject', 'Teste ticket subject'); // Example with IDs
         $I->fillField('#supportticket-content', 'Teste ticket content'); // Example with IDs
 
-
         $I->wait(3);
 
         $I->dontSee('Content cannot be blank.');
@@ -106,14 +104,45 @@ class SupportTicketCest
 
     public function firstTestToMakeEmptySupportTicket(AcceptanceTester $I)
     {
-        $I->amOnPage('/supportticket');
-        $I->click('Create Support Ticket');
-        
-        // $I->waitForElementVisible('#support-ticket-form', 5); // Wait for form to load
-        // $I->submitForm('#support-ticket-form', []); // Submitting empty form
+        $I->amOnPage(\Yii::$app->homeUrl);
 
+        $I->amOnPage('/site/login');
+        $I->see("Entre na sua conta");
+        $I->see('Enviar', 'button');
+
+        $I->fillField('input[name="LoginForm[username]"]', 'fouser');
+        $I->fillField('input[name="LoginForm[password]"]', 'qweasdzxc');
+        $I->click('login-button');
+
+        $I->wait(5);
+
+        $I->click('Profile');
+
+        $I->wait(5);
+
+        $I->click("Support Ticket");
+        
+        $I->wait(5);
+
+
+        $I->see("Create Support Ticket");
+
+        $I->click('Create Support Ticket');
+
+        $I->waitForElementVisible('.support-ticket-form', 5); 
+
+
+        $I->fillField('#supportticket-subject', ''); 
+        $I->fillField('#supportticket-content', '');
+
+        $I->wait(3);
+
+        $I->click('Send'); 
+
+        // $I->submitForm('.support-ticket-form', []);
+        $I->wait(5);
         // Assert validation messages
-        // $I->see('Content cannot be blank.');
-        // $I->see('Subject cannot be blank.');
+        $I->see('Content cannot be blank.');
+        $I->see('Subject cannot be blank.');
     }
 }

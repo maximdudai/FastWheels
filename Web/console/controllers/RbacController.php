@@ -36,7 +36,6 @@ class RbacController extends Controller
         $manageTicket->description = 'Manage client support tickets';
         $auth->add($manageTicket);
 
-
         # ### END PERMISSIONS ### #
 
         # ### ROLES ### #

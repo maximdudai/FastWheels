@@ -4,7 +4,7 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=fastwheels',
+            'dsn' => 'mysql:host=localhost;dbname=fastwheelstest',
             'username' => 'root',
             // 'password' => 'FastWheels2024!@#',
             'password' => '',

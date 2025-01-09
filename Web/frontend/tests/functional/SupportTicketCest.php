@@ -3,98 +3,128 @@
 
 namespace frontend\tests\Functional;
 
+use common\models\Client;
+use common\models\User;
 use frontend\tests\FunctionalTester;
 
 class SupportTicketCest
 {
-    public function firstTestToMakeIncorrectLogin(FunctionalTester $I)
+    protected $newPassword;
+
+    protected function _before()
     {
-        // $I->amOnPage(\Yii::$app->homeUrl);
-        // $I->see('Login', 'a');
-        // $I->click('Login');
-        $I->amOnPage('/site/login');
-        $I->see("Entre na sua conta");
-        $I->see('Enviar', 'button');
-
-
-
-        $I->fillField('input[name="LoginForm[username]"]', 'admin');
-        $I->fillField('input[name="LoginForm[password]"]', 'admin');
-        $I->click('login-button');
-
-        $I->see('Incorrect username or password.');
+        $this->createNewClient(true);
     }
-
-    public function firstTestToMakeAccountCreation(FunctionalTester $I)
-    {
-        $I->amOnPage('/site/signup');
-        $I->see("Crie a sua conta");
-        $I->see('Enviar', 'button');
-
-        $I->fillField('input[name="SignupForm[username]"]', 'testuser');
-        $I->fillField('input[name="SignupForm[email]"]', 'testfunctional@gmail.com');
-        $I->fillField('input[name="SignupForm[password]"]', 'qweasdzxc');
-        $I->fillField('input[name="SignupForm[confirmPassword]"]', 'qweasdzxc');
-        // $I->click('SignupForm[termsAccepted]');
-        // $I->checkOption('input[name="SignupForm[termsAccepted]"]');
-
-
-        $I->click('signup-button');
-    }
-
-    public function firstTestToMakeCorrectLogin(FunctionalTester $I)
+    public function testUpdateProfileWithData(FunctionalTester $I)
     {
         $I->amOnPage('/site/login');
-        $I->see("Entre na sua conta");
-        $I->see('Enviar', 'button');
+        $I->fillField('#loginform-username', 'fouser');
+        $I->fillField('#loginform-password', 'qweasdzxc');
 
-
-
-        $I->fillField('input[name="LoginForm[username]"]', 'fouser');
-        $I->fillField('input[name="LoginForm[password]"]', 'qweasdzxc');
         $I->click('login-button');
+    
+        $I->dontSee('Incorrect username or password.');
 
-        $I->amOnPage(\Yii::$app->homeUrl);
         $I->see('Profile', 'a');
-        $I->see('Logout');
+        $I->click('Profile');
+
+        $I->click('Edit Profile');
+
+        $I->fillField('#client-name', 'fouser');
+        $I->fillField('#client-email', 'newemailaddress@gmail.com');
+        $I->fillField('#client-phone', '123456789');
+    }
+    
+    public function testLoginAsAdministrator(FunctionalTester $I)
+    {
+        $I->amOnPage('/site/login');
+        $I->fillField('#loginform-username', 'admin');
+        $I->fillField('#loginform-password', 'admin123');
+
+        $I->click('login-button');
+    
+        $I->see('Access denied: You do not have permission to access the front office as employee or admin.');
     }
 
-    public function firstTestToMakeSupportTicket(FunctionalTester $I)
+
+    public function testCreateSupportTicket(FunctionalTester $I)
     {
-        $I->amOnPage('/supportticket');
-        $I->see("Support Tickets", 'h1');
-        $I->see('Create Support Ticket', 'a');
+        $I->amOnPage('/site/login');
+        $I->fillField('#loginform-username', 'fouser');
+        $I->fillField('#loginform-password', 'qweasdzxc');
+
+        $I->click('login-button');
+    
+        $I->dontSee('Incorrect username or password.');
+
+        $I->click('Contact Us');
 
         $I->click('Create Support Ticket');
 
-        $I->amOnPage('/supportticket/create');
-        $I->see("Create Support Ticket", 'h1');
+        $I->fillField('#supportticket-subject', 'Test Subject');
+        $I->fillField('#supportticket-content', 'Test Body');
 
-
-        $I->seeElement('input', ['name' => 'SupportTicket[subject]']);
-        $I->seeElement('textarea', ['name' => 'SupportTicket[content]']);
-
-        $I->fillField('input[name="SupportTicket[subject]"]', 'Teste ticket subject');
-        $I->fillField('textarea[name="SupportTicket[content]"]', 'Test ticket content');
-
-        $I->dontSee('Content cannot be blank.');
-        $I->dontSee('Subject cannot be blank.');
-
-        $I->click('Send', 'button');
+        $I->click('Send');
     }
 
-    public function firstTestToMakeEmptySupportTicket(FunctionalTester $I)
+    public function testCreateEmptySupportTicket(FunctionalTester $I)
     {
-        $I->amOnPage('/supportticket');
-        $I->see("Support Tickets", 'h1');
-        $I->see('Create Support Ticket', 'a');
+        $I->amOnPage('/site/login');
+        $I->fillField('#loginform-username', 'fouser');
+        $I->fillField('#loginform-password', 'qweasdzxc');
+
+        $I->click('login-button');
+    
+        $I->dontSee('Incorrect username or password.');
+
+        $I->click('Contact Us');
 
         $I->click('Create Support Ticket');
 
-        $I->amOnPage('/supportticket/create');
-        
-        $I->submitForm('#support-ticket-form', []); // Submitting empty form
+        $I->fillField('#supportticket-subject', '');
+        $I->fillField('#supportticket-content', '');
 
-        $I->amOnPage('/supportticket/create');
+        $I->click('Send');
+
+        $I->seeInCurrentUrl('/supportticket/create');
+    }
+
+
+    
+    private function createNewClient(bool $save = false)
+    {
+        $uniqueString = uniqid();  
+
+        $user = new User();
+        $user->username = 'newuser_' . $uniqueString;
+        $user->email = 'emailfornewuser_' . $uniqueString . '@gmail.com';
+
+        $user->setPassword("password_" . $uniqueString);
+        $user->generateAuthKey();
+        $user->generateEmailVerificationToken();
+        $user->created_at = time();
+        $user->updated_at = time();
+
+        $client = new Client();
+        $client->name = $user->username;
+        $client->email = $user->email;
+        $client->phone = '112233445';
+        $client->roleId = 1;
+        $client->createdAt = time();
+        $client->balance = 0;
+        $client->iban = 'PT50000201231234567890154';
+
+        if (!$user->save()) {
+            print_r($user->getErrors());
+        }
+
+        $client->userId = $user->id;
+
+        if ($save) {
+            $user->save();
+            $client->save();
+        }
+
+        return $client;
     }
 }
