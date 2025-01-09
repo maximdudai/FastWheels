@@ -50,7 +50,7 @@ $this->title = 'Fast Wheels';
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                             <img src="<?= $defaultImage ?>" class="d-block w-100" alt="Default Car Photo <?= $index + 1 ?>">
                             <div class="carousel-caption">
-                                <h5>No Vehicles Available</h5>
+                                <h5>Join our collection!</h5>
                             </div>
                         </div>
                     <?php endforeach; ?>
