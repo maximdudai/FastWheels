@@ -57,7 +57,8 @@ $loggedUserRole = $findRole?->roleName;
 
                     ['label' => 'Company', 'header' => true],
                     ['label' => 'Support ticket', 'icon' => 'fa-solid fa-headset', 'url' => ['/support-ticket']],
-                    ['label' => 'Taxes', 'icon' => 'fa-solid fa-percent', 'url' => ['/taxes']]
+                    ['label' => 'Taxes', 'icon' => 'fa-solid fa-percent', 'url' => ['/taxes']],
+                    ['label' => 'Tarefas', 'icon' => 'fa-solid fa-percent', 'url' => ['/tarefa']]
                 ],
             ]);
             ?>

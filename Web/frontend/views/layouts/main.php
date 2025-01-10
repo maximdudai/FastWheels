@@ -45,6 +45,7 @@ AppAsset::register($this);
 
         // The menu items are the same for all users
         $menuItems = [
+            ['label' => 'Tarefas', 'url' => ['/tarefa']],
             ['label' => 'Vehicles', 'url' => ['/usercar']],
             ['label' => 'Contact Us', 'url' => ['/supportticket']],
         ];

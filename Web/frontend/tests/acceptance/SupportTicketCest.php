@@ -77,11 +77,9 @@ class SupportTicketCest
         
         $I->wait(5);
 
-
         $I->see("Create Support Ticket");
 
         $I->click('Create Support Ticket');
-
 
         // $I->seeElement('input', ['name' => 'SupportTicket[subject]']);
         // $I->seeElement('textarea', ['name' => 'SupportTicket[content]']);
