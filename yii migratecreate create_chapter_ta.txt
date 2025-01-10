@@ -1,4 +1,0 @@
-yii migrate/create create_chapter_table --fields="name:string(200):notNull,_id:integer:foreignKey(book)"
-
-
-yii migrate/create create_chapter_table --fields="name:string(200):notNull,book_id:integer:foreignKey(book)"

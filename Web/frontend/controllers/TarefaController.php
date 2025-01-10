@@ -41,6 +41,8 @@ class TarefaController extends Controller
         $searchModel = new TarefaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $dataProvider->query->where(['clientId' => \Yii::$app->user->id]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

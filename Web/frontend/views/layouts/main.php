@@ -12,6 +12,7 @@ use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -45,7 +46,6 @@ AppAsset::register($this);
 
         // The menu items are the same for all users
         $menuItems = [
-            ['label' => 'Tarefas', 'url' => ['/tarefa']],
             ['label' => 'Vehicles', 'url' => ['/usercar']],
             ['label' => 'Contact Us', 'url' => ['/supportticket']],
         ];
@@ -57,6 +57,7 @@ AppAsset::register($this);
             $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
         } else {
             $menuItems[] = ['label' => 'Profile', 'url' => $profileUrl];
+            $menuItems[] = ['label' => 'Tarefas', 'url' => '/frontend/web/tarefa'];
             $menuItems[] = '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline'])
                 . Html::submitButton('Logout', ['class' => 'btn btn-link logout-btn text-decoration-none'])

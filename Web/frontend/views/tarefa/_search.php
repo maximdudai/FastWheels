@@ -19,8 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clientId') ?>
 
-    <?= $form->field($model, 'titulo') ?>
-
     <?= $form->field($model, 'descricao') ?>
 
     <?= $form->field($model, 'feito') ?>

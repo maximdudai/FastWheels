@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Tarefa;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -12,8 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="tarefa-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,11 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'clientId',
-            'titulo',
+            'clientId' => 'client.name',
             'descricao:ntext',
-            'feito',
+            'feito' => [
+                'attribute' => 'feito',
+                'value' => function (Tarefa $model) {
+                    return $model->feito ? 'Feito' : 'Nao feito';
+                },
+                'filter' => ['0' => 'Nao feito', '1' => 'Feito'],
+            ],
         ],
     ]) ?>
 
