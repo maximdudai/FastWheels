@@ -6,8 +6,13 @@ return [
             'class' => \yii\db\Connection::class,
             'dsn' => 'mysql:host=localhost;dbname=fastwheelstest',
             'username' => 'root',
+<<<<<<< Updated upstream
             // 'password' => 'FastWheels2024!@#',
             'password' => '',
+=======
+            //'password' => 'FastWheels2024!@#',
+             'password' => '',
+>>>>>>> Stashed changes
             'charset' => 'utf8',
         ],
         'mailer' => [
