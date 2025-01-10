@@ -26,6 +26,8 @@ import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 public class MainActivity extends AppCompatActivity {
 
     Button btnMyVehicles;
+    LinearLayout goMeusVeiculos, goVeiculosDisponiveis;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         showMessage(this, ""+ notificacao1);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
 //        loadFragment(new VehicleListFragment());
 
@@ -59,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         // region OPCOES MENU
-
         // MeusVeiculos
-        LinearLayout goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
+        goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
         goMeusVeiculos.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserVehicles.class);
             startActivity(intent);
@@ -70,15 +71,23 @@ public class MainActivity extends AppCompatActivity {
         // TODO Favoritos
 
 
+        // Suporte
 
 
         // VeiculosDisponiveis
-        LinearLayout goVeiculosDisponiveis = findViewById(R.id.LayoutMainVeiculosDisp);
+        goVeiculosDisponiveis = findViewById(R.id.LayoutMainVeiculosDisp);
         goVeiculosDisponiveis.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, VehicleListFragment.class);
-            startActivity(intent);
+            loadFragment(new VehicleListFragment());
+
+            //Intent intent = new Intent(MainActivity.this, VehicleListFragment.class);
+            //startActivity(intent);
         });
 
+
+        // TODO Reservas
+
+
+        // TODO Notificacoes
 
 
         // endregion
