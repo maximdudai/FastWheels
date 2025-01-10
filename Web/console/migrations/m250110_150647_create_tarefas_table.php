@@ -16,7 +16,8 @@ class m250110_150647_create_tarefas_table extends Migration
         $this->createTable('{{%tarefas}}', [
             'id' => $this->primaryKey(),
             'clientId' => $this->integer()->notNull(),
-            'descricao' => $this->string(30)->notNull(),
+            'titulo' => $this->string(255)->notNull(),
+            'descricao' => $this->text()->notNull(),
             'feito' => $this->boolean()->notNull()->defaultValue(false),
         ], 'ENGINE=InnoDB');
         

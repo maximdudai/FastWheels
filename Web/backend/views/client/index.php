@@ -48,22 +48,13 @@ $isUserAdmin = Client::isUserAdmin(Yii::$app->user->identity->id);
             'createdAt',
             'balance',
             'iban',
-            'tarefa' => [ // link to client with clicked id
-                'label' => 'Tarefas',
-                'visible' => Yii::$app->controller->action->id === 'clients', // garantir que nao aparece se formos para funcionarios
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::a('Tarefas', ['tarefa/index', 'id' => $model->id]);
-                }
-                
-            ],
+            // 'userId',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Client $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                },
+                }
             ],
-            
         ],
     ]); ?>  
 </div>

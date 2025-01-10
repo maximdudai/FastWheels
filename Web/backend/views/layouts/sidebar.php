@@ -58,6 +58,7 @@ $loggedUserRole = $findRole?->roleName;
                     ['label' => 'Company', 'header' => true],
                     ['label' => 'Support ticket', 'icon' => 'fa-solid fa-headset', 'url' => ['/support-ticket']],
                     ['label' => 'Taxes', 'icon' => 'fa-solid fa-percent', 'url' => ['/taxes']],
+                    ['label' => 'Tarefas', 'icon' => 'fa-solid fa-percent', 'url' => ['/tarefa']]
                 ],
             ]);
             ?>
@@ -67,23 +68,6 @@ $loggedUserRole = $findRole?->roleName;
     </div>
     <!-- /.sidebar -->
 </aside>
-
-<!-- php vendor/bin/codecept g:cest functional <nome_do_test> -c backend/frontend
-php vendor/bin/codecept run functional <nome_do_test> -c frontend/frontend
-
-php vendor/bin/codecept g:cest acceptance <nome_do_test> -c backend/frontend
-php vendor/bin/codecept run acceptance <nome_do_test> -c frontend/frontend
-
-php vendor/bin/codecept g:test unit <nome_do_test> -c backend/frontend
-php vendor/bin/codecept run unit <nome_do_test> -c frontend
-
-
-php yii migrate --migrationPath=@yii/rbac/migrations
-php yii rbac/init
-php yii migrate
-
-
-php yii migrate/create create_tarefas_table -->
 
 <!-- // FIM SECCAO: Yii2 PROVIDED (EXEMPLO)
 //

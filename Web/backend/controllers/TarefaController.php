@@ -36,12 +36,10 @@ class TarefaController extends Controller
      *
      * @return string
      */
-    public function actionIndex($id)
+    public function actionIndex()
     {
         $searchModel = new TarefaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        $dataProvider->query->where(['clientId' => $id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -72,11 +70,7 @@ class TarefaController extends Controller
         $model = new Tarefa();
 
         if ($this->request->isPost) {
-
-
-            if ($model->load($this->request->post())) {
-
-                $model->save();
+            if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

@@ -12,16 +12,13 @@ use yii\grid\GridView;
 
 $this->title = 'Tarefas';
 $this->params['breadcrumbs'][] = $this->title;
-
-$getCurrentIdFromUrl = Yii::$app->request->get('id');
-
 ?>
 <div class="tarefa-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Tarefa', ['create?id=' . $getCurrentIdFromUrl], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Tarefa', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -32,15 +29,11 @@ $getCurrentIdFromUrl = Yii::$app->request->get('id');
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'clientId' => 'client.name',
+            'id',
+            'clientId',
+            'titulo',
             'descricao:ntext',
-            'feito' => [
-                'attribute' => 'feito',
-                'value' => function (Tarefa $model) {
-                    return $model->feito ? 'Feito' : 'Nao feito';
-                },
-                'filter' => ['0' => 'Nao feito', '1' => 'Feito'],
-            ],
+            'feito',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Tarefa $model, $key, $index, $column) {

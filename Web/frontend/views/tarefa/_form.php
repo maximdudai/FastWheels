@@ -12,9 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <!-- <?= $form->field($model, 'clientId')->textInput() ?> -->
+    <?= $form->field($model, 'clientId')->textInput() ?>
 
-    <?= $form->field($model, 'clientId')->hiddenInput(['value' => \Yii::$app->user->id])->label(false) ?>
+    <?= $form->field($model, 'titulo')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'descricao')->textarea(['rows' => 6]) ?>
 
@@ -22,6 +22,7 @@ use yii\widgets\ActiveForm;
         $form->field($model, 'feito')->textInput()
         ->dropDownList(
             ['0' => 'Nao feito', '1' => 'Feito'],
+            ['prompt' => 'Select Role']
         );
      ?>
 
