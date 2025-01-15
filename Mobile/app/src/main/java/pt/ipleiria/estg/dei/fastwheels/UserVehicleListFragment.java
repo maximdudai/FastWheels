@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.fastwheels;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -31,10 +32,6 @@ public class UserVehicleListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
-
-//        // Configuração do SwipeRefreshLayout
-//        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-//        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         // Configuração da ListView
         lvVehicles = view.findViewById(R.id.lvImgVehicle);

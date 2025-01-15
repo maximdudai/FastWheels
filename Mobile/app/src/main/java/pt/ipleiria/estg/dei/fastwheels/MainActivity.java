@@ -3,12 +3,15 @@ package pt.ipleiria.estg.dei.fastwheels;
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,18 +22,21 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnMyVehicles;
+    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte;
+    TextView tvMainLoggedName, tvMainLoggedEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //region NOTIFICICACOES
         // Criar notificações
         Notification notificacao1 = new Notification(Notification.TITLE_WELCOME, "Obrigado por se registrar!");
         Notification notificacao2 = new Notification(Notification.TITLE_SYSTEM_UPDATE, "Confira as novidades em nosso app.");
@@ -45,25 +51,64 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(notificacao1);
 
         showMessage(this, ""+ notificacao1);
+        //endregion
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        loadFragment(new VehicleListFragment());
+        //region CARREGAR DADOS UTILIZADOR
+        tvMainLoggedName = findViewById(R.id.tvMainLoggedName);
+        tvMainLoggedEmail = findViewById(R.id.tvMainLoggedEmail);
 
-        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
-        btnMyVehicles.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+
+        tvMainLoggedName.setText(sharedPreferences.getString(Constants.KEY_USERNAME, null));
+        tvMainLoggedEmail.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
+
+        //endregion
+
+        // region OPCOES MENU
+        // Perfil
+        goPerfil = findViewById(R.id.userInfoSection);
+        goPerfil.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserProfile.class);
             startActivity(intent);
         });
-    }
 
-    private void loadFragment(Fragment fragment) {
+        // MeusVeiculos
+        goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
+        goMeusVeiculos.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            intent.putExtra("TAG_Vehicle", "UserVehicleListFragment");
+            startActivity(intent);
+        });
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.contentFragment, fragment)
-                .commit();
+        // TODO Favoritos
+
+
+        // Suporte
+        goSuporte = findViewById(R.id.layoutMainSuporte);
+        goSuporte.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Support.class);
+            startActivity(intent);
+        });
+
+        // VeiculosDisponiveis
+        goVeiculosDisponiveis = findViewById(R.id.LayoutMainVeiculosDisp);
+        goVeiculosDisponiveis.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            intent.putExtra("TAG_Vehicle", "VehicleListFragment");
+            startActivity(intent);
+        });
+
+
+        // TODO Reservas
+
+
+        // TODO Notificacoes
+
+
+        // endregion
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,15 +116,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    /*
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.contentFragment);
-        if (fragment instanceof VehicleListFragment) {
-
-            getSupportFragmentManager().popBackStackImmediate();
-        } else {
-            super.onBackPressed();
-        }
-    }
-    */
 }

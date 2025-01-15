@@ -19,6 +19,8 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -54,6 +56,18 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Configuração do SwipeRefreshLayout
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        // Configuracao do Toolbar
+        // Find the toolbar in the fragment's layout
+        Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
+
+        // Set the Toolbar as the ActionBar
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
+
+        // Optional: Set a title or navigation icon
+        if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
