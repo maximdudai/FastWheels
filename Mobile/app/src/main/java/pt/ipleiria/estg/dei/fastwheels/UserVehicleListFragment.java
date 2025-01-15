@@ -32,10 +32,6 @@ public class UserVehicleListFragment extends Fragment {
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
-//        // Configuração do SwipeRefreshLayout
-//        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-//        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-
         // Configuração da ListView
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
