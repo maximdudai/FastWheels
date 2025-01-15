@@ -164,10 +164,11 @@ public class SingletonFastWheels {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String token = String.valueOf(LoginParser.parseLoginData(response));
+
+                User loggedUserResponse = LoginParser.parseLoginData(response);
 
                 if(loginListener != null)
-                    loginListener.onValidateLogin(token, username, context);
+                    loginListener.onValidateLogin(loggedUserResponse, context);
             }
         }, new Response.ErrorListener() {
             @Override

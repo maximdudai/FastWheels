@@ -5,13 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.modules.InputDialog;
 
-public class UserProfile extends AppCompatActivity {
-
+public class UserProfile extends AppCompatActivity implements InputDialog.OnInputListener {
     private TextView loggedEmail, loggedName;
 
     @Override
@@ -22,12 +23,12 @@ public class UserProfile extends AppCompatActivity {
         loggedEmail = findViewById(R.id.loggedEmail);
         loggedName = findViewById(R.id.loggedName);
 
-        //get saved data
+        // get saved data
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
 
         // update UI
         loggedEmail.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
-        loggedName.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
+        loggedName.setText(sharedPreferences.getString(Constants.KEY_USERNAME, null));
     }
 
     public void handleLogout(View v) {
@@ -46,5 +47,25 @@ public class UserProfile extends AppCompatActivity {
     public void handleSupport(View v) {
         Intent supportPage = new Intent(this, Support.class);
         startActivity(supportPage);
+    }
+
+    private void showDialog(String title, String hint, String type) {
+        InputDialog dialog = InputDialog.newInstance(title, hint, type);
+        dialog.setOnInputListener(this);
+        dialog.show(getSupportFragmentManager(), "InputDialogFragment");
+    }
+
+    @Override
+    public void onInputReceived(String input, String type) {
+        switch (type) {
+            case "email":
+                Toast.makeText(this, "New Email: " + input, Toast.LENGTH_SHORT).show();
+                break;
+            case "password":
+                Toast.makeText(this, "New Password: " + input, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "Unknown type: " + input, Toast.LENGTH_SHORT).show();
+        }
     }
 }
