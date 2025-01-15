@@ -115,7 +115,7 @@ class ClientsController extends ActiveController
             throw new \yii\web\BadRequestHttpException('Please provide all required fields');
         }
 
-        if(User::findByUsername($receivedUser['username']) || User::findByEmail($receivedUser['email'])) {
+        if (User::findByUsername($receivedUser['username']) || User::findByEmail($receivedUser['email'])) {
             throw new \yii\web\BadRequestHttpException('User already exists');
         }
 
@@ -191,7 +191,7 @@ class ClientsController extends ActiveController
 
         $receivedUser = \Yii::$app->request->put();
 
-        $modelClient = Client::findModel($id);
+        $modelClient = Client::findOne($id);
         $modelUser = User::findOne(['id' => $id]);
 
         if (!$modelClient || !$modelUser) {
@@ -210,12 +210,14 @@ class ClientsController extends ActiveController
         $modelUser->email = $receivedUser['email'] ?? $modelUser->email;
 
         if ($modelClient->save() && $modelUser->save()) {
-            \Yii::$app->response->statusCode = 201;
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            \Yii::$app->response->statusCode = 200;
             return [
                 'status' => 'success',
                 'message' => 'User updated successfully',
             ];
         } else {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             \Yii::$app->response->statusCode = 400;
             return [
                 'status' => 'error',
@@ -223,6 +225,7 @@ class ClientsController extends ActiveController
             ];
         }
     }
+
     public function actionDelete($id)
     {
         if (!\Yii::$app->request->isDelete) {
