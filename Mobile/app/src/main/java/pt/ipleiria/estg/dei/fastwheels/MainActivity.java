@@ -56,11 +56,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //region DADOS UTILIZADOR
-        // TODO carregar dados utilizador
-
+        //region CARREGAR DADOS UTILIZADOR
         tvMainLoggedName = findViewById(R.id.tvMainLoggedName);
         tvMainLoggedEmail = findViewById(R.id.tvMainLoggedEmail);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+
+        tvMainLoggedName.setText(sharedPreferences.getString(Constants.KEY_USERNAME, null));
+        tvMainLoggedEmail.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
 
         //endregion
 
