@@ -7,8 +7,18 @@
     android:background="@color/secondary_color"
     tools:context=".VehicleListFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCars"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="Veiculos"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
