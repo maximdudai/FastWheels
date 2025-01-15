@@ -29,6 +29,9 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
         // update UI
         loggedEmail.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
         loggedName.setText(sharedPreferences.getString(Constants.KEY_USERNAME, null));
+
+        findViewById(R.id.changeCurrentEmail).setOnClickListener(v -> showDialog("Update Email", "Enter your new email", "email"));
+        findViewById(R.id.changeCurrentPassword).setOnClickListener(v -> showDialog("Update Password", "Enter your new password", "password"));
     }
 
     public void handleLogout(View v) {

@@ -81,6 +81,7 @@
 
         <!-- Change Password Button -->
         <LinearLayout
+            android:id="@+id/changeCurrentPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -109,6 +110,7 @@
 
         <!-- Change Email Button -->
         <LinearLayout
+            android:id="@+id/changeCurrentEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -137,6 +139,7 @@
 
         <!-- Notifications Button -->
         <LinearLayout
+            android:id="@+id/notificationPage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -165,13 +168,14 @@
 
         <!-- Assistance Button -->
         <LinearLayout
+            android:id="@+id/assistancePage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#2D2D2D"
             android:elevation="4dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:onClick="handleSupport"
+            android:orientation="horizontal"
             android:padding="16dp">
 
             <ImageView
