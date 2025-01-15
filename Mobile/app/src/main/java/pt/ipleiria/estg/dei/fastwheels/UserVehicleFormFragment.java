@@ -32,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -102,7 +101,7 @@ public class UserVehicleFormFragment extends Fragment {
             int vehicleId = args.getInt("VEHICLE_ID", -1); // -1 é o valor padrão caso não encontre o ID
             if (vehicleId != -1) {
                 loadVehicleDataByID(vehicleId);
-                ivEliminarVeiculo.setOnClickListener(v -> RemoveVehicle(vehicleId));
+                ivEliminarVeiculo.setOnClickListener(v -> removeVehicle(vehicleId));
             }
         }
 
@@ -435,7 +434,7 @@ public class UserVehicleFormFragment extends Fragment {
         }
     }
 
-    private void RemoveVehicle(int vehicleId) {
+    private void removeVehicle(int vehicleId) {
         new AlertDialog.Builder(requireContext())
                 .setMessage("Pretende eliminar o registo deste veículo?")
                 .setPositiveButton("Sim", (dialog, which) -> {
