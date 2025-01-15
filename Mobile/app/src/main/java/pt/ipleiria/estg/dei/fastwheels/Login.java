@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity implements LoginListener {
             String savedPassword = sharedPreferences.getString(Constants.KEY_PASSWORD, null);
 
             if (savedEmail != null && savedPassword != null) {
-                // Redirecionar automaticamente para a MainActivity
+                // Redirecionar automaticamente para a MainActivity=
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
                 finish(); // Finalizar a tela de login
@@ -94,28 +94,24 @@ public class Login extends AppCompatActivity implements LoginListener {
     }
 
     @Override
-    public void onValidateLogin(String token, String email, Context context) {
+    public void onValidateLogin(User user, Context context) {
 
-        if(token.isEmpty()) {
+        if(user.getToken().isEmpty()) {
             Toast.makeText(context, "invalid authentication credentials", Toast.LENGTH_SHORT).show();
         } else {
-            if (keepLoggedInCheckbox.isChecked()) {
-                SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(Constants.KEY_KEEP_LOGGED_IN, true);
-                editor.putString(Constants.KEY_EMAIL, userEmail.getText().toString());
-                editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
-                editor.apply();
-            } else {
-                // Remover credenciais caso não queira manter o login automático
-                SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
-            }
+
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putBoolean(Constants.KEY_KEEP_LOGGED_IN, keepLoggedInCheckbox.isChecked());
+            editor.putString(Constants.KEY_USERNAME, user.getName());
+            editor.putString(Constants.KEY_EMAIL, user.getEmail());
+            editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
+
+            editor.apply();
 
             // Redirecionar para a MainActivity
-            Intent mainActivity = new Intent(this, MainActivity.class);
+            Intent mainActivity = new Intent(this, UserProfile.class);
             startActivity(mainActivity);
             finish();
         }
