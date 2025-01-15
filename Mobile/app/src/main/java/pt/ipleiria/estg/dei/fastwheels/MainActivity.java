@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 public class MainActivity extends AppCompatActivity {
 
     Button btnMyVehicles;
+    LinearLayout goMeusVeiculos, goVeiculosDisponiveis;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +49,55 @@ public class MainActivity extends AppCompatActivity {
 
         showMessage(this, ""+ notificacao1);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
-        loadFragment(new VehicleListFragment());
+//        loadFragment(new VehicleListFragment());
 
-        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
-        btnMyVehicles.setOnClickListener(v -> {
+//        btnMyVehicles = findViewById(R.id.btnMeusVeiculos);
+//        btnMyVehicles.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+//            startActivity(intent);
+//        });
+
+        // region OPCOES MENU
+        // MeusVeiculos
+        goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
+        goMeusVeiculos.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserVehicles.class);
             startActivity(intent);
         });
+
+        // TODO Favoritos
+
+
+        // Suporte
+
+
+        // VeiculosDisponiveis
+        goVeiculosDisponiveis = findViewById(R.id.LayoutMainVeiculosDisp);
+        goVeiculosDisponiveis.setOnClickListener(v -> {
+            loadFragment(new VehicleListFragment());
+
+            //Intent intent = new Intent(MainActivity.this, VehicleListFragment.class);
+            //startActivity(intent);
+        });
+
+
+        // TODO Reservas
+
+
+        // TODO Notificacoes
+
+
+        // endregion
     }
 
     private void loadFragment(Fragment fragment) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.contentFragment, fragment)
+                .replace(R.id.layoutPrincipal, fragment)
                 .commit();
     }
 

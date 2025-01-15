@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,19 +23,288 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/contentFragment"
+    <!-- conteudo principal -->
+    <LinearLayout
+        android:id="@+id/layoutPrincipal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" >
+        android:background="@color/black"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <Button
-            android:id="@+id/btnMeusVeiculos"
-            android:layout_width="wrap_content"
+        <!-- inf. client -->
+        <LinearLayout
+            android:id="@+id/userInfoSection"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MeusVeiculos" />
+            android:background="@color/gray_color"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </FrameLayout>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/user_profile"
+                android:src="@drawable/ic_man_foreground"
+                app:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- loggedName -->
+                <TextView
+                    android:id="@+id/tvMainLoggedName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_name"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- loggedEmail -->
+                <TextView
+                    android:id="@+id/tvMainLoggedEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profileemail_gmail_com"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Meus veiculos, Favoritos, Suporte-->
+        <LinearLayout
+            android:id="@+id/layoutbotoes1"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="50dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_marginBottom="10dp">
+
+            <!-- Meus veiculos -->
+            <LinearLayout
+                android:id="@+id/layoutMainMeusVeiculos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@color/gray_color"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ivMainMeusVeiculos"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/meusveiculos"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvMainMeusVeiculos"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Meus Veiculos"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Favoritos-->
+            <LinearLayout
+                android:id="@+id/layoutMainFavoritos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:layout_weight="1"
+                android:background="@color/gray_color"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ivMainFavoritos"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/favoritos"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvMainFavoritos"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Favoritos"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Suporte-->
+            <LinearLayout
+                android:id="@+id/layoutMainSuporte"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@color/gray_color"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ivMainSuporte"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/suporte"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvMainSuporte"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Suporte"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Veiculos disponiveis-->
+        <LinearLayout
+            android:id="@+id/LayoutMainVeiculosDisp"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            android:background="@color/gray_color"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:srcCompat="@drawable/veiculosdisponiveis"
+                android:padding="7dp"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:text="Veiculos Disponiveis"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <!-- Reservas e Notificacoes -->
+        <LinearLayout
+            android:id="@+id/Layoutbotoes3"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="50dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <!-- Reservas -->
+            <LinearLayout
+                android:id="@+id/LayoutMainReservas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="13dp"
+                android:layout_weight="1"
+                android:background="@color/gray_color"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ivMainReservas"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/reservas"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:id="@+id/tvMainReservas"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Reservas"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- Notificacoes  -->
+            <LinearLayout
+                android:id="@+id/LayoutMainNotificacoes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_weight="1"
+                android:background="@color/gray_color"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="5dp">
+
+                <ImageView
+                    android:id="@+id/ivMainNotificacoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:src="@drawable/notificacao"
+                    android:padding="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvMainNotificacoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Notificações"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
