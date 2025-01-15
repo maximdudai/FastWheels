@@ -189,7 +189,7 @@ class ClientsController extends ActiveController
             throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
         }
 
-        $receivedUser = \Yii::$app->request->bodyParams; // Use `bodyParams` para PUT requests.
+        $receivedUser = \Yii::$app->request->put();
 
         $modelClient = Client::findModel($id);
         $modelUser = User::findOne(['id' => $id]);

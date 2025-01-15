@@ -15,7 +15,9 @@ import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
+import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
+import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
 
 public class SingletonFastWheels {
 
@@ -31,6 +33,7 @@ public class SingletonFastWheels {
 
     // listeners
     private LoginListener loginListener;
+    private ProfileListener profileListener;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -196,7 +199,38 @@ public class SingletonFastWheels {
 
     //region #Profile
 
+    public void updateProfileAPI(User user, final Context context) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
+                User loggedUserResponse = ProfileParser.parseProfileData(response);
+
+                if (profileListener != null)
+                    profileListener.onProfileUpdate(loggedUserResponse, context);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(context, "invalid updating profile", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("username", user.getName());
+                params.put("email", user.getEmail());
+                params.put("phone", user.getPhone());
+                params.put("balance", user.getBalance());
+                params.put("iban", user.getIban());
+
+                return params;
+            }
+        };
+        volleyQueue.add(request);
+    }
 
     //endregion
 }
