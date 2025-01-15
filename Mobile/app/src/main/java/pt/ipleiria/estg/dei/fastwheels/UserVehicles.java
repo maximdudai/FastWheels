@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class UserVehicles extends AppCompatActivity {
 
@@ -14,7 +15,13 @@ public class UserVehicles extends AppCompatActivity {
         setContentView(R.layout.activity_user_vehicles);
 
         if (savedInstanceState == null) {
-            loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
+            String fragmentTag = getIntent().getStringExtra("TAG_Vehicle");
+
+            if ("VehicleListFragment".equals(fragmentTag)) {
+                loadFragment(new VehicleListFragment(), "VehicleListFragment");
+            } else {
+                loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
+            }
         }
     }
 
@@ -29,8 +36,10 @@ public class UserVehicles extends AppCompatActivity {
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentUserVehicleManager);
 
-        if (currentFragment instanceof UserVehicleListFragment) {
-            // Encerra a atividade se o fragmento atual for UserVehicleListFragment
+        if (currentFragment != null && currentFragment instanceof UserVehicleListFragment) {
+            super.onBackPressed();
+            finish();
+        } else if (currentFragment != null && currentFragment instanceof VehicleListFragment) {
             super.onBackPressed();
             finish();
         }  else {

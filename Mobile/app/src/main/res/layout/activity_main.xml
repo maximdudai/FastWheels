@@ -122,7 +122,11 @@
                     android:gravity="center"
                     android:text="Meus Veiculos"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeStepGranularity="1sp"/>
             </LinearLayout>
 
             <!-- Favoritos-->
@@ -157,7 +161,11 @@
                     android:gravity="center"
                     android:text="Favoritos"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeStepGranularity="1sp"/>
             </LinearLayout>
 
             <!-- Suporte-->
@@ -191,7 +199,11 @@
                     android:gravity="center"
                     android:text="Suporte"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeStepGranularity="1sp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -209,14 +221,14 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/ivMainVeiculosDisp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                tools:srcCompat="@drawable/veiculosdisponiveis"
+                android:src="@drawable/veiculosdisponiveis"
                 android:padding="7dp"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvMainVeiculosDisp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:baselineAligned="false"
@@ -267,7 +279,11 @@
                     android:gravity="center"
                     android:text="Reservas"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeStepGranularity="1sp"/>
 
             </LinearLayout>
 
@@ -302,7 +318,11 @@
                     android:gravity="center"
                     android:text="Notificações"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeStepGranularity="1sp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
