@@ -207,7 +207,7 @@ class ClientsController extends ActiveController
         $receivedUser = \Yii::$app->request->post();
 
         $modelClient = Client::findOne($id);
-        $modelUser = User::find()->where(['id' => $modelClient->userId])->one();
+        $modelUser = User::findOne(['id' => $id]);
 
         $getUserToken = $modelUser->verification_token;
 
