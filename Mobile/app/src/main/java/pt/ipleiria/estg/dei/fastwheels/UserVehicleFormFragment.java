@@ -395,7 +395,7 @@ public class UserVehicleFormFragment extends Fragment {
             singleton.removeAllVehiclePhotosBD(vehicleId);
 
             if(vehicleId == -1) {
-                singleton.addVehicleDb(vehicle);
+                singleton.addVehicleAPI(vehicle, getContext());
                 Helpers.showMessage(getContext(), "Veículo adicionado com sucesso!");
 
             } else {

@@ -323,6 +323,14 @@ public class SingletonFastWheels {
 
                     return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
+                @Override
+                public Map<String, String> getHeaders()  {
+                    Map<String, String> headers = new HashMap<>();
+
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    return headers;
+                }
             };
             volleyQueue.add(request);
         }
