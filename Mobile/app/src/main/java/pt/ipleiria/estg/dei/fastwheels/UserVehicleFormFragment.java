@@ -319,7 +319,7 @@ public class UserVehicleFormFragment extends Fragment {
     //endregion
 
     private void loadVehicleDataByID(int vehicleId) {
-        Vehicle vehicle = SingletonFastWheels.getInstance(getContext()).getVehicleById(vehicleId);
+        Vehicle vehicle = SingletonFastWheels.getInstance(getContext()).getVehicleByIdBd(vehicleId);
 
         if (vehicle != null) {
             ivEliminarVeiculo.setVisibility(View.VISIBLE);
