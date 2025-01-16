@@ -75,7 +75,8 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
                 SingletonFastWheels.getInstance(getApplicationContext()).setUser(user);
                 break;
             case "password":
-                Toast.makeText(this, "New Password: " + input, Toast.LENGTH_SHORT).show();
+                user.setPassword(input);
+                SingletonFastWheels.getInstance(getApplicationContext()).setUser(user);
                 break;
             default:
                 Toast.makeText(this, "Unknown type: " + input, Toast.LENGTH_SHORT).show();
@@ -86,6 +87,14 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
 
     @Override
     public void onProfileUpdate(User user, Context context) {
-        Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(Constants.KEY_USERNAME, user.getName());
+        editor.putString(Constants.KEY_EMAIL, user.getEmail());
+        editor.putString(Constants.KEY_PASSWORD, user.getPassword());
+
+        Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
     }
 }

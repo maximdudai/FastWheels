@@ -225,6 +225,11 @@ class ClientsController extends ActiveController
         $modelUser->username = $receivedUser['name'];
         $modelUser->email = $receivedUser['email'];
 
+        if($receivedUser['password']) {
+            $modelUser->setPassword($receivedUser['password']);
+            $modelUser->generateAuthKey();
+        }
+
         if ($modelClient->save() && $modelUser->save()) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             \Yii::$app->response->statusCode = 200;

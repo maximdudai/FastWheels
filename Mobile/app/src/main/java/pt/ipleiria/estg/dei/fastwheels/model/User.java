@@ -7,6 +7,7 @@ import java.util.Date;
 public class User {
     private String token, name, email, phone, balance, iban;
     private int id;
+    private String password;
 
     public User() {
 
@@ -75,6 +76,14 @@ public class User {
 
     public void setIban(String iban) {
         this.iban = iban;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @NonNull

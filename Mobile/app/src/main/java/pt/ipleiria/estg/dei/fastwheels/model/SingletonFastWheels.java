@@ -231,6 +231,8 @@ public class SingletonFastWheels {
                 params.put("phone", user.getPhone());
                 params.put("balance", user.getBalance());
                 params.put("iban", user.getIban());
+                params.put("password", user.getPassword());
+
                 return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
             }
 
