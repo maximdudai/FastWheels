@@ -55,7 +55,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
         if (vehicleId != -1) {
             // Busca o veículo no Singleton
-            Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleById(vehicleId);
+            Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd(vehicleId);
 
             if (vehicle != null) {
                 // Preenche os campos com os dados do veículo
