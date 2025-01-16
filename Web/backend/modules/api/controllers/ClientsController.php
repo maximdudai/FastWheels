@@ -182,7 +182,7 @@ class ClientsController extends ActiveController
             'message' => 'Error creating user',
         ];
     }
-    
+
     // public function beforeAction($action)
     // {
     //     if ($action->id == 'update') {
@@ -195,11 +195,53 @@ class ClientsController extends ActiveController
     //     return parent::beforeAction($action);
     // }
 
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['update']); 
+        return $actions;
+    }
+
     public function actionUpdate()
     {
-        die('Controller method reached');
+        $receivedUser = \Yii::$app->request->post();
+
+        $id = $receivedUser['id'];
+
+        $modelClient = Client::findOne($id);
+        $modelUser = User::find()->where(['id' => $modelClient->userId])->one();
+
+        if (!$modelClient || !$modelUser) {
+            throw new \yii\web\NotFoundHttpException('User or client not found');
+        }
+
+        // Atualiza os dados do cliente
+        $modelClient->name = $receivedUser['name'];
+        $modelClient->email = $receivedUser['email'];
+        $modelClient->phone = $receivedUser['phone'] ?? $modelClient->phone;
+        $modelClient->iban = $receivedUser['iban'] ?? $modelClient->iban;
+        $modelClient->balance = $receivedUser['balance'] ?? $modelClient->balance;
+
+        $modelUser->username = $receivedUser['name'];
+        $modelUser->email = $receivedUser['email'];
+
+        if ($modelClient->save() && $modelUser->save()) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            \Yii::$app->response->statusCode = 200;
+            return [
+                'status' => 'success',
+                'message' => 'User updated successfully',
+            ];
+        } else {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            \Yii::$app->response->statusCode = 400;
+            return [
+                'status' => 'error',
+                'message' => 'Error updating user',
+            ];
+        }
     }
-    
+
 
     public function actionDelete($id)
     {
