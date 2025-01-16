@@ -136,11 +136,11 @@ class ReservationsController extends ActiveController
 
     // Validate token
 
-    // $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
+    $findClientByVerificationToken = User::findByVerificationToken($data['token'] ?? null);
 
-    // if (!$findClientByVerificationToken) {
-    //   throw new UnauthorizedHttpException('Invalid token', 403);
-    // }
+    if (!$findClientByVerificationToken) {
+      throw new UnauthorizedHttpException('Invalid token', 403);
+    }
 
     // Find the existing model
     $model = Reservation::findOne($id);

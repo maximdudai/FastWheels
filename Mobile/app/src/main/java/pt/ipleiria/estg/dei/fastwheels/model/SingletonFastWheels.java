@@ -1,7 +1,10 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -10,6 +13,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -18,8 +24,11 @@ import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
+import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
+import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
+import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
 
 public class SingletonFastWheels {
@@ -29,13 +38,14 @@ public class SingletonFastWheels {
 
     private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
 
-    private int clientId;
+    private User loggedUser = null;
 
     //volley
     private static RequestQueue volleyQueue;
 
     // listeners
     private LoginListener loginListener;
+    private ProfileListener profileListener;
     private VehicleListener vehicleListener;
 
     // Mosquitto
@@ -62,15 +72,13 @@ public class SingletonFastWheels {
         vehicleDbHelper = new VehicleDbHelper(context);
     }
 
-    // region Get/Set ClientID
-    public int getClientId() {
-        return clientId;
+    // region get/set user
+    public User getUser() {
+        return loggedUser;
     }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setUser(User user) {
+        this.loggedUser = user;
     }
-    // endregion
 
     //region METODOS GERIR VEHICLE
     // Obter veículo específico pelo ID
@@ -183,11 +191,13 @@ public class SingletonFastWheels {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                loggedUser =  LoginParser.parseLoginData(response);
 
-                User loggedUserResponse = LoginParser.parseLoginData(response);
+                generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                loggedUser.setBase64token(base64Token);
 
                 if (loginListener != null)
-                    loginListener.onValidateLogin(loggedUserResponse, context);
+                    loginListener.onValidateLogin(loggedUser, context);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -216,7 +226,56 @@ public class SingletonFastWheels {
 
     //region #Profile
 
+    public void updateProfileAPI(User user, final Context context) {
+        StringRequest request = new StringRequest(Request.Method.PUT, Constants.API_PROFILE + "?id=" + loggedUser.getId(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                User loggedUserResponse = ProfileParser.parseProfileData(response);
+                if (profileListener != null)
+                    profileListener.onProfileUpdate(loggedUserResponse, context);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                String errorMessage = error.networkResponse != null ? new String(error.networkResponse.data) : "Unknown error";
+                Log.e("SINGLETON", errorMessage);
+                Toast.makeText(context, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
 
+            @Override
+            public byte[] getBody() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", user.getName());
+                params.put("email", user.getEmail());
+                params.put("phone", user.getPhone());
+                params.put("balance", user.getBalance());
+                params.put("iban", user.getIban());
+                params.put("password", user.getPassword());
+
+                return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+            }
+
+            @Override
+            public Map<String, String> getHeaders()  {
+                Map<String, String> headers = new HashMap<>();
+
+                generateBase64 base64Token = new generateBase64(user.getName(), user.getPassword());
+                headers.put("Authorization", base64Token.getBase64Token());  // Add a token if required
+                return headers;
+            }
+        };
+
+        volleyQueue.add(request);
+    }
+    public void setProfileListener(ProfileListener profileListener) {
+        this.profileListener = profileListener;
+    }
 
     //endregion
 
