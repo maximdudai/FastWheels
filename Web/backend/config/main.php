@@ -95,6 +95,22 @@ return [
                         '{id}' => '<id:\\d+>',
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/tarefas',
+                    'extraPatterns' => [
+                        'GET {id}/index' => 'index',
+                        'POST create' => 'create',
+                        'PUT update/{id}' => 'update',
+                        'DELETE delete/{id}' => 'delete',
+                        'PUT done/{id}/{feito}' => 'done',
+                    ],
+
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>', // id so pode ser do tipo numerico
+                        '{feito}' => '<feito:\\d+>',
+                    ],
+                ],
             ],
         ],
     ],

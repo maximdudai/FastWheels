@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property int $clientId
- * @property string $titulo
  * @property string $descricao
  * @property int $feito
  *
@@ -31,10 +30,9 @@ class Tarefa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clientId', 'titulo', 'descricao'], 'required'],
+            [['clientId', 'descricao'], 'required'],
             [['clientId', 'feito'], 'integer'],
-            [['descricao'], 'string'],
-            [['titulo'], 'string', 'max' => 255],
+            [['descricao'], 'string', 'max' => 30],
             [['clientId'], 'exist', 'skipOnError' => true, 'targetClass' => Client::class, 'targetAttribute' => ['clientId' => 'id']],
         ];
     }
@@ -47,7 +45,6 @@ class Tarefa extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'clientId' => 'Client ID',
-            'titulo' => 'Titulo',
             'descricao' => 'Descricao',
             'feito' => 'Feito',
         ];
