@@ -28,7 +28,6 @@ public class LoginParser {
             String balance = fetchData.getString("balance");
             String iban = fetchData.getString("iban");
 
-
             userData = new User(token, id, name, email, phone, balance, iban);
 
         } catch (JSONException e) {

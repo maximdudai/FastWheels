@@ -101,7 +101,8 @@ public class VehicleParser {
 
             vehicleData = new Vehicle(id, clientId, carBrand, carModel,
                     carYear, carDoors, status, availableFrom,
-                    availableTo, address, postalCode, city, priceDay,vehiclePhotos);
+                    availableTo, address, postalCode, city, priceDay, vehiclePhotos);
+
 
         }catch (JSONException e) {
             e.printStackTrace();

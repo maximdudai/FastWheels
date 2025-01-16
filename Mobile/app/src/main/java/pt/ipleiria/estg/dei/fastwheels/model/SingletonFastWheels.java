@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -283,58 +284,70 @@ public class SingletonFastWheels {
     //endregion
 
     //region #Vechicle API
-    public void addVehicleAPI (final Vehicle vehicleData, final Context context){
-        if(!VehicleParser.isConnectionInternet(context)) {
+    public void addVehicleAPI(final Vehicle vehicleData, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
             StringRequest request = new StringRequest(
                     Request.Method.POST,
                     Constants.API_VEHICLES + "/create",
                     new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
-                    addVehicleDb(VehicleParser.parseVehicleData(response));
-
-                    if (vehicleListener != null)
-                        vehicleListener.onRefreshVehicle();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }) {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("API_RESPONSE", response);
+                            Vehicle vehicle = VehicleParser.parseVehicleData(response);
+                            if (vehicle != null) {
+                                addVehicleDb(vehicle);
+                                if (vehicleListener != null) vehicleListener.onRefreshVehicle();
+                            } else {
+                                Log.e("API_RESPONSE", "Failed to parse vehicle data.");
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null) {
+                                String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                                Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                                Log.e("API_ERROR", "Response Data: " + responseData);
+                            }
+                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
                 @Override
                 public byte[] getBody() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("clientId", "" + vehicleData.getClientId());
+                    Map<String, String> params = new HashMap<>();
+                    params.put("clientId", String.valueOf(vehicleData.getClientId()));
                     params.put("carBrand", vehicleData.getCarBrand());
                     params.put("carModel", vehicleData.getCarModel());
-                    params.put("carYear", "" + vehicleData.getCarYear());
-                    params.put("carDoors", "" + vehicleData.getCarDoors());
-                    params.put("status", "" + vehicleData.isStatus());
-                    params.put("availableFrom", "" + vehicleData.getAvailableFrom());
-                    params.put("availableTo", "" + vehicleData.getAvailableTo());
+                    params.put("carYear", String.valueOf(vehicleData.getCarYear()));
+                    params.put("carDoors", String.valueOf(vehicleData.getCarDoors()));
+                    params.put("status", String.valueOf(!vehicleData.isStatus() ? 0 : 1));
+                    params.put("createdAt", "2024-11-22 01:53:32");
+                    params.put("availableFrom", String.valueOf(vehicleData.getAvailableFrom()));
+                    params.put("availableTo",String.valueOf(vehicleData.getAvailableTo()));
                     params.put("address", vehicleData.getAddress());
                     params.put("postalCode", vehicleData.getPostalCode());
                     params.put("city", vehicleData.getCity());
-                    params.put("priceDay", "" + vehicleData.getPriceDay());
+                    params.put("priceDay", String.valueOf(vehicleData.getPriceDay()));
 
                     return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
-                @Override
-                public Map<String, String> getHeaders()  {
-                    Map<String, String> headers = new HashMap<>();
 
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
                     generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
                     headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
                     return headers;
                 }
             };
             volleyQueue.add(request);
         }
     }
+
 
     public void getVehiclesAPI(final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
