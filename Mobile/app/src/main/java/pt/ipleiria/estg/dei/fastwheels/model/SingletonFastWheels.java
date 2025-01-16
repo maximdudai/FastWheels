@@ -1,7 +1,9 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -9,6 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +31,7 @@ public class SingletonFastWheels {
 
     private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
 
-    private int clientId;
+    private User loggedUser = null;
 
     //volley
     private static RequestQueue volleyQueue;
@@ -59,15 +64,13 @@ public class SingletonFastWheels {
         vehicleDbHelper = new VehicleDbHelper(context);
     }
 
-    // region Get/Set ClientID
-    public int getClientId() {
-        return clientId;
+    // region get/set user
+    public User getUser() {
+        return loggedUser;
     }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
+    public void setUser(User user) {
+        this.loggedUser = user;
     }
-    // endregion
 
     //region METODOS GERIR VEHICLE
     // Obter veículo específico pelo ID
@@ -166,11 +169,10 @@ public class SingletonFastWheels {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-                User loggedUserResponse = LoginParser.parseLoginData(response);
+                loggedUser =  LoginParser.parseLoginData(response);
 
                 if (loginListener != null)
-                    loginListener.onValidateLogin(loggedUserResponse, context);
+                    loginListener.onValidateLogin(loggedUser, context);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -200,12 +202,10 @@ public class SingletonFastWheels {
     //region #Profile
 
     public void updateProfileAPI(User user, final Context context) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.API_AUTH, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.PUT, Constants.API_PROFILE + "?id=" + loggedUser.getId(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                 User loggedUserResponse = ProfileParser.parseProfileData(response);
-
                 if (profileListener != null)
                     profileListener.onProfileUpdate(loggedUserResponse, context);
             }
@@ -213,23 +213,39 @@ public class SingletonFastWheels {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(context, "invalid updating profile", Toast.LENGTH_SHORT).show();
+                String errorMessage = error.networkResponse != null ? new String(error.networkResponse.data) : "Unknown error";
+                Log.e("SINGLETON", errorMessage);
+                Toast.makeText(context, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
             }
         }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
 
             @Override
-            protected Map<String, String> getParams() {
+            public byte[] getBody() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("username", user.getName());
+                params.put("name", user.getName());
                 params.put("email", user.getEmail());
                 params.put("phone", user.getPhone());
                 params.put("balance", user.getBalance());
                 params.put("iban", user.getIban());
+                return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+            }
 
-                return params;
+            @Override
+            public Map<String, String> getHeaders()  {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Basic Zm91c2VyOnF3ZWFzZHp4Yw==");  // Add a token if required
+                return headers;
             }
         };
+
         volleyQueue.add(request);
+    }
+    public void setProfileListener(ProfileListener profileListener) {
+        this.profileListener = profileListener;
     }
 
     //endregion

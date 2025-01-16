@@ -202,14 +202,14 @@ class ClientsController extends ActiveController
         return $actions;
     }
 
-    public function actionUpdate()
+    public function actionUpdate($id)
     {
         $receivedUser = \Yii::$app->request->post();
 
-        $id = $receivedUser['id'];
-
         $modelClient = Client::findOne($id);
         $modelUser = User::find()->where(['id' => $modelClient->userId])->one();
+
+        $getUserToken = $modelUser->verification_token;
 
         if (!$modelClient || !$modelUser) {
             throw new \yii\web\NotFoundHttpException('User or client not found');
@@ -230,7 +230,13 @@ class ClientsController extends ActiveController
             \Yii::$app->response->statusCode = 200;
             return [
                 'status' => 'success',
-                'message' => 'User updated successfully',
+                'token' => $getUserToken,
+                'username' => $modelUser->username,
+                'id' => $modelUser->id,
+                'email' => $modelUser->email,
+                'phone' => $modelClient->phone,
+                'balance' => $modelClient->balance,
+                'iban' => $modelClient->iban,
             ];
         } else {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
