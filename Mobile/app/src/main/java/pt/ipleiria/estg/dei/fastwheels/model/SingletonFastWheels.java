@@ -17,7 +17,9 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,7 +84,7 @@ public class SingletonFastWheels {
 
     //region METODOS GERIR VEHICLE
     // Obter veículo específico pelo ID
-    public Vehicle getVehicleById(int id) {
+    public Vehicle getVehicleByIdBd(int id) {
         for (Vehicle vehicle : vehicles) {
             if (vehicle.getId() == id) {
                 return vehicle;
@@ -106,20 +108,6 @@ public class SingletonFastWheels {
             System.err.println("Erro ao adicionar veículo!");
         }
         return auxVehicle.getId();
-    }
-
-    public void addVehiclesDb(ArrayList<Vehicle> vehicles) {
-        if (vehicleDbHelper == null) {
-            return;
-        }
-
-        for (Vehicle v : vehicles) {
-            vehicleDbHelper.removeVehicleDb(v.getId());
-        }
-
-        for (Vehicle v: vehicles){
-            addVehicleDb(v);
-        }
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
@@ -150,6 +138,21 @@ public class SingletonFastWheels {
         return new ArrayList<>(vehicles); // Retorna uma nova lista para proteger os dados originais
     }
 
+    public void addVehiclesDb(ArrayList<Vehicle> vehicles) {
+        if (vehicleDbHelper == null) {
+            return;
+        }
+
+        for (Vehicle v : vehicles) {
+            vehicleDbHelper.removeVehicleDb(v.getId());
+        }
+
+        for (Vehicle v: vehicles){
+            addVehicleDb(v);
+        }
+    }
+
+    // TODO - CONFIRMAR SE É NECESSARIO
     // Consultar veículos por marca
     public ArrayList<Vehicle> getVehiclesByCarBrand(String brand) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
@@ -168,7 +171,7 @@ public class SingletonFastWheels {
     public void addVehiclePhoto(int vehicleId, String photoUrl) {
         VehiclePhoto newPhoto = vehicleDbHelper.addPhotoDb(new VehiclePhoto(0, vehicleId, photoUrl));
         if (newPhoto != null) {
-            Vehicle vehicle = getVehicleById(vehicleId);
+            Vehicle vehicle = getVehicleByIdBd(vehicleId);
             if (vehicle != null) {
                 vehicle.getVehiclePhotos().add(newPhoto);
             }
@@ -284,7 +287,10 @@ public class SingletonFastWheels {
         if(!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
-            StringRequest request = new StringRequest(Request.Method.POST, Constants.API_VEHICLES + "/create", new Response.Listener<String>() {
+            StringRequest request = new StringRequest(
+                    Request.Method.POST,
+                    Constants.API_VEHICLES + "/create",
+                    new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
 
@@ -300,9 +306,8 @@ public class SingletonFastWheels {
                 }
             }) {
                 @Override
-                protected Map<String, String> getParams() {
+                public byte[] getBody() {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("id", "" + vehicleData.getId());
                     params.put("clientId", "" + vehicleData.getClientId());
                     params.put("carBrand", vehicleData.getCarBrand());
                     params.put("carModel", vehicleData.getCarModel());
@@ -316,7 +321,7 @@ public class SingletonFastWheels {
                     params.put("city", vehicleData.getCity());
                     params.put("priceDay", "" + vehicleData.getPriceDay());
 
-                    return params;
+                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
             };
             volleyQueue.add(request);
@@ -360,7 +365,10 @@ public class SingletonFastWheels {
         if(!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
-            StringRequest request = new StringRequest(Request.Method.PUT, Constants.API_VEHICLES + "/" + vehicleData.getId(), new Response.Listener<String>() {
+            StringRequest request = new StringRequest(
+                    Request.Method.PUT,
+                    Constants.API_VEHICLES + "/update?id=" + vehicleData.getId(),
+                    new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
 
@@ -378,9 +386,8 @@ public class SingletonFastWheels {
             }) {
 
                 @Override
-                protected Map<String, String> getParams() {
+                public byte[] getBody() {
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("id", "" + vehicleData.getId());
                     params.put("clientId", "" + vehicleData.getClientId());
                     params.put("carBrand", vehicleData.getCarBrand());
                     params.put("carModel", vehicleData.getCarModel());
@@ -394,7 +401,7 @@ public class SingletonFastWheels {
                     params.put("city", vehicleData.getCity());
                     params.put("priceDay", "" + vehicleData.getPriceDay());
 
-                    return params;
+                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
             };
             volleyQueue.add(request);
@@ -405,7 +412,10 @@ public class SingletonFastWheels {
         if(!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
-            StringRequest request = new StringRequest(Request.Method.PUT, Constants.API_VEHICLES + "/delete?id=" + vehicleData.getId(), new Response.Listener<String>() {
+            StringRequest request = new StringRequest(
+                    Request.Method.PUT,
+                    Constants.API_VEHICLES + "/delete?id=" + vehicleData.getId(),
+                    new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
 
