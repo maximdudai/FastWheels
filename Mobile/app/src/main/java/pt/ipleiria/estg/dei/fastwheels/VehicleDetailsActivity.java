@@ -2,12 +2,17 @@ package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,13 +23,22 @@ import java.util.Locale;
 import pt.ipleiria.estg.dei.fastwheels.adapters.ImageListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
-    private TextView tvBrand, tvModel, tvYear, tvDoors, tvResidence, tvPostalCode, tvCity, tvAvailableFrom, tvAvailableTo;
+    private TextView tvBrand, tvModel, tvYear, tvDoors, tvResidence, tvPrice, tvPostalCode, tvCity, tvAvailableFrom, tvAvailableTo;
     private ListView lvImgVehicle;
     private Calendar calendarAvailableFrom, calendarAvailableTo;
+    private ArrayList<Uri> selectedImages;
+
+    private static final int REQUEST_MEDIA_PERMISSION = 100;
+    private static final int MAX_IMAGES = 3;
+
+    private GridLayout glImgVehicle;
+    private List<String> displayedImages = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +51,20 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         tvYear = findViewById(R.id.tvYear);
         tvDoors = findViewById(R.id.tvDoors);
         tvResidence = findViewById(R.id.tvResidence);
+        tvPrice = findViewById(R.id.tvPrice);
         tvPostalCode = findViewById(R.id.tvPostalCode);
         tvCity = findViewById(R.id.tvCity);
         tvAvailableFrom = findViewById(R.id.tvAvailableFrom);
         tvAvailableTo = findViewById(R.id.tvAvailableTo);
-        lvImgVehicle = findViewById(R.id.lvImgVehicle);
+        glImgVehicle = findViewById(R.id.glImgVehicle);
+
+        // Inicializando a lista de imagens
+        selectedImages = new ArrayList<>();
 
         // Configurar os calendários iniciais
         calendarAvailableFrom = Calendar.getInstance();
         calendarAvailableTo = (Calendar) calendarAvailableFrom.clone();
         calendarAvailableTo.add(Calendar.DAY_OF_MONTH, 1);
-
-        // Configurar os campos de data com o seletor de calendário
-        setupDatePickers();
 
         // Obter o ID do veículo passado pela Intent
         int vehicleId = getIntent().getIntExtra("VEHICLE_ID", -1);
@@ -71,46 +86,70 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void setupDatePickers() {
-        // Configurar o seletor de data para o campo AvailableFrom
-        etAvailableFrom.setOnClickListener(v ->
-                Helpers.showDatePickerDialog(this, etAvailableFrom, calendarAvailableFrom, (year, month, day) ->
-                        etAvailableFrom.setText(String.format(Locale.getDefault(), "%02d/%02d/%04d", day, month + 1, year))
-                )
-        );
+    private void refreshImageContainer() {
+        System.out.println("--->DEBUG refreshImageContainer called");
 
-        // Configurar o seletor de data para o campo AvailableTo
-        etAvailableTo.setOnClickListener(v ->
-                Helpers.showDatePickerDialog(this, etAvailableTo, calendarAvailableTo, (year, month, day) ->
-                        etAvailableTo.setText(String.format(Locale.getDefault(), "%02d/%02d/%04d", day, month + 1, year))
-                )
-        );
+        // Limpa as imagens exibidas e o container visual
+        displayedImages.clear();
+        glImgVehicle.removeAllViews();
+
+        for (Uri uri : selectedImages) {
+            // Verifica se a imagem já foi exibida
+            if (!displayedImages.contains(uri.toString())) {
+                displayedImages.add(uri.toString());
+
+                // Cria um novo ImageView
+                ImageView imageView = new ImageView(this); // Use 'this' como contexto
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+
+                // Define tamanho fixo para largura e altura
+                params.width = 600; // Largura fixa
+                params.height = 600; // Altura fixa
+                params.setMargins(8, 8, 8, 8); // Margem entre imagens
+                imageView.setLayoutParams(params);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); // Centraliza e corta
+
+                // Carrega a imagem usando Glide
+                Glide.with(this) // Use 'this' como contexto
+                        .load(uri)
+                        .error(R.drawable.gallery_icon)
+                        .into(imageView);
+
+                // Adiciona a imagem ao container
+                glImgVehicle.addView(imageView);
+            } else {
+                System.out.println("--->DEBUG nothing to show");
+            }
+        }
     }
 
     private void populateVehicleDetails(Vehicle vehicle) {
-        etBrand.setText(vehicle.getCarBrand());
-        etModel.setText(vehicle.getCarModel());
-        etYear.setText(String.valueOf(vehicle.getCarYear()));
-        etDoors.setText(String.valueOf(vehicle.getCarDoors()));
+        // Preencher os campos principais
+        tvBrand.setText(vehicle.getCarBrand());
+        tvModel.setText(vehicle.getCarModel());
+        tvYear.setText(String.valueOf(vehicle.getCarYear()));
+        tvDoors.setText(String.valueOf(vehicle.getCarDoors()));
+        tvResidence.setText(vehicle.getAddress());
+        tvPrice.setText(String.valueOf(vehicle.getPriceDay() + "€"));
+        tvPostalCode.setText(vehicle.getPostalCode());
+        tvCity.setText(vehicle.getCity());
 
-        // Preencher os campos de localização
-        etResidence.setText(vehicle.getAddress());
-        etPostalCode.setText(vehicle.getPostalCode());
-        etCity.setText(vehicle.getCity());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        tvAvailableFrom.setText(dateFormat.format(vehicle.getAvailableFrom()));
+        tvAvailableTo.setText(dateFormat.format(vehicle.getAvailableTo()));
 
-        // Formatar as datas antes de exibir
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        etAvailableFrom.setText(dateFormat.format(vehicle.getAvailableFrom()));
-        etAvailableTo.setText(dateFormat.format(vehicle.getAvailableTo()));
+        // Preencher as imagens
+        selectedImages.clear(); // Limpa a lista antes de preencher
+        if (vehicle.getVehiclePhotos() != null) {
+            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+                String photoUrl = photo.getPhotoUrl();
+                if (photoUrl != null && !photoUrl.isEmpty()) {
+                    selectedImages.add(Uri.parse(photoUrl)); // Adiciona o URI à lista
+                }
+            }
+        }
 
-        // Exemplo de lista de imagens
-        List<Integer> imageList = new ArrayList<>();
-        imageList.add(R.drawable.car_test);
-        imageList.add(R.drawable.car_test);
-        imageList.add(R.drawable.car_test);
-
-        // Configurar o adaptador
-        ImageListAdapter adapter = new ImageListAdapter(this, imageList);
-        lvImgVehicle.setAdapter(adapter);
+        // Atualizar o container de imagens
+        refreshImageContainer();
     }
 }

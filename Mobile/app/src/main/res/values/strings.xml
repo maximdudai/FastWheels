@@ -37,7 +37,7 @@
     <string name="vehicle_list_modelo">"Modelo: "</string>
     <string name="vehicle_list_ano">"Ano: "</string>
     <string name="vehicle_list_n_portas">"Nº de portas: "</string>
-    <string name="vehicle_list_estado">"Estado: "</string>
+    <string name="vehicle_list_estado">"Preço: "</string>
     <string name="vehicle_form_cidade">Cidade</string>
     <string name="vehicle_image">Fotos do veículo</string>
     <string name="ndopen">ndOpen</string>
@@ -45,4 +45,14 @@
     <string name="vehicle_form_lista_foto_adicionada">Lista fotografia(s) adicionadas</string>
     <string name="dialog_enter_value">Enter value</string>
     <string name="vehicle_list_address">Local:</string>
+    <string name="vehicle_details_price">Preço Dia</string>
+    <string name="vehicle_details_brand">Marca</string>
+    <string name="vehicle_details_model">Modelo</string>
+    <string name="vehicle_details_year">Ano</string>
+    <string name="vehicle_details_doors">Nº de portas</string>
+    <string name="vehicle_details_address">Morada Completa</string>
+    <string name="vehicle_details_postal_code">Código Postal</string>
+    <string name="vehicle_details_city">Cidade</string>
+    <string name="vehicle_details_available_from">Disponível de</string>
+    <string name="vehicle_details_available_to">Disponível até</string>
 </resources>
