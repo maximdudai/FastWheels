@@ -208,6 +208,7 @@ class ClientsController extends ActiveController
 
         $modelClient = Client::findOne($id);
         $modelUser = User::findOne(['id' => $id]);
+        
 
         $getUserToken = $modelUser->verification_token;
 
@@ -225,7 +226,7 @@ class ClientsController extends ActiveController
         $modelUser->username = $receivedUser['name'] ?? $modelUser->username;
         $modelUser->email = $receivedUser['email'] ?? $modelUser->email;
 
-        if($receivedUser['password']) {
+        if(isset($receivedUser['password'])) {
             $modelUser->setPassword($receivedUser['password']);
             $modelUser->generateAuthKey();
         }
