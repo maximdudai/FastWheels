@@ -6,8 +6,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +18,9 @@ import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
+import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
+import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
 
 public class SingletonFastWheels {
 
@@ -31,6 +36,7 @@ public class SingletonFastWheels {
 
     // listeners
     private LoginListener loginListener;
+    private VehicleListener vehicleListener;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -92,6 +98,20 @@ public class SingletonFastWheels {
             System.err.println("Erro ao adicionar veículo!");
         }
         return auxVehicle.getId();
+    }
+
+    public void addVehiclesDb(ArrayList<Vehicle> vehicles) {
+        if (vehicleDbHelper == null) {
+            return;
+        }
+
+        for (Vehicle v : vehicles) {
+            vehicleDbHelper.removeVehicleDb(v.getId());
+        }
+
+        for (Vehicle v: vehicles){
+            addVehicleDb(v);
+        }
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
@@ -197,6 +217,159 @@ public class SingletonFastWheels {
     //region #Profile
 
 
+
+    //endregion
+
+    //region #Vechicle API
+    public void addVehicleAPI (final Vehicle vehicleData, final Context context){
+        if(!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(Request.Method.POST, Constants.API_VEHICLES + "/create", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    addVehicleDb(VehicleParser.parseVehicleData(response));
+
+                    if (vehicleListener != null)
+                        vehicleListener.onRefreshVehicle();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("id", "" + vehicleData.getId());
+                    params.put("clientId", "" + vehicleData.getClientId());
+                    params.put("carBrand", vehicleData.getCarBrand());
+                    params.put("carModel", vehicleData.getCarModel());
+                    params.put("carYear", "" + vehicleData.getCarYear());
+                    params.put("carDoors", "" + vehicleData.getCarDoors());
+                    params.put("status", "" + vehicleData.isStatus());
+                    params.put("availableFrom", "" + vehicleData.getAvailableFrom());
+                    params.put("availableTo", "" + vehicleData.getAvailableTo());
+                    params.put("address", vehicleData.getAddress());
+                    params.put("postalCode", vehicleData.getPostalCode());
+                    params.put("city", vehicleData.getCity());
+                    params.put("priceDay", "" + vehicleData.getPriceDay());
+
+                    return params;
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+    public void getVehiclesAPI(final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+
+            if (vehicleListener != null)
+                vehicleListener.onRefreshVehicle();
+        } else {
+            JsonArrayRequest Jsonrequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    Constants.API_VEHICLES,
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+
+                            addVehiclesDb(VehicleParser.parseVehiclesData(response));
+
+                            if (vehicleListener != null)
+                                vehicleListener.onRefreshVehicle();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            volleyQueue.add(Jsonrequest);
+        }
+    }
+
+
+    public void editVehicleAPI (final Vehicle vehicleData, final Context context){
+        if(!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(Request.Method.PUT, Constants.API_VEHICLES + "/" + vehicleData.getId(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    editVehicleDb(VehicleParser.parseVehicleData(response));
+//                    addVehicleDb(VehicleParser.parseVehicleData(response));
+
+                    if (vehicleListener != null)
+                        vehicleListener.onRefreshVehicle();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("id", "" + vehicleData.getId());
+                    params.put("clientId", "" + vehicleData.getClientId());
+                    params.put("carBrand", vehicleData.getCarBrand());
+                    params.put("carModel", vehicleData.getCarModel());
+                    params.put("carYear", "" + vehicleData.getCarYear());
+                    params.put("carDoors", "" + vehicleData.getCarDoors());
+                    params.put("status", "" + vehicleData.isStatus());
+                    params.put("availableFrom", "" + vehicleData.getAvailableFrom());
+                    params.put("availableTo", "" + vehicleData.getAvailableTo());
+                    params.put("address", vehicleData.getAddress());
+                    params.put("postalCode", vehicleData.getPostalCode());
+                    params.put("city", vehicleData.getCity());
+                    params.put("priceDay", "" + vehicleData.getPriceDay());
+
+                    return params;
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+    public void removeVehicleAPI (final Vehicle vehicleData, final Context context){
+        if(!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(Request.Method.PUT, Constants.API_VEHICLES + "/delete?id=" + vehicleData.getId(), new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    removeVehicleDb(vehicleData.getId());
+
+                    if (vehicleListener != null)
+                        vehicleListener.onRefreshVehicle();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            volleyQueue.add(request);
+        }
+    }
+
+
+
+    public void setVehicleListener(VehicleListener vehicleListener){
+        this.vehicleListener = vehicleListener;
+    }
 
     //endregion
 }
