@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
+import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 
 public class SingletonFastWheels {
 
@@ -171,6 +173,9 @@ public class SingletonFastWheels {
             public void onResponse(String response) {
                 loggedUser =  LoginParser.parseLoginData(response);
 
+                generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                loggedUser.setBase64token(base64Token);
+
                 if (loginListener != null)
                     loginListener.onValidateLogin(loggedUser, context);
             }
@@ -239,7 +244,10 @@ public class SingletonFastWheels {
             @Override
             public Map<String, String> getHeaders()  {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Basic Zm91c2VyOnF3ZWFzZHp4Yw==");  // Add a token if required
+
+                generateBase64 base64Token = new generateBase64(user.getName(), user.getPassword());
+                Log.d("SINGLETON", "token: " + base64Token.getBase64Token());
+                headers.put("Authorization", base64Token.getBase64Token());  // Add a token if required
                 return headers;
             }
         };

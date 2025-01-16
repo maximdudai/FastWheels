@@ -1,5 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels.parsers;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,6 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.fastwheels.model.User;
+import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 
 public class LoginParser {
 
@@ -25,9 +28,9 @@ public class LoginParser {
             String balance = fetchData.getString("balance");
             String iban = fetchData.getString("iban");
 
-            System.out.println("------> userData: " + fetchData);
 
             userData = new User(token, id, name, email, phone, balance, iban);
+
         } catch (JSONException e) {
             e.printStackTrace();
 

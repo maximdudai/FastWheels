@@ -216,14 +216,14 @@ class ClientsController extends ActiveController
         }
 
         // Atualiza os dados do cliente
-        $modelClient->name = $receivedUser['name'];
-        $modelClient->email = $receivedUser['email'];
+        $modelClient->name = $receivedUser['name'] ?? $modelClient->name;
+        $modelClient->email = $receivedUser['email'] ?? $modelClient->email;
         $modelClient->phone = $receivedUser['phone'] ?? $modelClient->phone;
         $modelClient->iban = $receivedUser['iban'] ?? $modelClient->iban;
         $modelClient->balance = $receivedUser['balance'] ?? $modelClient->balance;
 
-        $modelUser->username = $receivedUser['name'];
-        $modelUser->email = $receivedUser['email'];
+        $modelUser->username = $receivedUser['name'] ?? $modelUser->username;
+        $modelUser->email = $receivedUser['email'] ?? $modelUser->email;
 
         if($receivedUser['password']) {
             $modelUser->setPassword($receivedUser['password']);
