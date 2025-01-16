@@ -5,6 +5,7 @@ import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +22,7 @@ import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
-    private EditText etBrand, etModel, etYear, etDoors, etResidence, etPostalCode, etCity, etAvailableFrom, etAvailableTo;
+    private TextView tvBrand, tvModel, tvYear, tvDoors, tvResidence, tvPostalCode, tvCity, tvAvailableFrom, tvAvailableTo;
     private ListView lvImgVehicle;
     private Calendar calendarAvailableFrom, calendarAvailableTo;
 
@@ -31,15 +32,15 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vehicle_details);
 
         // Referências para os campos da UI
-        etBrand = findViewById(R.id.etBrand);
-        etModel = findViewById(R.id.etModel);
-        etYear = findViewById(R.id.etYear);
-        etDoors = findViewById(R.id.etDoors);
-        etResidence = findViewById(R.id.etResidence);
-        etPostalCode = findViewById(R.id.etPostalCode);
-        etCity = findViewById(R.id.etCity);
-        etAvailableFrom = findViewById(R.id.etAvailableFrom);
-        etAvailableTo = findViewById(R.id.etAvailableTo);
+        tvBrand = findViewById(R.id.tvBrand);
+        tvModel = findViewById(R.id.tvModel);
+        tvYear = findViewById(R.id.tvYear);
+        tvDoors = findViewById(R.id.tvDoors);
+        tvResidence = findViewById(R.id.tvResidence);
+        tvPostalCode = findViewById(R.id.tvPostalCode);
+        tvCity = findViewById(R.id.tvCity);
+        tvAvailableFrom = findViewById(R.id.tvAvailableFrom);
+        tvAvailableTo = findViewById(R.id.tvAvailableTo);
         lvImgVehicle = findViewById(R.id.lvImgVehicle);
 
         // Configurar os calendários iniciais
