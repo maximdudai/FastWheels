@@ -91,7 +91,7 @@
             android:padding="16dp">
 
             <ImageView
-                android:layout_width="30dp"
+                android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/change_current_phone"
