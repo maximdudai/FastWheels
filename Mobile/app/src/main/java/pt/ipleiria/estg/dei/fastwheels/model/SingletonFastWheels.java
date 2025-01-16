@@ -266,11 +266,15 @@ public class SingletonFastWheels {
             }
 
             @Override
-            public Map<String, String> getHeaders()  {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
+                generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
 
-                generateBase64 base64Token = new generateBase64(user.getName(), user.getPassword());
-                headers.put("Authorization", base64Token.getBase64Token());  // Add a token if required
+                Log.e("SINGLETON", "profile: " + loggedUser.getName() + " - " + loggedUser.getPassword());
+                Log.e("SINGLETON", "token: " + base64Token.getBase64Token());
+
+                headers.put("Authorization", base64Token.getBase64Token());
+                headers.put("Content-Type", "application/json; charset=UTF-8");
                 return headers;
             }
         };

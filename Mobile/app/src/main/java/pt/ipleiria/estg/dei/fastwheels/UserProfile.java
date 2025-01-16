@@ -37,6 +37,9 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
 
         findViewById(R.id.changeCurrentEmail).setOnClickListener(v -> showDialog("Update Email", "Enter your new email", "email"));
         findViewById(R.id.changeCurrentPassword).setOnClickListener(v -> showDialog("Update Password", "Enter your new password", "password"));
+        findViewById(R.id.changeCurrentIban).setOnClickListener(v -> showDialog("Update IBAN", "Enter your new IBAN", "iban"));
+        findViewById(R.id.changeCurrentPhone).setOnClickListener(v -> showDialog("Update Phone Number", "Enter your new phone number", "phone"));
+
 
         //
         SingletonFastWheels.getInstance(getApplicationContext()).setProfileListener(this);
@@ -72,16 +75,21 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
         switch (type) {
             case "email":
                 user.setEmail(input);
-                SingletonFastWheels.getInstance(getApplicationContext()).setUser(user);
                 break;
             case "password":
                 user.setPassword(input);
-                SingletonFastWheels.getInstance(getApplicationContext()).setUser(user);
+                break;
+            case "iban":
+                user.setIban(input);
+                break;
+            case "phone":
+                user.setPhone(input);
                 break;
             default:
                 Toast.makeText(this, "Unknown type: " + input, Toast.LENGTH_SHORT).show();
         }
 
+        SingletonFastWheels.getInstance(getApplicationContext()).setUser(user);
         SingletonFastWheels.getInstance(getApplicationContext()).updateProfileAPI(user, getApplicationContext());
     }
 
