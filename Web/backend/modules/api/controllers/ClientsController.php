@@ -182,49 +182,24 @@ class ClientsController extends ActiveController
             'message' => 'Error creating user',
         ];
     }
+    
+    // public function beforeAction($action)
+    // {
+    //     if ($action->id == 'update') {
+    //         $receivedUser = \Yii::$app->request->post();
 
-    public function actionUpdate($id)
+    //         $user = User::find()->where(['id' => $receivedUser['id']])->one();
+
+    //         die( var_dump($user->attributes) );
+    //     }
+    //     return parent::beforeAction($action);
+    // }
+
+    public function actionUpdate()
     {
-        if (!\Yii::$app->request->isPut) {
-            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
-        }
-
-        $receivedUser = \Yii::$app->request->post();
-
-        $modelClient = Client::findOne($id);
-        $modelUser = User::findOne(['id' => $id]);
-
-        if (!$modelClient || !$modelUser) {
-            throw new \yii\web\NotFoundHttpException('User or client not found');
-        }
-
-        // Atualiza os dados do cliente
-        $modelClient->name = $receivedUser['username'] ?? $modelClient->name;
-        $modelClient->email = $receivedUser['email'] ?? $modelClient->email;
-        $modelClient->phone = $receivedUser['phone'] ?? $modelClient->phone;
-        $modelClient->iban = $receivedUser['iban'] ?? $modelClient->iban;
-        $modelClient->balance = $receivedUser['balance'] ?? $modelClient->balance;
-
-        // Atualiza os dados do usuário
-        $modelUser->username = $receivedUser['username'] ?? $modelUser->username;
-        $modelUser->email = $receivedUser['email'] ?? $modelUser->email;
-
-        if ($modelClient->save() && $modelUser->save()) {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            \Yii::$app->response->statusCode = 200;
-            return [
-                'status' => 'success',
-                'message' => 'User updated successfully',
-            ];
-        } else {
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            \Yii::$app->response->statusCode = 400;
-            return [
-                'status' => 'error',
-                'message' => 'Error updating user',
-            ];
-        }
+        die('Controller method reached');
     }
+    
 
     public function actionDelete($id)
     {

@@ -6,8 +6,8 @@ return [
             'class' => \yii\db\Connection::class,
             'dsn' => 'mysql:host=localhost;dbname=fastwheels',
             'username' => 'root',
-            'password' => 'FastWheels2024!@#',
-            // 'password' => '',
+            // 'password' => 'FastWheels2024!@#',
+            'password' => '',
             'charset' => 'utf8',
         ],
         'mailer' => [
