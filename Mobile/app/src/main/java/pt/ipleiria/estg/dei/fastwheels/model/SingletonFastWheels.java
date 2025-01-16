@@ -246,7 +246,6 @@ public class SingletonFastWheels {
                 Map<String, String> headers = new HashMap<>();
 
                 generateBase64 base64Token = new generateBase64(user.getName(), user.getPassword());
-                Log.d("SINGLETON", "token: " + base64Token.getBase64Token());
                 headers.put("Authorization", base64Token.getBase64Token());  // Add a token if required
                 return headers;
             }
