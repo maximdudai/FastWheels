@@ -51,12 +51,12 @@ class VehiclesController extends ActiveController
 
   public function actionList()
   {
-    return UserCar::find()->all();
+    return UserCar::find()->where(['status' => 0])->all();
   }
 
   public function actionIndex($id)
   {
-    return UserCar::findOne($id);
+    return UserCar::find()->where(['status' => 0]);
   }
 
   public function actionCreate()
