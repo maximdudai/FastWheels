@@ -20,8 +20,10 @@
     <string name="profile_name">Profile Name</string>
     <string name="profileemail_gmail_com">profileemail@gmail.com</string>
     <string name="profile_logout">Log Out</string>
-    <string name="change_current_password">change current password</string>
-    <string name="change_current_email">Change current email</string>
+    <string name="change_current_password">Change password</string>
+    <string name="change_current_iban">Change IBAN</string>
+    <string name="change_current_phone">Change Phone number</string>
+    <string name="change_current_email">Change email</string>
     <string name="assistance">Assistance</string>
     <string name="vehicle_form_marca">Marca</string>
     <string name="vehicle_form_modelo">Modelo</string>

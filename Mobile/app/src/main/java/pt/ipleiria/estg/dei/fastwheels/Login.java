@@ -108,6 +108,9 @@ public class Login extends AppCompatActivity implements LoginListener {
             editor.putString(Constants.KEY_EMAIL, user.getEmail());
             editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
 
+            //atualizar a pass do user
+            user.setPassword(userPassword.getText().toString());
+
             editor.apply();
 
             // Redirecionar para a MainActivity

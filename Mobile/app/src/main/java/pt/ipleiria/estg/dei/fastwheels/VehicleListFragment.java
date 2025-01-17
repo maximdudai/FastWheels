@@ -29,11 +29,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
+import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
 
-public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, VehicleListener {
 
     private ListView lvVehicles;
     private ArrayList<Vehicle> vehicleList;
@@ -91,6 +92,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
                 startActivity(intent);
             }
         });
+
+        SingletonFastWheels.getInstance(getContext()).setVehicleListener(this);
         return view;
     }
     @Override
@@ -265,5 +268,11 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefreshVehicle() {
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
     }
 }

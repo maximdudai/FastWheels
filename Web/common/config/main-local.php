@@ -4,15 +4,10 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'mysql:host=localhost;dbname=fastwheelstest',
+            'dsn' => 'mysql:host=localhost;dbname=fastwheels',
             'username' => 'root',
-<<<<<<< Updated upstream
-            // 'password' => 'FastWheels2024!@#',
-            'password' => '',
-=======
-            //'password' => 'FastWheels2024!@#',
-             'password' => '',
->>>>>>> Stashed changes
+            'password' => 'FastWheels2024!@#',
+            // 'password' => '',
             'charset' => 'utf8',
         ],
         'mailer' => [
