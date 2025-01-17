@@ -322,6 +322,7 @@ public class UserVehicleFormFragment extends Fragment {
     private void loadVehicleDataByID(int vehicleId) {
         SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
         Vehicle vehicle = singleton.getVehicleByIdBd(vehicleId);
+        System.out.println("--->API Form: getVehicleByIdBd(vehicleId)" + vehicle);
 
         if (vehicle != null) {
             ivEliminarVeiculo.setVisibility(View.VISIBLE);
@@ -401,6 +402,7 @@ public class UserVehicleFormFragment extends Fragment {
                 Helpers.showMessage(getContext(), "Veículo adicionado com sucesso!");
 
             } else {
+                System.out.println("--->API Form - savevehicle - entra edit");
                 singleton.editVehicleAPI(vehicle,getContext());
                 Helpers.showMessage(getContext(), "Veículo atualizado com sucesso!");
             }

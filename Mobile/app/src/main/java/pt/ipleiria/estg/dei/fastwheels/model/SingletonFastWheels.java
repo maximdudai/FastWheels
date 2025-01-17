@@ -340,6 +340,10 @@ public class SingletonFastWheels {
                             if (vehicle != null) {
                                 System.out.println("--->API addVehicleAPI_onResponse vehicle != null");
                                 addVehicleDb(vehicle);
+
+//                                // Adiciona o veículo, sincroniza os dados
+//                                getVehiclesAPI(context);
+
                                 if (vehicleListener != null) vehicleListener.onRefreshVehicle();
                             } else {
                                 System.out.println("--->API addVehicleAPI_onResponse vehicle null");
@@ -409,12 +413,14 @@ public class SingletonFastWheels {
                         @Override
                         public void onResponse(JSONArray response) {
                             System.out.println("--->API entra onResponse: " + response);
+
+//                            // Limpar todos os veículos no banco de dados local
+//                            vehicleDbHelper.clearAllVehicles();
+
                             addVehiclesDb(VehicleParser.parseVehiclesData(response));
                             System.out.println("--->API depois parse: " + response);
                             if (vehicleListener != null)
-                                System.out.println("--->API ativado listener ");
                                 vehicleListener.onRefreshVehicle();
-                            System.out.println("--->API ativado listener ");
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -477,21 +483,28 @@ public class SingletonFastWheels {
         if(!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
+            System.out.println("--->API editVehicleAPI_vehicleData.getId :" + vehicleData.getId());
             StringRequest request = new StringRequest(
                     Request.Method.PUT,
                     Constants.API_VEHICLES + "/update?id=" + vehicleData.getId(),
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-
-                    editVehicleDb(VehicleParser.parseVehicleData(response));
-
-                    if (vehicleListener != null)
-                        vehicleListener.onRefreshVehicle();
+                    Log.d("API_RESPONSE", response);
+                    Vehicle vehicle = VehicleParser.parseVehicleData(response);
+                    System.out.println("--->API editVehicleAPI_onResponse vehicleparse :" + vehicle);
+                    editVehicleDb(vehicle);
+                    if (vehicleListener != null) vehicleListener.onRefreshVehicle();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        System.out.println("--->API editVehicleAPI -> onErrorResponse() " + error);
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -504,7 +517,7 @@ public class SingletonFastWheels {
                     params.put("carModel", vehicleData.getCarModel());
                     params.put("carYear", "" + vehicleData.getCarYear());
                     params.put("carDoors", "" + vehicleData.getCarDoors());
-                    params.put("status", "" + vehicleData.isStatus());
+                    params.put("status", vehicleData.isStatus() ? "1" : "0");
                     params.put("availableFrom", "" + vehicleData.getAvailableFrom());
                     params.put("availableTo", "" + vehicleData.getAvailableTo());
                     params.put("address", vehicleData.getAddress());
@@ -513,6 +526,14 @@ public class SingletonFastWheels {
                     params.put("priceDay", "" + vehicleData.getPriceDay());
 
                     return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+                }
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
                 }
             };
             volleyQueue.add(request);

@@ -212,6 +212,11 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         cursor.close();
         return vehicles;
     }
+
+    public void clearAllVehicles() {
+        db.delete(TABLE_VEHICLES, null, null);
+    }
+
     //endregion
 
     //region METODOS GERIR VEHICLEPHOTO

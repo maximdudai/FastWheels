@@ -117,6 +117,9 @@ public class VehicleParser {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            System.err.println("Erro ao parsear os dados do veículo: " + e.getMessage());
+        }catch (IllegalArgumentException e) {
+            System.err.println("Formato inválido detectado: " + e.getMessage());
         }
 
         return vehicleData;
