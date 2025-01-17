@@ -62,6 +62,8 @@ public class VehicleListAdapter extends BaseAdapter {
             }
         }
 
+        System.out.println("adapter: " + vehicles);
+
         Vehicle vehicle = vehicles.get(position);
 
         if (layoutResourceId == R.layout.vehicle_list_item) {
@@ -77,27 +79,40 @@ public class VehicleListAdapter extends BaseAdapter {
 
     private class ViewHolderVehicle {
         private ImageView imgVehicle;
-        private TextView tvBrand, tvModel, tvYear, tvAddress, tvRating, tvTrips;
+        private TextView tvBrand, tvModel, tvDoors, tvAddress, tvPrice;
 
         public ViewHolderVehicle(View view) {
-            imgVehicle = view.findViewById(R.id.imgVehicle);
+            imgVehicle = view.findViewById(R.id.ivVehicle);
             tvBrand = view.findViewById(R.id.tvBrand);
             tvModel = view.findViewById(R.id.tvModel);
-            tvYear = view.findViewById(R.id.tvYear);
+            tvDoors = view.findViewById(R.id.tvDoors);
             tvAddress = view.findViewById(R.id.tvAddress);
-            tvRating = view.findViewById(R.id.tvRating);
-            tvTrips = view.findViewById(R.id.tvTrips);
+            tvPrice = view.findViewById(R.id.tvPrice);
         }
 
         public void update(Vehicle vehicle) {
-            imgVehicle.setImageResource(R.drawable.car_test);
+
+            if (!vehicle.getVehiclePhotos().isEmpty()) {
+                VehiclePhoto firstPhoto = vehicle.getVehiclePhotos().get(0);  // Get the first photo object
+                System.out.println("--->DEBUG firstPhoto: " + firstPhoto);
+                String photoUrl = firstPhoto.getPhotoUrl();  // Get the URL string
+                System.out.println("--->DEBUG photoUrl: " + photoUrl);
+                Uri photoUri = Uri.parse(photoUrl);
+
+                // Load the image using Glide
+                Glide.with(context)
+                        .load(photoUri)  // Pass the URI object
+                        .placeholder(R.drawable.gallery_icon)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imgVehicle);
+            }
             tvBrand.setText(vehicle.getCarBrand());
             tvModel.setText(vehicle.getCarModel());
-            tvYear.setText(String.valueOf(vehicle.getCarYear()));
-            tvAddress.setText(vehicle.getAddress());
+            tvDoors.setText(String.valueOf(vehicle.getCarDoors()));
+            tvAddress.setText(vehicle.getCity());
+            tvPrice.setText(String.format("%.2f€", vehicle.getPriceDay()));
 
-            tvRating.setText("0.0"); // Replace
-            tvTrips.setText("0 trips"); // Replace
+
         }
     }
 

@@ -1,56 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 
     <LinearLayout
-        android:id="@+id/layoutMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/secondary_color"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle_form_marca"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etBrand"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/white"
-            android:textColor="@android:color/white" />
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle_form_modelo"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/white"
-            android:textColor="@android:color/white" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_details_brand"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
+            </LinearLayout>
+
+            <!-- Modelo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_details_model"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <!-- Ano e Número de Portas -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Ano -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vehicle_details_year"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="4"
+                    android:inputType="number"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+            </LinearLayout>
+
+            <!-- Número de Portas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/vehicle_details_doors"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvDoors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:ems="2"
+                    android:inputType="number"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+            </LinearLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,21 +158,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/vehicle_form_ano"
+                    android:text="@string/vehicle_details_address"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-
                 <EditText
-                    android:id="@+id/etYear"
+                    android:id="@+id/tvResidence"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
                     android:backgroundTint="@color/white"
-                    android:ems="4"
-                    android:inputType="number"
-                    android:textColor="@android:color/white" />
+                    android:scrollHorizontally="true"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
 
             </LinearLayout>
 
@@ -96,184 +186,192 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text="@string/vehicle_form_n_portas"
+                    android:text="@string/vehicle_details_price"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etDoors"
+                    android:id="@+id/tvPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
-                    android:ems="2"
-                    android:inputType="number"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <!-- Codigo Postal e Cidade -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Codigo Postal -->
+            <LinearLayout
+                android:id="@+id/layoutCp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/vehicle_details_postal_code"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvPostalCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="8"
+                    android:inputType="textPostalAddress"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
+            </LinearLayout>
+
+            <!-- Cidade-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/vehicle_details_city"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@android:color/white"
+                    android:focusable="false"
+                    android:clickable="false" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Localização -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle_form_morada"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etResidence"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/white"
-            android:scrollHorizontally="true"
-            android:textColor="@android:color/white"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
-
+        <!-- Disponível de e Disponível até -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/vehicle_form_codigo_postal"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <!-- Disponível de -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etPostalCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/white"
-            android:ems="8"
-            android:inputType="textPostalAddress"
-            android:textColor="@android:color/white" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_details_available_from"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvAvailableFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:clickable="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <!-- Disponível até -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/vehicle_details_available_to"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tvAvailableTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:clickable="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
-
+        <!-- TV Lista fotografia -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:text="@string/vehicle_form_cidade"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etCity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:textColor="@android:color/white" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle_form_disponivel_de"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etAvailableFrom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/white"
-            android:clickable="true"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="Selecione a data"
-            android:inputType="none"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:text="@string/vehicle_form_disponivel_ate"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etAvailableTo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:clickable="true"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="Selecione a data"
-            android:inputType="none"
-            android:textColor="@android:color/white" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
             android:text="Fotos do Veículo:"
-            android:textColor="#CCCCCC"
-            android:textSize="14sp" />
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <ListView
-            android:id="@+id/lvImgVehicle"
+        <!-- Lista fotografias -->
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp"
-            android:focusable="true"
-            android:focusableInTouchMode="false" />
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+
+            <GridLayout
+                android:id="@+id/glImgVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:rowCount="1"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="30dp"/>
+        </HorizontalScrollView>
+
+        <!-- Botão Alugar -->
+        <Button
+            android:id="@+id/btnRent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@android:color/holo_orange_dark"
+            android:padding="12dp"
+            android:text="Rent"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </ScrollView>

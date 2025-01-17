@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,8 +22,10 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
@@ -31,6 +34,7 @@ import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
 
@@ -95,20 +99,12 @@ public class SingletonFastWheels {
     }
 
     // Adicionar veículo ao banco de dados e à lista
-    public long addVehicleDb(Vehicle vehicle) {
+    public void addVehicleDb(Vehicle vehicle) {
         if (vehicleDbHelper == null) {
-            return -1;  // Se nao estiver inicializado sai
+            return;  // Se nao estiver inicializado sai
         }
 
-        Vehicle auxVehicle = vehicleDbHelper.addVehicleDb(vehicle); // Adicionar à bd através do Helper
-
-        if (auxVehicle != null) {
-            vehicles.add(auxVehicle); // Adicionar à lista local
-            System.out.println("Veículo adicionado com sucesso!");
-        } else {
-            System.err.println("Erro ao adicionar veículo!");
-        }
-        return auxVehicle.getId();
+        vehicleDbHelper.addVehicleDb(vehicle); // Adicionar à bd através do Helper
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
@@ -131,27 +127,25 @@ public class SingletonFastWheels {
         }
     }
 
+
     // Carregar todos os veículos do banco de dados
     public ArrayList<Vehicle> getVehiclesDb() {
-        if (vehicles == null || vehicles.isEmpty()) {
-            vehicles = vehicleDbHelper.getAllVehiclesDb();
-        }
+
+        vehicles = vehicleDbHelper.getAllVehiclesDb();
         return new ArrayList<>(vehicles); // Retorna uma nova lista para proteger os dados originais
     }
 
-    public void addVehiclesDb(ArrayList<Vehicle> vehicles) {
-        if (vehicleDbHelper == null) {
-            return;
-        }
+    public void addVehiclesDb(ArrayList<Vehicle> vehiclesAPI) {
+        if (vehicleDbHelper == null) return;
 
-        for (Vehicle v : vehicles) {
-            vehicleDbHelper.removeVehicleDb(v.getId());
-        }
+        vehicleDbHelper.clearAllVehicles();
 
-        for (Vehicle v: vehicles){
-            addVehicleDb(v);
+        for(Vehicle v: vehicles) {
+            vehicleDbHelper.addVehicleDb(v);
         }
     }
+
+
 
     // TODO - CONFIRMAR SE É NECESSARIO
     // Consultar veículos por marca
@@ -298,13 +292,13 @@ public class SingletonFastWheels {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("API_RESPONSE", response);
                             Vehicle vehicle = VehicleParser.parseVehicleData(response);
+
                             if (vehicle != null) {
                                 addVehicleDb(vehicle);
-                                if (vehicleListener != null) vehicleListener.onRefreshVehicle();
-                            } else {
-                                Log.e("API_RESPONSE", "Failed to parse vehicle data.");
+
+                                if (vehicleListener != null)
+                                    vehicleListener.onRefreshVehicle();
                             }
                         }
                     },
@@ -319,8 +313,8 @@ public class SingletonFastWheels {
                             Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }) {
-                @Override
-                public byte[] getBody() {
+                    @Override
+                    public byte[] getBody() {
                     Map<String, String> params = new HashMap<>();
                     params.put("clientId", String.valueOf(vehicleData.getClientId()));
                     params.put("carBrand", vehicleData.getCarBrand());
@@ -328,13 +322,13 @@ public class SingletonFastWheels {
                     params.put("carYear", String.valueOf(vehicleData.getCarYear()));
                     params.put("carDoors", String.valueOf(vehicleData.getCarDoors()));
                     params.put("status", String.valueOf(!vehicleData.isStatus() ? 0 : 1));
-                    params.put("createdAt", "2024-11-22 01:53:32");
                     params.put("availableFrom", String.valueOf(vehicleData.getAvailableFrom()));
                     params.put("availableTo",String.valueOf(vehicleData.getAvailableTo()));
                     params.put("address", vehicleData.getAddress());
                     params.put("postalCode", vehicleData.getPostalCode());
                     params.put("city", vehicleData.getCity());
                     params.put("priceDay", String.valueOf(vehicleData.getPriceDay()));
+                    params.put("createdAt", Helpers.getCurrentDateTime());
 
                     return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
@@ -351,8 +345,6 @@ public class SingletonFastWheels {
             volleyQueue.add(request);
         }
     }
-
-
     public void getVehiclesAPI(final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
@@ -360,28 +352,80 @@ public class SingletonFastWheels {
             if (vehicleListener != null)
                 vehicleListener.onRefreshVehicle();
         } else {
-            JsonArrayRequest Jsonrequest = new JsonArrayRequest(
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(
                     Request.Method.GET,
                     Constants.API_VEHICLES,
                     null,
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
+                            vehicleDbHelper.clearAllVehicles();
 
-                            addVehiclesDb(VehicleParser.parseVehiclesData(response));
+                            vehicles = VehicleParser.parseVehiclesData(response);
 
-                            if (vehicleListener != null)
-                                vehicleListener.onRefreshVehicle();
+                            //make a loop only if there is vehicles on API
+                            if(!vehicles.isEmpty()) {
+                                for(Vehicle veh: vehicles) {
+                                    vehicleDbHelper.addVehicleDb(veh);
+                                }
+                                if (vehicleListener != null)
+                                    vehicleListener.onRefreshVehicle();
+                            }
                         }
                     }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            );
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String errorMsg = (error.getMessage() != null) ? error.getMessage() : "An unexpected error occurred.";
+                    Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
 
-            volleyQueue.add(Jsonrequest);
+            volleyQueue.add(jsonRequest);
+        }
+    }
+
+
+    public void getVehicleByIdAPI(final int vehicleId, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+
+            if (vehicleListener != null)
+                vehicleListener.onRefreshVehicle();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.GET,
+                    Constants.API_VEHICLES + "/index?id=" + vehicleId,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            Vehicle vehicle = VehicleParser.parseVehicleData(response);
+
+                            if (vehicle != null) {
+                                if (vehicleListener != null)
+                                    vehicleListener.onRefreshVehicle();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (vehicleListener != null) {
+                        vehicleListener.onRefreshVehicle();
+                    }
+                }
+            }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
+            volleyQueue.add(request);
         }
     }
 
@@ -390,22 +434,28 @@ public class SingletonFastWheels {
         if(!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
+            System.out.println("--->API editVehicleAPI_vehicleData.getId :" + vehicleData.getId());
             StringRequest request = new StringRequest(
                     Request.Method.PUT,
                     Constants.API_VEHICLES + "/update?id=" + vehicleData.getId(),
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-
-                    editVehicleDb(VehicleParser.parseVehicleData(response));
-//                    addVehicleDb(VehicleParser.parseVehicleData(response));
-
-                    if (vehicleListener != null)
-                        vehicleListener.onRefreshVehicle();
+                    Log.d("API_RESPONSE", response);
+                    Vehicle vehicle = VehicleParser.parseVehicleData(response);
+                    System.out.println("--->API editVehicleAPI_onResponse vehicleparse :" + vehicle);
+                    editVehicleDb(vehicle);
+                    if (vehicleListener != null) vehicleListener.onRefreshVehicle();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        System.out.println("--->API editVehicleAPI -> onErrorResponse() " + error);
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }) {
@@ -418,7 +468,7 @@ public class SingletonFastWheels {
                     params.put("carModel", vehicleData.getCarModel());
                     params.put("carYear", "" + vehicleData.getCarYear());
                     params.put("carDoors", "" + vehicleData.getCarDoors());
-                    params.put("status", "" + vehicleData.isStatus());
+                    params.put("status", vehicleData.isStatus() ? "1" : "0");
                     params.put("availableFrom", "" + vehicleData.getAvailableFrom());
                     params.put("availableTo", "" + vehicleData.getAvailableTo());
                     params.put("address", vehicleData.getAddress());
@@ -428,23 +478,31 @@ public class SingletonFastWheels {
 
                     return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
             };
             volleyQueue.add(request);
         }
     }
 
-    public void removeVehicleAPI (final Vehicle vehicleData, final Context context){
+    public void removeVehicleAPI (final int vehicleId, final Context context){
         if(!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
         } else {
             StringRequest request = new StringRequest(
                     Request.Method.PUT,
-                    Constants.API_VEHICLES + "/delete?id=" + vehicleData.getId(),
+                    Constants.API_VEHICLES + "/delete?id=" + vehicleId,
                     new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
 
-                    removeVehicleDb(vehicleData.getId());
+                    removeVehicleDb(vehicleId);
 
                     if (vehicleListener != null)
                         vehicleListener.onRefreshVehicle();

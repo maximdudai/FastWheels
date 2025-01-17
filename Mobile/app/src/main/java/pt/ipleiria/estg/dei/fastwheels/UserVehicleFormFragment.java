@@ -99,6 +99,7 @@ public class UserVehicleFormFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             int vehicleId = args.getInt("VEHICLE_ID", -1); // -1 é o valor padrão caso não encontre o ID
+            System.out.println("--->API Entrou em saveVehicle(), vehicleId = " + vehicleId);
             if (vehicleId != -1) {
                 loadVehicleDataByID(vehicleId);
                 ivEliminarVeiculo.setOnClickListener(v -> removeVehicle(vehicleId));
@@ -319,7 +320,9 @@ public class UserVehicleFormFragment extends Fragment {
     //endregion
 
     private void loadVehicleDataByID(int vehicleId) {
-        Vehicle vehicle = SingletonFastWheels.getInstance(getContext()).getVehicleByIdBd(vehicleId);
+        SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
+        Vehicle vehicle = singleton.getVehicleByIdBd(vehicleId);
+        System.out.println("--->API Form: getVehicleByIdBd(vehicleId)" + vehicle);
 
         if (vehicle != null) {
             ivEliminarVeiculo.setVisibility(View.VISIBLE);
@@ -399,10 +402,9 @@ public class UserVehicleFormFragment extends Fragment {
                 Helpers.showMessage(getContext(), "Veículo adicionado com sucesso!");
 
             } else {
-                boolean updatedVehicle = singleton.editVehicleDb(vehicle);
-                if(updatedVehicle) {
-                    Helpers.showMessage(getContext(), "Veículo atualizado com sucesso!");
-                }
+                System.out.println("--->API Form - savevehicle - entra edit");
+                singleton.editVehicleAPI(vehicle,getContext());
+                Helpers.showMessage(getContext(), "Veículo atualizado com sucesso!");
             }
 
             for (Uri uri : selectedImages) {
@@ -439,7 +441,7 @@ public class UserVehicleFormFragment extends Fragment {
                 .setMessage("Pretende eliminar o registo deste veículo?")
                 .setPositiveButton("Sim", (dialog, which) -> {
                     SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
-                    singleton.removeVehicleDb(vehicleId);
+                    singleton.removeVehicleAPI(vehicleId, getContext());
                     Helpers.showMessage(getContext(), "Veículo e fotos eliminados com sucesso!");
 
                     if (getActivity() instanceof UserVehicles) {

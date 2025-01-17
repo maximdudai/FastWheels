@@ -27,7 +27,6 @@
             android:layout_gravity="right"
             android:visibility="gone"/>
 
-        <!-- Marca e Modelo -->
         <LinearLayout
             android:id="@+id/layoutMarcaModelo"
             android:layout_width="match_parent"
@@ -36,7 +35,6 @@
             android:baselineAligned="false"
             android:orientation="horizontal">
 
-            <!-- Marca -->
             <LinearLayout
                 android:id="@+id/layoutMarca"
                 android:layout_width="match_parent"

@@ -31,19 +31,22 @@ import java.util.ArrayList;
 import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 
 public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, VehicleListener {
 
     private ListView lvVehicles;
-    private ArrayList<Vehicle> vehicleList;
+    private ArrayList<Vehicle> vehicleList, vehiclesToShow;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchView;
     private Integer appliedCarDoors;
     private String availableFrom;
     private String availableTo;
     private String locationFilter;
+    private User loggedUser;
 
     public VehicleListFragment() {
         // Construtor padrão necessário
@@ -71,7 +74,12 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         }
 
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
+        SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
+        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
+
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
 
         appliedCarDoors = null;
         availableFrom = null;
@@ -79,12 +87,12 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         locationFilter = null;
 
         // Configuração da ListView
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
 
         lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Vehicle selectedVehicle = vehicleList.get(position); // Obter o veículo selecionado
+                Vehicle selectedVehicle = vehiclesToShow.get(position); // Obter o veículo selecionado
                 showMessage(getContext(), "Clicked position: " + position + ", ID: " + id);
 
                 Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
@@ -170,27 +178,30 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
 
     private void reloadListWithoutFilters() {
-        // Obter todos os veículos sem filtros
-        ArrayList<Vehicle> allVehicles = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
 
         // Atualizar o adaptador da ListView com todos os veículos
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), allVehicles, R.layout.vehicle_list_item));
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
     }
 
 
     private void filterByCarDoors(int doors) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
-        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+        for (Vehicle v : vehiclesToShow) {
             if (v.getCarDoors() == doors) {
                 filteredList.add(v);
             }
         }
+
+
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), filteredList, R.layout.vehicle_list_item));
     }
 
     private void filterByAvailableFrom(Timestamp startDate) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
-        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+        for (Vehicle v : vehiclesToShow) {
             if (v.getAvailableFrom().after(startDate)) {
                 filteredList.add(v);
             }
@@ -200,7 +211,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
     private void filterByAvailableTo(Timestamp endDate) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
-        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+        for (Vehicle v : vehiclesToShow) {
             if (v.getAvailableTo().before(endDate)) {
                 filteredList.add(v);
             }
@@ -210,7 +221,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
     private void filterByLocation(String location) {
         ArrayList<Vehicle> filteredList = new ArrayList<>();
-        for (Vehicle v : SingletonFastWheels.getInstance(getContext()).getVehiclesDb()) {
+        for (Vehicle v : vehiclesToShow) {
 
             if ((v.getAddress() != null && v.getAddress().toLowerCase().contains(location.toLowerCase())) ||
                     (v.getPostalCode() != null && v.getPostalCode().toLowerCase().contains(location.toLowerCase())) ||
@@ -261,18 +272,23 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         datePickerDialog.show();
     }
 
-
     @Override
     public void onRefresh() {
         // Atualiza a lista ao realizar "pull to refresh"
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
+        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
+
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onRefreshVehicle() {
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
+        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
+
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
     }
 }
