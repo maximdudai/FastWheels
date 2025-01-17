@@ -16,7 +16,7 @@ import java.util.List;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     private final SQLiteDatabase db;
 
@@ -102,6 +102,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         values.put(PRICE_DAY, vehicle.getPriceDay().toPlainString());
 
         long id = db.insert(TABLE_VEHICLES, null, values); //long: verificar operação for bem-sucedida
+        System.out.println("--->API addVehicleDb_Valor retornado por db.insert = " + id);
         if (id > -1) { //db.insert retorna -1 quando falha
             // Criar um novo objeto Vehicle com o ID gerado
             Vehicle newVehicle = new Vehicle(
@@ -127,8 +128,10 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                     addPhotoDb(photo);
                 }
             }
+            System.out.println("--->API addVehicleDb - sucesso: " + newVehicle);
             return newVehicle;
         }
+        System.out.println("--->API addVehicleDb - insucesso: ");
         return null; // Retorna null em caso de falha
     }
 

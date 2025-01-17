@@ -72,6 +72,7 @@ public class VehicleParser {
 
         try {
             JSONObject fetchData = new JSONObject(response);
+            System.out.println("--->API parseVehicleData" + fetchData);
 
             int id = fetchData.getInt("id");
             int clientId = fetchData.getInt("clientId");
