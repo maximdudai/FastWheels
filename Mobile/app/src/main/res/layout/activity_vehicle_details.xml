@@ -368,6 +368,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@android:color/holo_orange_dark"
+            android:onClick="handleRentVehicle"
             android:padding="12dp"
             android:text="Rent"
             android:textColor="@android:color/white"

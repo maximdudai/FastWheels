@@ -163,7 +163,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Recarregar a lista sem filtros
         reloadListWithoutFilters();
 
-        // Exibir uma mensagem para o usuário
+        // Exibir uma mensagem para o user
         showMessage(getContext(), "Filtros removidos");
     }
 

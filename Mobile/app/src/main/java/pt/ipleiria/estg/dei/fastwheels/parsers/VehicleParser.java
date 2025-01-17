@@ -65,52 +65,6 @@ public class VehicleParser {
         return vehiclesData;
     }
 
-
-    public static Vehicle parseVehicleData (String response) {
-
-        Vehicle vehicleData = null;
-
-        try {
-            JSONObject fetchData = new JSONObject(response);
-
-            int id = fetchData.getInt("id");
-            int clientId = fetchData.getInt("clientId");
-            String carBrand = fetchData.getString("carBrand");
-            String carModel = fetchData.getString("carModel");
-            int carYear = fetchData.getInt("carYear");
-            int carDoors = fetchData.getInt("carDoors");
-            boolean status = fetchData.getInt("status") == 1;
-            Timestamp availableFrom = Timestamp.valueOf(fetchData.getString("availableFrom"));
-            Timestamp availableTo = Timestamp.valueOf(fetchData.getString("availableTo"));
-            String address = fetchData.getString("address");
-            String postalCode = fetchData.getString("postalCode");
-            String city = fetchData.getString("city");
-            BigDecimal priceDay = new BigDecimal(fetchData.getString("priceDay"));
-            JSONArray photosArray = fetchData.getJSONArray("vehiclePhotos");
-
-            List<VehiclePhoto> vehiclePhotos = new ArrayList<>();
-            for (int i = 0; i < photosArray.length(); i++) {
-                JSONObject photoJson = photosArray.getJSONObject(i);
-
-                int Id = photoJson.getInt("Id");
-                int carId = photoJson.getInt("carId");
-                String photoUrl = photoJson.getString("photoUrl");
-
-                vehiclePhotos.add(new VehiclePhoto(Id, carId, photoUrl));
-            }
-
-            vehicleData = new Vehicle(id, clientId, carBrand, carModel,
-                    carYear, carDoors, status, availableFrom,
-                    availableTo, address, postalCode, city, priceDay, vehiclePhotos);
-
-
-        }catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return vehicleData;
-    }
-
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();

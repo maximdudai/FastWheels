@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Nome Completo -->
+        <EditText
+            android:id="@+id/et_nome_completo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:hint="Nome Completo"
+            android:minHeight="48dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FFFFFF"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+        <!-- Contacto -->
+        <EditText
+            android:id="@+id/et_contacto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FFFFFF"
+            android:hint="Contacto (+351)"
+            android:inputType="phone"
+            android:minHeight="48dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+        <!-- Localização -->
+        <EditText
+            android:id="@+id/et_localizacao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FFFFFF"
+            android:hint="Localização"
+            android:minHeight="48dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+        <!-- Opção Seguro -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Opção Seguro"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp"/>
+
+        <RadioGroup
+            android:id="@+id/rg_opcao_seguro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_seguro_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Seguro 1"
+                android:textColor="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/rb_seguro_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Seguro 2"
+                android:textColor="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/rb_seguro_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Seguro 3"
+                android:textColor="#FFFFFF" />
+        </RadioGroup>
+
+
+        <!-- Data Inicio and Data Fim -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:weightSum="2">
+
+            <EditText
+                android:id="@+id/et_data_inicio"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
+                android:hint="Data Início"
+                android:inputType="date"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="0dp"/>
+
+            <EditText
+                android:id="@+id/et_data_fim"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#FFFFFF"
+                android:hint="Data Fim"
+                android:inputType="date"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+        </LinearLayout>
+
+        <!-- Metodo de pagamento -->
+        <RadioGroup
+            android:id="@+id/rg_opcao_pagamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_pagamento_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="PayPal"
+                android:textColor="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/rb_pagamento_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MB Way"
+                android:textColor="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/rb_pagamento_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Credit Card"
+                android:textColor="#FFFFFF" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnConfirmReservation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="handleConfirmReservation"
+            android:text="RESERVATE VEHICLE" />
+    </LinearLayout>
+</ScrollView>
