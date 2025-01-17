@@ -151,4 +151,25 @@ public class Vehicle {
     public void setVehiclePhotos(List<VehiclePhoto> vehiclePhotos) {
         this.vehiclePhotos = vehiclePhotos;
     }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", clientId=" + clientId +
+                ", carBrand='" + carBrand + '\'' +
+                ", carModel='" + carModel + '\'' +
+                ", carYear=" + carYear +
+                ", carDoors=" + carDoors +
+                ", createdAt=" + createdAt +
+                ", status=" + status +
+                ", availableFrom=" + availableFrom +
+                ", availableTo=" + availableTo +
+                ", address='" + address + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                ", priceDay=" + priceDay +
+                ", vehiclePhotos=" + vehiclePhotos +
+                '}';
+    }
 }
