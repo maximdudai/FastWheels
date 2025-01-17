@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/secondary_color">
@@ -8,120 +10,141 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/secondary_color">
+        android:orientation="horizontal">
 
-        <!-- Imagem Veículo -->
         <ImageView
-            android:id="@+id/imgVehicle"
+            android:id="@+id/ivVehicle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.35"
+            android:src="@drawable/car"
             android:scaleType="centerCrop"
-            android:src="@drawable/car_test" />
+            android:contentDescription="@string/vehicle_image"/>
 
-        <!-- Informações do veículo -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.65"
             android:orientation="vertical">
 
-            <!-- Marca -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvBrand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Audi"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
+                    android:text="@string/vehicle_list_marca"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="BMW [ex]"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_list_modelo"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvModel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="A4 B5"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="200d [ex]"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
             </LinearLayout>
 
-            <!-- Ano -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvYear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="11/1998"
-                    android:textColor="#B0B0B0"
-                    android:textSize="14sp" />
+                    android:text="@string/vehicle_list_n_portas"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDoors"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="5 [ex]"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
             </LinearLayout>
 
-            <!-- Localização -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imgLocation"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/location"
-                    android:contentDescription="Location Icon" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vehicle_list_address"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="Leiria, Portugal"
-                    android:textColor="#B0B0B0"
-                    android:textSize="14sp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Leiria [ex]"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
             </LinearLayout>
 
-            <!-- Rating e trips -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6.0"
-                    android:textColor="#FFEB3B"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:id="@+id/imgStar"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginStart="4dp"
-                    android:src="@drawable/star_favorite"
-                    android:tint="#FFEB3B"
-                    android:contentDescription="Rating Star" />
+                    android:text="@string/vehicle_list_estado"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvTrips"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="120 trips"
-                    android:textColor="#B0B0B0"
-                    android:textSize="14sp" />
+                    android:id="@+id/tvPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="5€ [ex]"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
