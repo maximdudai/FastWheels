@@ -71,7 +71,12 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         }
 
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
+
+
+        SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+
+        System.out.println("---API list + " + vehicleList);
 
         appliedCarDoors = null;
         availableFrom = null;

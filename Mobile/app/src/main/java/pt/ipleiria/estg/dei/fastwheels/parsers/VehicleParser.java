@@ -19,52 +19,64 @@ import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 
 public class VehicleParser {
 
-    public static ArrayList<Vehicle> parseVehiclesData (JSONArray response) {
+    public static ArrayList<Vehicle> parseVehiclesData(JSONArray response) {
         ArrayList<Vehicle> vehiclesData = new ArrayList<>();
 
         try {
             for (int i = 0; i < response.length(); i++) {
-                JSONObject fetchData = (JSONObject) response.get(i);
+                JSONObject fetchData = response.getJSONObject(i);
 
-                int id = fetchData.getInt("id");
-                int clientId = fetchData.getInt("clientId");
-                String carBrand = fetchData.getString("carBrand");
-                String carModel = fetchData.getString("carModel");
-                int carYear = fetchData.getInt("carYear");
-                int carDoors = fetchData.getInt("carDoors");
-                boolean status = fetchData.getInt("status") == 1;
-                Timestamp availableFrom = Timestamp.valueOf(fetchData.getString("availableFrom"));
-                Timestamp availableTo = Timestamp.valueOf(fetchData.getString("availableTo"));
-                String address = fetchData.getString("address");
-                String postalCode = fetchData.getString("postalCode");
-                String city = fetchData.getString("city");
-                BigDecimal priceDay = new BigDecimal(fetchData.getString("priceDay"));
-                JSONArray photosArray = fetchData.getJSONArray("vehiclePhotos");
+                // Extracting vehicle details
+                int id = fetchData.optInt("id", -1);
+                int clientId = fetchData.optInt("clientId", -1);
+                String carBrand = fetchData.optString("carBrand", "");
+                String carModel = fetchData.optString("carModel", "");
+                int carYear = fetchData.optInt("carYear", 0);
+                int carDoors = fetchData.optInt("carDoors", 0);
+                boolean status = fetchData.optInt("status", 0) == 1;
+                String availableFromStr = fetchData.optString("availableFrom", null);
+                String availableToStr = fetchData.optString("availableTo", null);
+                String address = fetchData.optString("address", "");
+                String postalCode = fetchData.optString("postalCode", "");
+                String city = fetchData.optString("city", "");
+                String priceDayStr = fetchData.optString("priceDay", "0.0");
 
+                // Convert strings to Timestamp and BigDecimal
+                Timestamp availableFrom = (availableFromStr != null) ? Timestamp.valueOf(availableFromStr) : null;
+                Timestamp availableTo = (availableToStr != null) ? Timestamp.valueOf(availableToStr) : null;
+                BigDecimal priceDay = new BigDecimal(priceDayStr);
+
+                // Parsing photos array
+                JSONArray photosArray = fetchData.optJSONArray("vehiclePhotos");
                 List<VehiclePhoto> vehiclePhotos = new ArrayList<>();
-                for (int j = 0; j < photosArray.length(); j++) {
-                    JSONObject photoJson = photosArray.getJSONObject(j);
+                if (photosArray != null) {
+                    for (int j = 0; j < photosArray.length(); j++) {
+                        JSONObject photoJson = photosArray.getJSONObject(j);
 
-                    int Id = photoJson.getInt("Id");
-                    int carId = photoJson.getInt("carId");
-                    String photoUrl = photoJson.getString("photoUrl");
+                        int photoId = photoJson.optInt("Id", -1);
+                        int carId = photoJson.optInt("carId", -1);
+                        String photoUrl = photoJson.optString("photoUrl", "");
 
-                    vehiclePhotos.add(new VehiclePhoto(Id, carId, photoUrl));
+                        vehiclePhotos.add(new VehiclePhoto(photoId, carId, photoUrl));
+                    }
                 }
 
-                Vehicle auxVehicleData = new Vehicle(id, clientId, carBrand, carModel,
-                        carYear, carDoors, status, availableFrom,
-                        availableTo, address, postalCode, city, priceDay,vehiclePhotos);
+                // Add the vehicle to the list
+                Vehicle auxVehicleData = new Vehicle(id, clientId, carBrand, carModel, carYear,
+                        carDoors, status, availableFrom, availableTo, address, postalCode, city, priceDay, vehiclePhotos);
 
                 vehiclesData.add(auxVehicleData);
             }
-        }catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException e) {
+            System.err.println("Error parsing vehicles data: " + e.getMessage());
+        }
+
+        if (vehiclesData.isEmpty()) {
+            System.err.println("No vehicles parsed from response.");
         }
 
         return vehiclesData;
     }
-
 
     public static Vehicle parseVehicleData(String response) {
         Vehicle vehicleData = null;

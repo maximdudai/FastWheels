@@ -18,12 +18,15 @@ import java.util.ArrayList;
 import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
 public class UserVehicleListFragment extends Fragment implements VehicleListener {
 
     private ListView lvVehicles;
-    private ArrayList<Vehicle> vehicleList;
+    private ArrayList<Vehicle> vehicleList = null, vehiclesToShow = null;
+
+    private User loggedUser;
 
     public UserVehicleListFragment() {
         // Required empty public constructor
@@ -34,20 +37,33 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
-        SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
+        // Configurar o FloatingActionButton
+        FloatingActionButton fabSaveVehicle = view.findViewById(R.id.fabSaveVehicle);
+        fabSaveVehicle.setVisibility(View.VISIBLE); // Torna o botão visível
+        fabSaveVehicle.setOnClickListener(v -> {
+            // Navega para o formulário do UserVehicle
+            if (getActivity() instanceof UserVehicles) {
+                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment(),"UserVehicleFormFragment");
+            }
+        });
 
+        SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
         //VehicleListener
         singleton.setVehicleListener(this);
 
         // Configuração da ListView
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         singleton.getVehiclesAPI(getContext());
-        vehicleList = new ArrayList<>();
+        loggedUser = singleton.getUser();
+        vehicleList = singleton.getVehiclesDb();
+        vehiclesToShow = new ArrayList<Vehicle>();
 
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
+        // mostrar apenas a lista dos meus veiculos
+        vehiclesToShow = vehiclesToShowForRent();
 
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
         lvVehicles.setOnItemClickListener((adapterView, itemView, position, id) -> {
-            Vehicle selectedVehicle = vehicleList.get(position); // Obter o veículo selecionado
+            Vehicle selectedVehicle = vehiclesToShow.get(position); // Obter o veículo selecionado
 
             UserVehicleFormFragment formFragment = new UserVehicleFormFragment();
 
@@ -58,18 +74,7 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
 
             // Navegar para o formulário
             if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(formFragment,"UserVehicleFormFragment");
-            }
-        });
-
-
-        // Configurar o FloatingActionButton
-        FloatingActionButton fabSaveVehicle = view.findViewById(R.id.fabSaveVehicle);
-        fabSaveVehicle.setVisibility(View.VISIBLE); // Torna o botão visível
-        fabSaveVehicle.setOnClickListener(v -> {
-            // Navega para o formulário do UserVehicle
-            if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment(),"UserVehicleFormFragment");
+                ((UserVehicles) getActivity()).loadFragment(formFragment, "UserVehicleFormFragment");
             }
         });
 
@@ -83,12 +88,23 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
 
     @Override
     public void onRefreshVehicle() {
-        System.out.println("--->API entra onRefreshVehicle ");
-        // Recarrega a lista de veículos do banco de dados (sincronizado c/ API)
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        System.out.println("--->API vehicleList: " + vehicleList);
-        // Atualiza o adaptador da ListView
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
-        System.out.println("--->API lvVehicles: " + vehicleList);
+        vehiclesToShow = vehiclesToShowForRent();
+
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
+    }
+
+    private ArrayList<Vehicle> vehiclesToShowForRent() {
+
+        ArrayList<Vehicle> auxVehicle = new ArrayList<>();
+
+        for(Vehicle car: vehicleList) {
+            if(car.getClientId() == loggedUser.getId()) {
+                auxVehicle.add(car);
+            }
+        }
+        return auxVehicle;
     }
 }
