@@ -20,6 +20,7 @@ import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class UserVehicleListFragment extends Fragment implements VehicleListener {
 
@@ -59,7 +60,7 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         vehiclesToShow = new ArrayList<Vehicle>();
 
         // mostrar apenas a lista dos meus veiculos
-        vehiclesToShow = vehiclesToShowForRent();
+        vehiclesToShow = Helpers.filterVehicleListByPersonal(loggedUser, vehicleList);
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
         lvVehicles.setOnItemClickListener((adapterView, itemView, position, id) -> {
@@ -91,20 +92,8 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
 
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow = vehiclesToShowForRent();
+        vehiclesToShow = Helpers.filterVehicleListByPersonal(loggedUser, vehicleList);
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
-    }
-
-    private ArrayList<Vehicle> vehiclesToShowForRent() {
-
-        ArrayList<Vehicle> auxVehicle = new ArrayList<>();
-
-        for(Vehicle car: vehicleList) {
-            if(car.getClientId() == loggedUser.getId()) {
-                auxVehicle.add(car);
-            }
-        }
-        return auxVehicle;
     }
 }

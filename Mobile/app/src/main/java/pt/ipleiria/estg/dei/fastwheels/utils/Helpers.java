@@ -9,11 +9,16 @@ import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
+import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
 public class Helpers {
 
@@ -182,4 +187,26 @@ public class Helpers {
         return dateTimeFormat.format(new Date());
     }
 
+    public static ArrayList<Vehicle> filterVehicleListByPersonal(User loggedUser, ArrayList<Vehicle> vehicleList) {
+
+        ArrayList<Vehicle> auxVehicle = new ArrayList<>();
+
+        for(Vehicle car: vehicleList) {
+            if(car.getClientId() == loggedUser.getId()) {
+                auxVehicle.add(car);
+            }
+        }
+        return auxVehicle;
+    }
+    public static ArrayList<Vehicle> filterVehicleByNotPersonal(User loggedUser, ArrayList<Vehicle> vehicleList) {
+
+        ArrayList<Vehicle> auxVehicle = new ArrayList<>();
+
+        for(Vehicle car: vehicleList) {
+            if(car.getClientId() != loggedUser.getId()) {
+                auxVehicle.add(car);
+            }
+        }
+        return auxVehicle;
+    }
 }

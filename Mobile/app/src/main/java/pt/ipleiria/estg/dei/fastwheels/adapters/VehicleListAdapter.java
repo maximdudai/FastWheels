@@ -62,6 +62,8 @@ public class VehicleListAdapter extends BaseAdapter {
             }
         }
 
+        System.out.println("adapter: " + vehicles);
+
         Vehicle vehicle = vehicles.get(position);
 
         if (layoutResourceId == R.layout.vehicle_list_item) {
