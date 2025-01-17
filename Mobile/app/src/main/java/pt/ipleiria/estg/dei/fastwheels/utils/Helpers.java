@@ -177,4 +177,9 @@ public class Helpers {
         return true;
     }
 
+    public static String getCurrentDateTime() {
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.forLanguageTag("pt-PT"));
+        return dateTimeFormat.format(new Date());
+    }
+
 }

@@ -34,12 +34,16 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
+        SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
+
         //VehicleListener
-        SingletonFastWheels.getInstance(getContext()).setVehicleListener(this);
+        singleton.setVehicleListener(this);
 
         // Configuração da ListView
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
-        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        singleton.getVehiclesAPI(getContext());
+        vehicleList = new ArrayList<>();
+
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
 
         lvVehicles.setOnItemClickListener((adapterView, itemView, position, id) -> {
@@ -79,10 +83,12 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
 
     @Override
     public void onRefreshVehicle() {
-        // Recarrega a lista de veículos do banco de dados
+        System.out.println("--->API entra onRefreshVehicle ");
+        // Recarrega a lista de veículos do banco de dados (sincronizado c/ API)
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-
+        System.out.println("--->API vehicleList: " + vehicleList);
         // Atualiza o adaptador da ListView
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.item_vehicle));
+        System.out.println("--->API lvVehicles: " + vehicleList);
     }
 }

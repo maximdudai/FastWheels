@@ -65,6 +65,64 @@ public class VehicleParser {
         return vehiclesData;
     }
 
+
+    public static Vehicle parseVehicleData(String response) {
+        Vehicle vehicleData = null;
+
+        try {
+            JSONObject fetchData = new JSONObject(response);
+
+            int id = fetchData.optInt("id", -1);
+            int clientId = fetchData.optInt("clientId", -1);
+            String carBrand = fetchData.optString("carBrand");
+            String carModel = fetchData.optString("carModel");
+            int carYear = fetchData.optInt("carYear", 0);
+            int carDoors = fetchData.optInt("carDoors", 0);
+            boolean status = fetchData.optInt("status", 0) == 1;
+
+            String availableFromStr = fetchData.optString("availableFrom");
+            Timestamp availableFrom = availableFromStr != null
+                    ? Timestamp.valueOf(availableFromStr)
+                    : null;
+
+            String availableToStr = fetchData.optString("availableTo");
+            Timestamp availableTo = availableToStr != null
+                    ? Timestamp.valueOf(availableToStr)
+                    : null;
+
+            String address = fetchData.optString("address");
+            String postalCode = fetchData.optString("postalCode");
+            String city = fetchData.optString("city", "");
+            BigDecimal priceDay = new BigDecimal(fetchData.optString("priceDay"));
+
+            List<VehiclePhoto> vehiclePhotos = new ArrayList<>();
+            if (fetchData.has("vehiclePhotos")) {
+                JSONArray photosArray = fetchData.getJSONArray("vehiclePhotos");
+                for (int i = 0; i < photosArray.length(); i++) {
+                    JSONObject photoJson = photosArray.getJSONObject(i);
+
+                    int photoId = photoJson.optInt("Id", -1);
+                    int carId = photoJson.optInt("carId", -1);
+                    String photoUrl = photoJson.optString("photoUrl", "");
+
+                    vehiclePhotos.add(new VehiclePhoto(photoId, carId, photoUrl));
+                }
+            }
+
+            vehicleData = new Vehicle(id, clientId, carBrand, carModel, carYear, carDoors, status,
+                    availableFrom, availableTo, address, postalCode, city,
+                    priceDay, vehiclePhotos);
+
+            System.out.println("Parsed Vehicle: " + vehicleData);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return vehicleData;
+    }
+
+
     public static boolean isConnectionInternet(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
