@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,11 +21,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import pt.ipleiria.estg.dei.fastwheels.adapters.ImageListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
-import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
@@ -40,7 +37,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
     private GridLayout glImgVehicle;
     private List<String> displayedImages = new ArrayList<>();
-    private int selectedVehicle = null;
+    private int selectedVehicle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,9 +153,9 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     }
 
     public void handleRentVehicle(View v) {
-        Intent toReservation = new Intent(this, ReserveVehicle.class);
-        toReservation.putExtra("SELECTED_VEHICLE", selectedVehicle);
-        startActivity(toReservation);
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new ReserveVehicleFragment(), "ReserveVehicleFragment") // Use FrameLayout ID
+                .addToBackStack(null)
+                .commit();
     }
 }

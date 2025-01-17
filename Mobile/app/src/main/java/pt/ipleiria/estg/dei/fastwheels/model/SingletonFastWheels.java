@@ -416,7 +416,6 @@ public class SingletonFastWheels {
                             addVehiclesDb(VehicleParser.parseVehiclesData(response));
                             System.out.println("--->API depois parse: " + response);
                             if (vehicleListener != null)
-                                System.out.println("--->API ativado listener ");
                                 vehicleListener.onRefreshVehicle();
                             System.out.println("--->API ativado listener ");
                         }
@@ -555,5 +554,5 @@ public class SingletonFastWheels {
         this.vehicleListener = vehicleListener;
     }
 
-    //endregion
+    //region #Reservation API
 }
