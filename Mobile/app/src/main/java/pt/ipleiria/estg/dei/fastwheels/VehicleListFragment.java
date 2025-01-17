@@ -261,7 +261,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         datePickerDialog.show();
     }
 
-
     @Override
     public void onRefresh() {
         // Atualiza a lista ao realizar "pull to refresh"
