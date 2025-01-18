@@ -5,25 +5,15 @@ import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
-import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {

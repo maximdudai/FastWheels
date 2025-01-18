@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +27,8 @@ import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 public class VehicleDetailsActivity extends AppCompatActivity {
 
     private TextView tvBrand, tvModel, tvYear, tvDoors, tvResidence, tvPrice, tvPostalCode, tvCity, tvAvailableFrom, tvAvailableTo;
-    private ListView lvImgVehicle;
     private Calendar calendarAvailableFrom, calendarAvailableTo;
     private ArrayList<Uri> selectedImages;
-
-    private static final int REQUEST_MEDIA_PERMISSION = 100;
-    private static final int MAX_IMAGES = 3;
 
     private GridLayout glImgVehicle;
     private List<String> displayedImages = new ArrayList<>();
