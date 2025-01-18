@@ -31,9 +31,11 @@ import java.util.Map;
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
+import pt.ipleiria.estg.dei.fastwheels.listeners.ReservationListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
+import pt.ipleiria.estg.dei.fastwheels.parsers.ReservationParser;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
@@ -44,6 +46,7 @@ public class SingletonFastWheels {
     private static SingletonFastWheels instance = null; // Instância única
 
     private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
+    private ReservationDbHelper reservationDbHelper = null;
 
     private User loggedUser = null;
 
@@ -54,6 +57,7 @@ public class SingletonFastWheels {
     private LoginListener loginListener;
     private ProfileListener profileListener;
     private VehicleListener vehicleListener;
+    private ReservationListener reservationListener;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -77,6 +81,7 @@ public class SingletonFastWheels {
     private SingletonFastWheels(Context context) {
         vehicles = new ArrayList<>();
         vehicleDbHelper = new VehicleDbHelper(context);
+        reservationDbHelper = new ReservationDbHelper(context);
     }
 
     // region get/set user
@@ -126,13 +131,15 @@ public class SingletonFastWheels {
             System.err.println("Erro ao remover veículo!");
         }
     }
+    public void removeVehiclesDb() {
+        vehicleDbHelper.clearAllVehicles();
+    }
 
 
     // Carregar todos os veículos do banco de dados
     public ArrayList<Vehicle> getVehiclesDb() {
-
         vehicles = vehicleDbHelper.getAllVehiclesDb();
-        return new ArrayList<>(vehicles); // Retorna uma nova lista para proteger os dados originais
+        return vehicles;
     }
 
     public void addVehiclesDb(ArrayList<Vehicle> vehiclesAPI) {
@@ -359,14 +366,15 @@ public class SingletonFastWheels {
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            vehicleDbHelper.clearAllVehicles();
+                            removeVehiclesDb();
 
+                            vehicles.clear();
                             vehicles = VehicleParser.parseVehiclesData(response);
 
                             //make a loop only if there is vehicles on API
                             if(!vehicles.isEmpty()) {
                                 for(Vehicle veh: vehicles) {
-                                    vehicleDbHelper.addVehicleDb(veh);
+                                    addVehicleDb(veh);
                                 }
                                 if (vehicleListener != null)
                                     vehicleListener.onRefreshVehicle();
@@ -524,4 +532,77 @@ public class SingletonFastWheels {
     }
 
     //region #Reservation API
+
+    public void addReservationDB(Reservation reservation) {
+        if (reservationDbHelper == null) {
+            return;  // Se nao estiver inicializado sai
+        }
+
+        reservationDbHelper.addReservationDB(reservation); // Adicionar à bd através do Helper
+    }
+
+    public void addReservationAPI(final Reservation reservationData, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.POST,
+                    Constants.API_RESERVATION + "/create",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Reservation reservation = ReservationParser.parseReservationData(response);
+
+                            if (reservation != null) {
+                                addReservationDB(reservation);
+
+                                if(reservationListener != null)
+                                    reservationListener.onReservationUpdate(reservation, context.getApplicationContext());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null) {
+                                String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                                Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                                Log.e("API_ERROR", "Response Data: " + responseData);
+                            }
+                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+                @Override
+                public byte[] getBody() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("clientId", String.valueOf(reservationData.getClientId()));
+                    params.put("carId", String.valueOf(reservationData.getCarId()));
+                    params.put("dateStart", String.valueOf(reservationData.getDateEnd()));
+                    params.put("dateEnd",String.valueOf(reservationData.getDateEnd()));
+                    params.put("value", String.valueOf(reservationData.getValue()));
+                    params.put("feeValue", String.valueOf(reservationData.getFeeValue()));
+                    params.put("carValue", String.valueOf(reservationData.getCarValue()));
+
+                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+                }
+
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+
+    public void setReservationListener(ReservationListener reservationListener){
+        this.reservationListener = reservationListener;
+    }
+
+    // endregion
 }

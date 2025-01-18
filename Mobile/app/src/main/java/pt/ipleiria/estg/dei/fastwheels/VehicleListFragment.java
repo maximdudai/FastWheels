@@ -65,10 +65,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Find the toolbar in the fragment's layout
         Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
 
-        // Set the Toolbar as the ActionBar
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
 
-        // Optional: Set a title or navigation icon
         if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
             ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -77,9 +75,10 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
         loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
 
-        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        vehiclesToShow = vehicleList = new ArrayList<>();
+
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
+        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
         appliedCarDoors = null;
         availableFrom = null;
@@ -92,8 +91,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
                 Vehicle selectedVehicle = vehiclesToShow.get(position); // Obter o veículo selecionado
-                showMessage(getContext(), "Clicked position: " + position + ", ID: " + id);
 
                 Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
                 intent.putExtra("VEHICLE_ID", selectedVehicle.getId());
@@ -180,7 +179,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     private void reloadListWithoutFilters() {
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
+        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
         // Atualizar o adaptador da ListView com todos os veículos
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
@@ -277,7 +276,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Atualiza a lista ao realizar "pull to refresh"
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
+        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
         swipeRefreshLayout.setRefreshing(false);
@@ -287,7 +286,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     public void onRefreshVehicle() {
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList);
+        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
     }

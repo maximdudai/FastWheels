@@ -86,7 +86,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
 
     //region METODOS GERIR VEHICLE
-    public Vehicle addVehicleDb(Vehicle vehicle) {
+    public void addVehicleDb(Vehicle vehicle) {
+
         ContentValues values = new ContentValues();
         values.put(CLIENT_ID, vehicle.getClientId());
         values.put(CAR_BRAND, vehicle.getCarBrand());
@@ -125,7 +126,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
             }
         }
         System.out.println("--->API addVehicleDb - sucesso: " + newVehicle.toString());
-        return newVehicle;
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
@@ -207,6 +207,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
 
     public void clearAllVehicles() {
+        System.out.println("---API removed from local db vehicles");
         db.delete(TABLE_VEHICLES, null, null);
     }
 
@@ -250,8 +251,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
 
                 photos.add(new VehiclePhoto(id, carId, url));
             } while (cursor.moveToNext());
-        } else {
-            System.out.println("---> Debug: No photos found for Vehicle ID: " + vehicleId);
         }
 
         cursor.close();

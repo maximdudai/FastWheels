@@ -26,7 +26,7 @@ public class VehicleListAdapter extends BaseAdapter {
 
     private static Context context;
     private LayoutInflater inflater;
-    private ArrayList<Vehicle> vehicles;
+    private ArrayList<Vehicle> vehicles = null;
     private int layoutResourceId; // Layout a ser utilizado
 
     public VehicleListAdapter(Context context, ArrayList<Vehicle> vehicles, int layoutResourceId) {
@@ -61,10 +61,9 @@ public class VehicleListAdapter extends BaseAdapter {
                 convertView.setTag(new ViewHolderUserVehicle(convertView));
             }
         }
-
-        System.out.println("adapter: " + vehicles);
-
         Vehicle vehicle = vehicles.get(position);
+
+        System.out.println("--->adapter vehpos: " + vehicle.toString());
 
         if (layoutResourceId == R.layout.vehicle_list_item) {
             ViewHolderVehicle viewHolder = (ViewHolderVehicle) convertView.getTag();

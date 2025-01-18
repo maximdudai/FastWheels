@@ -53,14 +53,16 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         singleton.setVehicleListener(this);
 
         // Configuração da ListView
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         singleton.getVehiclesAPI(getContext());
         loggedUser = singleton.getUser();
         vehicleList = singleton.getVehiclesDb();
-        vehiclesToShow = new ArrayList<Vehicle>();
+
 
         // mostrar apenas a lista dos meus veiculos
-        vehiclesToShow = Helpers.filterVehicleListByPersonal(loggedUser, vehicleList);
+        vehiclesToShow.addAll(Helpers.filterVehicleListByPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
         lvVehicles.setOnItemClickListener((adapterView, itemView, position, id) -> {
@@ -92,7 +94,7 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
 
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow = Helpers.filterVehicleListByPersonal(loggedUser, vehicleList);
+        vehiclesToShow.addAll(Helpers.filterVehicleListByPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
     }

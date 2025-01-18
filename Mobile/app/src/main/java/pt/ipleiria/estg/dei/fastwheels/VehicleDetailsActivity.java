@@ -153,8 +153,13 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     }
 
     public void handleRentVehicle(View v) {
+        ReserveVehicleFragment fragment = new ReserveVehicleFragment();
+        Bundle args = new Bundle();
+        args.putInt("vehicleId", selectedVehicle);
+        fragment.setArguments(args);
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new ReserveVehicleFragment(), "ReserveVehicleFragment") // Use FrameLayout ID
+                .replace(R.id.fragment_container, fragment, "ReserveVehicleFragment")
                 .addToBackStack(null)
                 .commit();
     }

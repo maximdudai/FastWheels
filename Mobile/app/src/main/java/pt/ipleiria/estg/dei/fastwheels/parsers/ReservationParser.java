@@ -21,16 +21,15 @@ public class ReservationParser {
             int clientId = fetchData.getInt("clientId");
             int carId = fetchData.getInt("carId");
 
-            Timestamp dateStart = Timestamp.valueOf(fetchData.getString("dateStart"));
-            Timestamp dateEnd = Timestamp.valueOf(fetchData.getString("dateEnd"));
-            Timestamp createAt = Timestamp.valueOf(fetchData.getString("createAt"));
+            String dateStart = fetchData.getString("dateStart");
+            String dateEnd = fetchData.getString("dateEnd");
 
             int filled = fetchData.getInt("filled");
             double value = fetchData.getDouble("value");
             double feeValue = fetchData.getDouble("feeValue");
             double carValue = fetchData.getDouble("carValue");
 
-            reservationData = new Reservation(id, clientId, carId, dateStart, dateEnd, createAt, filled, value, feeValue, carValue);
+            reservationData = new Reservation(id, clientId, carId, dateStart, dateEnd, filled, value, feeValue, carValue);
 
         } catch (JSONException e) {
             e.printStackTrace();
