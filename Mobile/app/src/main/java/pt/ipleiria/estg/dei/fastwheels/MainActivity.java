@@ -28,7 +28,7 @@ import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte;
+    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goVeiculosFavoritos;
     TextView tvMainLoggedName, tvMainLoggedEmail;
 
     @Override
@@ -98,6 +98,15 @@ public class MainActivity extends AppCompatActivity {
         goVeiculosDisponiveis.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserVehicles.class);
             intent.putExtra("TAG_Vehicle", "VehicleListFragment");
+            startActivity(intent);
+        });
+
+        // VeiculosFavoritos
+        goVeiculosFavoritos = findViewById(R.id.layoutMainFavoritos);
+        goVeiculosFavoritos.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            intent.putExtra("TAG_Vehicle", "VehicleListFragment");
+            intent.putExtra("SHOW_FAVORITES", true);
             startActivity(intent);
         });
 

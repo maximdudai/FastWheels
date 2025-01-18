@@ -27,8 +27,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
+import pt.ipleiria.estg.dei.fastwheels.model.FavoriteDbHelper;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
@@ -51,48 +53,34 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         // Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
-        // Configuração do SwipeRefreshLayout
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
 
-        // Configuracao do Toolbar
-        // Find the toolbar in the fragment's layout
-        Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
-
-        // Set the Toolbar as the ActionBar
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
-
-        // Optional: Set a title or navigation icon
-        if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
+        // Configuração da ListView
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
-        appliedCarDoors = null;
-        availableFrom = null;
-        availableTo = null;
-        locationFilter = null;
+        // Recupera o sinalizador para mostrar favoritos
+        boolean showFavorites = requireActivity().getIntent().getBooleanExtra("SHOW_FAVORITES", false);
+        if (showFavorites) {
+            List<Long> favoriteCarIds = getFavoriteCarIds(); // IDs favoritos do banco
+            showFavorites(favoriteCarIds);
+        } else {
+            toggleFavorites(false, null);
+        }
 
-        // Configuração da ListView
-        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
-
-        lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Vehicle selectedVehicle = vehicleList.get(position); // Obter o veículo selecionado
-                showMessage(getContext(), "Clicked position: " + position + ", ID: " + id);
-
-                Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
-                intent.putExtra("VEHICLE_ID", selectedVehicle.getId());
-                startActivity(intent);
-            }
+        // Configuração do clique nos itens da ListView
+        lvVehicles.setOnItemClickListener((adapterView, view1, position, id) -> {
+            Vehicle selectedVehicle = vehicleList.get(position); // Veículo selecionado
+            Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
+            intent.putExtra("VEHICLE_ID", selectedVehicle.getId());
+            startActivity(intent);
         });
+
         return view;
     }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
@@ -257,6 +245,35 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         });
         datePickerDialog.show();
     }
+
+    private List<Long> getFavoriteCarIds() {
+        long clientId = SingletonFastWheels.getInstance(getContext()).getClientId();
+        FavoriteDbHelper dbHelper = new FavoriteDbHelper(getContext());
+        return dbHelper.getFavoriteCarIdsByClientId(clientId);
+    }
+
+
+    public void showFavorites(List<Long> favoriteCarIds) {
+        ArrayList<Vehicle> favoriteVehicles = new ArrayList<>();
+        for (Vehicle vehicle : vehicleList) { // Utilize 'vehicleList' existente no fragmento
+            if (favoriteCarIds.contains(vehicle.getId())) { // Verifica se o ID do veículo está na lista de favoritos
+                favoriteVehicles.add(vehicle);
+            }
+        }
+
+        // Atualiza a lista exibida no adaptador da ListView
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), favoriteVehicles, R.layout.vehicle_list_item));
+    }
+
+    public void toggleFavorites(boolean showFavorites, List<Long> favoriteCarIds) {
+        if (showFavorites) {
+            showFavorites(favoriteCarIds); // Mostra apenas os veículos favoritos
+        } else {
+            // Restaura a lista completa
+            lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehicleList, R.layout.vehicle_list_item));
+        }
+    }
+
 
     @Override
     public void onRefresh() {

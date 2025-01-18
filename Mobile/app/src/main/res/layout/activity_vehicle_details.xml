@@ -361,17 +361,52 @@
                 android:layout_marginBottom="30dp"/>
         </HorizontalScrollView>
 
-        <!-- Botão Alugar -->
-        <Button
-            android:id="@+id/btnRent"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@android:color/holo_orange_dark"
-            android:padding="12dp"
-            android:text="Rent"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <!-- Botão Favoritos -->
+                <Button
+                    android:id="@+id/btnFav"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@android:color/holo_orange_dark"
+                    android:padding="12dp"
+                    android:text="Adicionar aos Favoritos"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
+
+                <!-- Botão Alugar -->
+                <Button
+                    android:id="@+id/btnRent"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@android:color/holo_orange_dark"
+                    android:padding="12dp"
+                    android:text="Alugar este veículo"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

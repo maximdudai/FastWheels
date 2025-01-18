@@ -4,6 +4,7 @@ import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -39,6 +40,9 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     private GridLayout glImgVehicle;
     private List<String> displayedImages = new ArrayList<>();
 
+    private boolean isFavorite = false;
+    private Button btnFav;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         tvAvailableFrom = findViewById(R.id.tvAvailableFrom);
         tvAvailableTo = findViewById(R.id.tvAvailableTo);
         glImgVehicle = findViewById(R.id.glImgVehicle);
+        btnFav = findViewById(R.id.btnFav);
 
         // Inicializando a lista de imagens
         selectedImages = new ArrayList<>();
@@ -120,6 +125,14 @@ public class VehicleDetailsActivity extends AppCompatActivity {
             } else {
                 System.out.println("--->DEBUG nothing to show");
             }
+        }
+    }
+
+    private void updateFavoriteButtonState() {
+        if (isFavorite) {
+            btnFav.setText("Remover dos Favoritos");
+        } else {
+            btnFav.setText("Adicionar aos Favoritos");
         }
     }
 

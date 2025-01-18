@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -9,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class SingletonFastWheels {
     private ArrayList<Vehicle> vehicles; // Lista de veículos
     private static SingletonFastWheels instance = null; // Instância única
 
-    private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
+    private VehicleDbHelper vehicleDbHelper = null; // Helper para a base de dados
 
     private int clientId;
 
@@ -153,6 +155,123 @@ public class SingletonFastWheels {
             System.out.println("Todas as fotos do veículo foram removidas com sucesso!");
         } else {
             System.err.println("Erro ao remover fotos do veículo!");
+        }
+    }
+
+    //region #Favorite API
+    public void addFavoriteAPI(final int vehicleId, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.POST,
+                    Constants.API_FAVORITES + "/add",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(context, "Vehicle added to favorites!", Toast.LENGTH_SHORT).show();
+                            if (vehicleListener != null) vehicleListener.onRefreshVehicle();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null) {
+                                String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                                Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                                Log.e("API_ERROR", "Response Data: " + responseData);
+                            }
+                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+                @Override
+                public byte[] getBody() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("userId", String.valueOf(loggedUser.getId()));
+                    params.put("vehicleId", String.valueOf(vehicleId));
+
+                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+                }
+
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+    public void removeFavoriteAPI(final int vehicleId, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.DELETE,
+                    Constants.API_FAVORITES + "/remove?userId=" + loggedUser.getId() + "&vehicleId=" + vehicleId,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(context, "Vehicle removed from favorites!", Toast.LENGTH_SHORT).show();
+                            if (vehicleListener != null) vehicleListener.onRefreshVehicle();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null) {
+                                String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                                Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                                Log.e("API_ERROR", "Response Data: " + responseData);
+                            }
+                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+    public void getFavoritesAPI(final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+
+            if (vehicleListener != null) vehicleListener.onRefreshVehicle();
+        } else {
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    Constants.API_FAVORITES + "?userId=" + loggedUser.getId(),
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            ArrayList<Vehicle> favorites = VehicleParser.parseVehiclesData(response);
+
+                            if (favorites != null && !favorites.isEmpty()) {
+                                if (vehicleListener != null) vehicleListener.onFavoritesLoaded(favorites);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String errorMsg = (error.getMessage() != null) ? error.getMessage() : "An unexpected error occurred.";
+                    Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            volleyQueue.add(jsonRequest);
         }
     }
 
