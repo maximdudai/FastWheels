@@ -18,9 +18,17 @@ public class UserVehicles extends AppCompatActivity {
             String fragmentTag = getIntent().getStringExtra("TAG_Vehicle");
 
             if ("VehicleListFragment".equals(fragmentTag)) {
+
+                // veiculos disponiveis
                 loadFragment(new VehicleListFragment(), "VehicleListFragment");
-            } else {
+            } else if("UserVehicleListFragment".equals(fragmentTag)) {
+
+                // meus veiculos
                 loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
+            } else if("ViewHolderReservedVehicles".equals(fragmentTag)) {
+
+                // minhas reservas
+                loadFragment(new UserReservedVehicleFragment(), "UserVehicleListFragment");
             }
         }
     }
@@ -42,9 +50,9 @@ public class UserVehicles extends AppCompatActivity {
         } else if (currentFragment != null && currentFragment instanceof VehicleListFragment) {
             super.onBackPressed();
             finish();
-        }  else {
-            // Volta para o fragmento anterior
-            getSupportFragmentManager().popBackStack();
+        }  else if (currentFragment != null && currentFragment instanceof UserReservedVehicleFragment) {
+            super.onBackPressed();
+            finish();
         }
     }
 }

@@ -14,11 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goVeiculosFavoritos;
+    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goReservations, goVeiculosFavoritos;
     TextView tvMainLoggedName, tvMainLoggedEmail;
 
     @Override
@@ -102,7 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // TODO Reservas
-
+        goReservations = findViewById(R.id.LayoutMainReservas);
+        goReservations.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            intent.putExtra("TAG_Vehicle", "ViewHolderReservedVehicles");
+            startActivity(intent);
+        });
 
         // TODO Notificacoes
 
@@ -114,5 +121,16 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        User loggedUser = SingletonFastWheels.getInstance(getApplicationContext()).getUser();
+
+        tvMainLoggedName.setText(loggedUser.getName());
+        tvMainLoggedEmail.setText(loggedUser.getEmail());
+    }
+
 
 }
