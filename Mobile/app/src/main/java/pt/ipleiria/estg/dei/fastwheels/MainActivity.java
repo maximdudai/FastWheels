@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
 
+        System.out.println("---> reg name: " + sharedPreferences.getString(Constants.KEY_USERNAME, null));
+        System.out.println("---> reg email: " + sharedPreferences.getString(Constants.KEY_EMAIL, null));
+
         tvMainLoggedName.setText(sharedPreferences.getString(Constants.KEY_USERNAME, null));
         tvMainLoggedEmail.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
 
