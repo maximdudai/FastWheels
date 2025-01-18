@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pt.ipleiria.estg.dei.fastwheels.model.Reservation;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 
@@ -209,4 +212,19 @@ public class Helpers {
         }
         return auxVehicle;
     }
+    public static ArrayList<Vehicle> filterVehicleByReserved(ArrayList<Vehicle> vehicleList, ArrayList<Reservation> reservatonList) {
+
+        ArrayList<Vehicle> auxVehicle = new ArrayList<>();
+
+        for(Vehicle car: vehicleList) {
+
+            for(Reservation reservs: reservatonList) {
+                if(reservs.getCarId() == car.getId()) {
+                    auxVehicle.add(car);
+                }
+            }
+        }
+        return auxVehicle;
+    }
+
 }

@@ -77,8 +77,8 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
     }
 
     // Get all reservations
-    public List<Reservation> getAllReservations() {
-        List<Reservation> reservations = new ArrayList<>();
+    public ArrayList<Reservation> getAllReservations() {
+        ArrayList<Reservation> reservations = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_RESERVATIONS, null, null, null, null, null, null);
 
@@ -123,5 +123,9 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
     public int deleteReservationDB(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_RESERVATIONS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void deleteAllReservationDB() {
+        db.delete(TABLE_RESERVATIONS, null, null);
     }
 }

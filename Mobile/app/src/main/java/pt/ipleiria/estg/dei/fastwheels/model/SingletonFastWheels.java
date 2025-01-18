@@ -35,6 +35,8 @@ import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
 public class SingletonFastWheels {
 
     private ArrayList<Vehicle> vehicles; // Lista de veículos
+    private ArrayList<Reservation> reservations;
+
     private static SingletonFastWheels instance = null; // Instância única
 
     private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
@@ -73,7 +75,10 @@ public class SingletonFastWheels {
     private SingletonFastWheels(Context context) {
         vehicles = new ArrayList<>();
         vehicleDbHelper = new VehicleDbHelper(context);
+
+        reservations = new ArrayList<>();
         reservationDbHelper = new ReservationDbHelper(context);
+
     }
 
     // region get/set user
@@ -122,9 +127,6 @@ public class SingletonFastWheels {
     // Carregar todos os veículos do banco de dados
     public ArrayList<Vehicle> getVehiclesDb() {
         vehicles = vehicleDbHelper.getAllVehiclesDb();
-
-        System.out.println("---API loaded: " + vehicles.size());
-
         return vehicles;
     }
 
@@ -477,6 +479,14 @@ public class SingletonFastWheels {
 
         reservationDbHelper.addReservationDB(reservation); // Adicionar à bd através do Helper
     }
+    public void removeReservationsDb() {
+        reservationDbHelper.deleteAllReservationDB();
+    }
+
+    public ArrayList<Reservation> getReservationsDb() {
+        reservations = reservationDbHelper.getAllReservations();
+        return reservations;
+    }
 
     public void addReservationAPI(final Reservation reservationData, final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
@@ -494,7 +504,7 @@ public class SingletonFastWheels {
                                 addReservationDB(reservation);
 
                                 if(reservationListener != null)
-                                    reservationListener.onReservationUpdate(reservation, context.getApplicationContext());
+                                    reservationListener.onReservationUpdate();
                             }
                         }
                     },
@@ -539,7 +549,46 @@ public class SingletonFastWheels {
     }
 
 
+    public void getReservationAPI(final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
 
+            if (reservationListener != null)
+                reservationListener.onReservationUpdate();
+        } else {
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    Constants.API_RESERVATION + "/user/" + loggedUser.getId(),
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            removeReservationsDb();
+
+                            reservations.clear();
+                            reservations = ReservationParser.parseReservationsData(response);
+
+                            //make a loop only if there is vehicles on API
+                            if (!reservations.isEmpty()) {
+                                for (Reservation res : reservations) {
+                                    addReservationDB(res);
+                                }
+
+                                if (reservationListener != null)
+                                    reservationListener.onReservationUpdate();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String errorMsg = (error.getMessage() != null) ? error.getMessage() : "An unexpected error occurred.";
+                    Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            volleyQueue.add(jsonRequest);
+        }
+    }
 
     public void setReservationListener(ReservationListener reservationListener){
         this.reservationListener = reservationListener;

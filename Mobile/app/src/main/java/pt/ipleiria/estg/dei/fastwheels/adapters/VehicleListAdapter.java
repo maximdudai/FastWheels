@@ -59,8 +59,6 @@ public class VehicleListAdapter extends BaseAdapter {
         }
         Vehicle vehicle = vehicles.get(position);
 
-        System.out.println("--->adapter vehpos: " + vehicle.toString());
-
         if (layoutResourceId == R.layout.vehicle_list_item) {
             ViewHolderVehicle viewHolder = (ViewHolderVehicle) convertView.getTag();
             viewHolder.update(vehicle);
@@ -106,8 +104,41 @@ public class VehicleListAdapter extends BaseAdapter {
             tvDoors.setText(String.valueOf(vehicle.getCarDoors()));
             tvAddress.setText(vehicle.getCity());
             tvPrice.setText(String.format("%.2f€", vehicle.getPriceDay()));
+        }
+    }
 
+    private class ViewHolderReservedVehicles {
+        private ImageView imgVehicle;
+        private TextView tvBrand, tvModel, tvAddress, tvPrice;
 
+        public ViewHolderReservedVehicles(View view) {
+            imgVehicle = view.findViewById(R.id.ivVehicle);
+            tvBrand = view.findViewById(R.id.tvBrand);
+            tvModel = view.findViewById(R.id.tvModel);
+
+            tvAddress = view.findViewById(R.id.tvAddress);
+            tvPrice = view.findViewById(R.id.tvPrice);
+        }
+
+        public void update(Vehicle vehicle) {
+
+            if (!vehicle.getVehiclePhotos().isEmpty()) {
+                VehiclePhoto firstPhoto = vehicle.getVehiclePhotos().get(0);  // Get the first photo object
+                String photoUrl = firstPhoto.getPhotoUrl();  // Get the URL string
+                Uri photoUri = Uri.parse(photoUrl);
+
+                // Load the image using Glide
+                Glide.with(context)
+                        .load(photoUri)  // Pass the URI object
+                        .placeholder(R.drawable.gallery_icon)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imgVehicle);
+            }
+            tvBrand.setText(vehicle.getCarBrand());
+            tvModel.setText(vehicle.getCarModel());
+
+            tvAddress.setText(String.valueOf(vehicle.getAvailableFrom()));
+            tvPrice.setText(String.valueOf(vehicle.getAvailableTo()));
         }
     }
 
