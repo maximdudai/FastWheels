@@ -565,8 +565,6 @@ public class SingletonFastWheels {
                         public void onResponse(String response) {
                             Reservation reservation = ReservationParser.parseReservationData(response);
 
-                            System.out.println("--->API reservation loaded: " + reservation.toString());
-
                             if (reservation != null) {
                                 addReservationDB(reservation);
 

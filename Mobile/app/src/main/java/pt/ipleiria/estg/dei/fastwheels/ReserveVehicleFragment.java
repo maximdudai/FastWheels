@@ -17,12 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -69,7 +65,7 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         etContacto = view.findViewById(R.id.et_contacto);
         etLocalizacao = view.findViewById(R.id.et_localizacao);
         etDataInicio = view.findViewById(R.id.et_data_inicio);
-        etDataFim = view.findViewById(R.id.et_data_fim);
+        etDataFim = view.findViewById(R.id.etdDisponivelAte);
         rgOpcaoSeguro = view.findViewById(R.id.rg_opcao_seguro);
         rgOpcaoPagamento = view.findViewById(R.id.rg_opcao_pagamento);
         btnConfirmReservation = view.findViewById(R.id.btnConfirmReservation);

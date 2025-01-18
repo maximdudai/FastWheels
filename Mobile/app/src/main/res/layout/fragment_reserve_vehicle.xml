@@ -100,7 +100,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Seguro 1"
+                    android:text="Basic"
                     android:textColor="#FFFFFF" />
 
                 <RadioButton
@@ -108,7 +108,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Seguro 2"
+                    android:text="Premium"
                     android:textColor="#FFFFFF" />
 
                 <RadioButton
@@ -116,7 +116,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Seguro 3"
+                    android:text="Elite"
                     android:textColor="#FFFFFF" />
 
             </RadioGroup>
@@ -129,43 +129,80 @@
                 android:layout_weight="1" />
 
             <LinearLayout
+                android:id="@+id/layoutDisponib"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="12dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/et_data_inicio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:clickable="true"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:hint="Selecione a data"
-                    android:inputType="none"
-                    android:minHeight="48dp"
-                    android:textColor="@android:color/white" />
+                <!-- Disponível de -->
+                <LinearLayout
+                    android:id="@+id/layoutDisponibDe"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_data_fim"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
-                    android:clickable="true"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:hint="Selecione a data"
-                    android:inputType="none"
-                    android:textColor="@android:color/white" />
+                    <TextView
+                        android:id="@+id/tvDisponivelDe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/vehicle_form_disponivel_de"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
+                    <EditText
+                        android:id="@+id/et_data_inicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:clickable="true"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="Selecione a data"
+                        android:inputType="none"
+                        android:minHeight="48dp"
+                        android:textColor="@android:color/white" />
+
+                </LinearLayout>
+
+                <!-- Disponível até -->
+                <LinearLayout
+                    android:id="@+id/layoutDisponibAte"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDisponivelAte"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="@string/vehicle_form_disponivel_ate"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etdDisponivelAte"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:clickable="true"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="Selecione a data"
+                        android:inputType="none"
+                        android:minHeight="48dp"
+                        android:textColor="@android:color/white" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Metodo de pagamento -->
-            <View
-                android:id="@+id/view5"
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
 
             <TextView
                 android:layout_width="match_parent"
