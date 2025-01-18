@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class Register extends AppCompatActivity {
@@ -61,7 +63,29 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        //TODO: Query to database (POST) to insert new user if inserted data is available
+
+        // Dados inseridos
+        String clientName = userName.getText().toString();
+        String clientEmail = userEmail.getText().toString();
+        String clientPassword = userPassword.getText().toString();
+
+        int clientId = 0;
+
+        // Criar o user
+        User newClient = new User(
+                "",
+                clientId,
+                clientName,
+                clientEmail,
+                "",
+                "",
+                ""
+        );
+
+        newClient.setPassword(clientPassword);
+
+        SingletonFastWheels.getInstance(getApplicationContext()).addUserAPI(newClient, getApplicationContext());
+
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);

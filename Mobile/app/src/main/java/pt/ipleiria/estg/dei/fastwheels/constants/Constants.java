@@ -12,6 +12,7 @@ public class Constants {
     public static final String API_AUTH = "http://54.229.223.123:8080/api/clients/login";
     public static final String API_VEHICLES = "http://54.229.223.123:8080/api/vehicles";
     public static final String API_PROFILE = "http://54.229.223.123:8080/api/clients/update";
+    public static final String API_REGISTER = "http://54.229.223.123:8080/api/clients/register";
 
     // MOSQUITTO
     public static final String MQTT_HOST = "tcp://54.229.223.123:1883";
