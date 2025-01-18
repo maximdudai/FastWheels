@@ -195,18 +195,19 @@ public class SingletonFastWheels {
         }
     }
 
-    public void loadFavoritesFromDb(int clientId) {
-        List<Integer> favoriteVehicleIds = favoriteDbHelper.getFavorites(clientId);
-        favorites.clear();
+    public ArrayList<Vehicle> getFavoriteVehiclesDb() {
+        ArrayList<Vehicle> favoriteVehicles = new ArrayList<>();
 
-        for (int vehicleId : favoriteVehicleIds) {
-            Vehicle vehicle = getVehicleByIdBd(vehicleId);
+        for (Favorite favorite : favorites) {
+            Vehicle vehicle = getVehicleByIdBd(favorite.getCarId());
             if (vehicle != null) {
-                Favorite favorite = new Favorite(0, clientId, vehicleId, new Date()); // O `id` e `createdAt` podem ser melhor gerenciados se existirem no banco
-                favorites.add(favorite);
+                favoriteVehicles.add(vehicle);
             }
         }
+
+        return favoriteVehicles;
     }
+
 
     public ArrayList<Favorite> getFavorites() {
         return new ArrayList<>(favorites);

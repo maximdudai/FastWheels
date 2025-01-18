@@ -67,7 +67,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Configuracao do Toolbar
         // Find the toolbar in the fragment's layout
         Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
-
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
 
         if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
@@ -82,26 +81,22 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
-        // Define o listener antes de carregar os favoritos
-        SingletonFastWheels.getInstance(getContext()).setVehicleListener(this);
-
-        // Carrega favoritos ou lista completa
         Bundle args = getArguments();
         if (args != null) {
             showFavorites = args.getBoolean("SHOW_FAVORITES", false);
         }
 
-        if (showFavorites) {
-            loadFavoriteVehicles();
-        } else {
-            reloadListWithoutFilters();
-        }
+        // Define o listener antes de carregar os favoritos
+        SingletonFastWheels.getInstance(getContext()).setVehicleListener(this);
+
+        loadVehicles();
+
         lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 Vehicle selectedVehicle = vehiclesToShow.get(position); // Obter o veículo selecionado
-                
+
                 Intent intent = new Intent(getContext(), VehicleDetailsActivity.class);
                 intent.putExtra("VEHICLE_ID", selectedVehicle.getId());
                 startActivity(intent);
@@ -281,7 +276,17 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     }
 
     private void loadFavoriteVehicles() {
-        SingletonFastWheels.getInstance(getContext()).getFavoritesAPI(getContext());
+        // Obter a lista de favoritos do Singleton
+        ArrayList<Vehicle> favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavoriteVehiclesDb();
+
+        if (favoriteVehicles != null && !favoriteVehicles.isEmpty()) {
+            vehiclesToShow = favoriteVehicles; // Atualizar a lista exibida com os favoritos
+            lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
+        } else {
+            showMessage(getContext(), "Nenhum veículo favorito encontrado.");
+            vehiclesToShow.clear(); // Limpar a lista caso não haja favoritos
+            lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
+        }
     }
 
 
@@ -311,6 +316,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
+        loadVehicles();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -320,6 +326,21 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
+    }
+
+    private void loadVehicles() {
+        if (showFavorites) {
+            vehiclesToShow = SingletonFastWheels.getInstance(getContext()).getFavoriteVehiclesDb();
+            if (vehiclesToShow.isEmpty()) {
+                Helpers.showMessage(getContext(), "Nenhum veículo favorito encontrado.");
+            }
+        } else {
+            vehiclesToShow = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+            vehiclesToShow = Helpers.filterVehicleByNotPersonal(loggedUser, vehiclesToShow);
+        }
+
+        // Atualiza o adaptador da ListView
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
     }
 
@@ -334,5 +355,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         // Set the adapter
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
         lvVehicles.invalidateViews(); // Force refresh
+        loadVehicles();
     }
 }

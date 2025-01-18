@@ -80,17 +80,17 @@ public class VehicleDetailsActivity extends AppCompatActivity {
             populateVehicleDetails(vehicle);
 
             // Verifica o estado inicial do favorito
-            checkFavoriteStatus(vehicleId);
+            checkFavoriteStatus(vehicle.getId());
 
             // Configura o clique no botão de favoritos
             btnFav.setOnClickListener(v -> {
                 if (isFavorite) {
                     SingletonFastWheels.getInstance(getApplicationContext())
-                            .removeFavoriteAPI(vehicleId, getApplicationContext());
+                            .removeFavoriteAPI(vehicle.getId(), getApplicationContext());
                     isFavorite = false;
                 } else {
                     SingletonFastWheels.getInstance(getApplicationContext())
-                            .addFavoriteAPI(vehicleId, getApplicationContext());
+                            .addFavoriteAPI(vehicle.getId(), getApplicationContext());
                     isFavorite = true;
                 }
                 updateFavoriteButtonState();
