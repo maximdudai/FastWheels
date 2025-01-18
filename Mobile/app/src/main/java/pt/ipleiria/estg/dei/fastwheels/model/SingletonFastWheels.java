@@ -122,6 +122,9 @@ public class SingletonFastWheels {
     // Carregar todos os veículos do banco de dados
     public ArrayList<Vehicle> getVehiclesDb() {
         vehicles = vehicleDbHelper.getAllVehiclesDb();
+
+        System.out.println("---API loaded: " + vehicles.size());
+
         return vehicles;
     }
 

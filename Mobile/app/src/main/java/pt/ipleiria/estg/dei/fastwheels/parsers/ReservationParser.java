@@ -21,8 +21,8 @@ public class ReservationParser {
             int clientId = fetchData.getInt("clientId");
             int carId = fetchData.getInt("carId");
 
-            String dateStart = fetchData.getString("dateStart");
-            String dateEnd = fetchData.getString("dateEnd");
+            Timestamp dateStart = Timestamp.valueOf(fetchData.getString("dateStart"));
+            Timestamp dateEnd = Timestamp.valueOf(fetchData.getString("dateEnd"));
 
             int filled = fetchData.getInt("filled");
             double value = fetchData.getDouble("value");

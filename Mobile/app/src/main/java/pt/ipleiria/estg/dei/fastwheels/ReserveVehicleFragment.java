@@ -19,8 +19,10 @@ import androidx.fragment.app.Fragment;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -100,68 +102,63 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         setupDisponivelDe_Ate();
         return view;
     }
-
     private void setupDisponivelDe_Ate() {
-        //Definir datas iniciais
+        // Define initial dates
         startRentFrom = Calendar.getInstance();
-        startRentFrom.add(Calendar.DAY_OF_MONTH, 1); //data sistema + 1 dia
+        startRentFrom.add(Calendar.DAY_OF_MONTH, 1); // System date + 1 day
         endRentAt = (Calendar) startRentFrom.clone();
-        endRentAt.add(Calendar.DAY_OF_MONTH, 1); //etDisponivelDe + 1 dia
+        endRentAt.add(Calendar.DAY_OF_MONTH, 1); // startRentFrom + 1 day
 
-        // Para etDisponivelDe
+        // For etDataInicio
         etDataInicio.setOnClickListener(v ->
                 Helpers.showDatePickerDialog(requireContext(),
                         etDataInicio, startRentFrom, (year, month, day) -> {
                             Calendar newDateDisponivelDe = Calendar.getInstance();
                             newDateDisponivelDe.set(year, month, day);
 
-                            etDataInicio.setText(String.format(Locale.forLanguageTag("pt-PT"),
-                                    "%02d-%02d-%04d", day, month + 1, year));
+                            etDataInicio.setText(String.format(Locale.getDefault(),
+                                    "%04d-%02d-%02d 00:00:00", year, month + 1, day));
 
-
-                            // Ajustar o limite mínimo para o calendário de etDisponivelAte
-                            // Se novo DisponivelDe >= DisponivelAte -> ajusta data etDisponivelAte
+                            // Adjust the minimum limit for etDataFim
                             if (newDateDisponivelDe.compareTo(endRentAt) >= 0) {
                                 endRentAt.set(year, month, day);
                                 endRentAt.add(Calendar.DAY_OF_MONTH, 1);
-                                etDataFim.setText(String.format(Locale.forLanguageTag("pt-PT"),
-                                        "%02d-%02d-%04d", endRentAt.get(Calendar.DAY_OF_MONTH),
+                                etDataFim.setText(String.format(Locale.getDefault(),
+                                        "%04d-%02d-%02d 00:00:00",
+                                        endRentAt.get(Calendar.YEAR),
                                         endRentAt.get(Calendar.MONTH) + 1,
-                                        endRentAt.get(Calendar.YEAR)));
+                                        endRentAt.get(Calendar.DAY_OF_MONTH)));
                             } else {
-                                // Nova data < data atual de etDisponivelAte, manter data atual
                                 endRentAt.set(year, month, day);
                                 endRentAt.add(Calendar.DAY_OF_MONTH, 1);
                             }
                         })
         );
 
-        // Para etDisponivelAte
+        // For etDataFim
         etDataFim.setOnClickListener(v ->
                 Helpers.showDatePickerDialog(requireContext(),
                         etDataFim, endRentAt, (year, month, day) -> {
-                            Calendar newDateDisponivelAte = Calendar.getInstance();
-                            newDateDisponivelAte.set(year, month, day);
-
-                            etDataFim.setText(String.format(Locale.forLanguageTag("pt-PT"),
-                                    "%02d-%02d-%04d", day, month + 1, year));
+                            etDataFim.setText(String.format(Locale.getDefault(),
+                                    "%04d-%02d-%02d 00:00:00", year, month + 1, day));
                         }
                 )
         );
     }
+
 
     private void handleConfirmReservation() {
         String nome = etNomeCompleto.getText().toString();
         String email = etEmail.getText().toString();
         String contacto = etContacto.getText().toString();
         String localizacao = etLocalizacao.getText().toString();
-        String dataInicio = etDataInicio.getText().toString();
-        String dataFim = etDataFim.getText().toString();
+        String dataInicioStr = etDataInicio.getText().toString();
+        String dataFimStr = etDataFim.getText().toString();
 
         int selectedSeguroId = rgOpcaoSeguro.getCheckedRadioButtonId();
         int selectedPagamentoId = rgOpcaoPagamento.getCheckedRadioButtonId();
 
-        if (selectedSeguroId == -1 || selectedPagamentoId == -1 || nome.isEmpty() || email.isEmpty()) {
+        if (selectedSeguroId == -1 || selectedPagamentoId == -1 || nome.isEmpty() || email.isEmpty() || dataInicioStr.isEmpty() || dataFimStr.isEmpty()) {
             Toast.makeText(getContext(), "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -172,21 +169,53 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         String seguro = selectedSeguro.getText().toString();
         String pagamento = selectedPagamento.getText().toString();
 
+        // Convert string dates to Timestamp
+        Timestamp dataInicio;
+        Timestamp dataFim;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date parsedDataInicio = dateFormat.parse(dataInicioStr);
+            Date parsedDataFim = dateFormat.parse(dataFimStr);
+
+            if (parsedDataInicio != null && parsedDataFim != null) {
+                dataInicio = new Timestamp(parsedDataInicio.getTime());
+                dataFim = new Timestamp(parsedDataFim.getTime());
+            } else {
+                throw new ParseException("Invalid date format", 0);
+            }
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "Formato de data inválido! Use 'yyyy-MM-dd HH:mm:ss'.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Toast.makeText(getContext(), "Reserva confirmada!\n" +
                 "Nome: " + nome + "\n" +
                 "Email: " + email + "\n" +
                 "Seguro: " + seguro + "\n" +
                 "Pagamento: " + pagamento, Toast.LENGTH_LONG).show();
 
-
         System.out.println("--API veid: " + selectedVehicle);
 
-        Reservation newReservation = new Reservation(0, loggedUser.getId(), selectedVehicle, dataInicio, dataFim, 0, 24.00, 4.50, 15.000);
+        // Create a new Reservation object
+        Reservation newReservation = new Reservation(
+                0,
+                loggedUser.getId(),
+                selectedVehicle,
+                dataInicio,
+                dataFim,
+                0,
+                24.00,
+                4.50,
+                15.000
+        );
+
+        // Send the reservation to the API
         SingletonFastWheels.getInstance(getContext()).addReservationAPI(newReservation, getContext());
 
-        //end current fragment and return to previous page
+        // End the current fragment and return to the previous page
         requireActivity().getSupportFragmentManager().popBackStack();
     }
+
 
     @Override
     public void onRefreshVehicle() {

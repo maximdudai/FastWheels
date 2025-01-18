@@ -5,10 +5,9 @@ import java.sql.Timestamp;
 public class Reservation {
     private int id, clientId, carId, filled;
     private Double value, feeValue, carValue;
-    private String dateStart, dateEnd;
-    private Timestamp createAt;
+    private Timestamp dateStart, dateEnd, createAt;
 
-    public Reservation(int id, int clientId, int carId, String dateStart, String dateEnd, int filled, double value, double feeValue, double carValue) {
+    public Reservation(int id, int clientId, int carId, Timestamp dateStart, Timestamp dateEnd, int filled, double value, double feeValue, double carValue) {
         this.id = id;
         this.clientId = clientId;
         this.carId = carId;
@@ -77,19 +76,19 @@ public class Reservation {
         this.carValue = carValue;
     }
 
-    public String getDateStart() {
+    public Timestamp getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(String dateStart) {
+    public void setDateStart(Timestamp dateStart) {
         this.dateStart = dateStart;
     }
 
-    public String getDateEnd() {
+    public Timestamp getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(String dateEnd) {
+    public void setDateEnd(Timestamp dateEnd) {
         this.dateEnd = dateEnd;
     }
 
