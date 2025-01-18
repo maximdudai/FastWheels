@@ -30,6 +30,7 @@ import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.model.Reservation;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
+import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class ReserveVehicleFragment extends Fragment implements VehicleListener {
@@ -211,6 +212,11 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
 
         // Send the reservation to the API
         SingletonFastWheels.getInstance(getContext()).addReservationAPI(newReservation, getContext());
+
+        // Update vehicle
+        Vehicle vehData = SingletonFastWheels.getInstance(getContext()).getVehicleByIdBd(selectedVehicle);
+        vehData.setStatus(true);
+        SingletonFastWheels.getInstance(getContext()).editVehicleAPI(vehData, getContext());
 
         // End the current fragment and return to the previous page
         requireActivity().getSupportFragmentManager().popBackStack();
