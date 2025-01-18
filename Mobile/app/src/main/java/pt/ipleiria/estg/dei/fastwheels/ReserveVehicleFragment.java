@@ -1,6 +1,10 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Locale;
@@ -143,7 +153,6 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         );
     }
 
-
     private void handleConfirmReservation() {
         String nome = etNomeCompleto.getText().toString();
         String email = etEmail.getText().toString();
@@ -166,13 +175,11 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         String seguro = selectedSeguro.getText().toString();
         String pagamento = selectedPagamento.getText().toString();
 
-
         Toast.makeText(getContext(), "Reserva confirmada!\n" +
                 "Nome: " + nome + "\n" +
                 "Email: " + email + "\n" +
                 "Seguro: " + seguro + "\n" +
                 "Pagamento: " + pagamento, Toast.LENGTH_LONG).show();
-
 
         Timestamp disponivelDe = Timestamp.valueOf(dataInicioStr + " 00:00:00");
         Timestamp disponivelAte = Timestamp.valueOf(dataFimStr + " 00:00:00");
@@ -196,13 +203,58 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         Vehicle vehData = SingletonFastWheels.getInstance(getContext()).getVehicleByIdBd(selectedVehicle);
         vehData.setStatus(true);
 
-        // set vehicle as rentend on database
+        // set vehicle as rented in database
         SingletonFastWheels.getInstance(getContext()).editVehicleAPI(vehData, getContext());
+
+        // Generate PDF
+        generateAndDownloadPDF(nome, email, contacto, localizacao, dataInicioStr, dataFimStr, seguro, pagamento);
 
         // End the current fragment and return to the previous page
         requireActivity().getSupportFragmentManager().popBackStack();
     }
 
+    private void generateAndDownloadPDF(String nome, String email, String contacto, String localizacao, String dataInicioStr, String dataFimStr, String seguro, String pagamento) {
+        try {
+            File pdfFile = new File(requireContext().getExternalFilesDir(null), "ReservationDetails.pdf");
+
+            PdfWriter writer = new PdfWriter(pdfFile);
+
+            Document document = new Document(new com.itextpdf.kernel.pdf.PdfDocument(writer));
+
+            document.add(new Paragraph("Detalhes da Reserva"));
+            document.add(new Paragraph("Nome: " + nome));
+            document.add(new Paragraph("Email: " + email));
+            document.add(new Paragraph("Contacto: " + contacto));
+            document.add(new Paragraph("Localização: " + localizacao));
+            document.add(new Paragraph("Data de Início: " + dataInicioStr));
+            document.add(new Paragraph("Data de Fim: " + dataFimStr));
+            document.add(new Paragraph("Seguro: " + seguro));
+            document.add(new Paragraph("Pagamento: " + pagamento));
+
+            document.close();
+            Toast.makeText(getContext(), "Invoice received successfully!", Toast.LENGTH_SHORT).show();
+
+            openPDF(pdfFile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("RESERVATION:INVOICE", "Erro while creating: " +e.getMessage());
+        }
+    }
+
+    private void openPDF(File pdfFile) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", pdfFile);
+
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "Nenhum visualizador de PDF encontrado.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onRefreshVehicle() {

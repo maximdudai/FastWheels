@@ -36,6 +36,8 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation ("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0")
     implementation ("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+    implementation ("com.itextpdf:itext7-core:7.2.3")
+
 
     implementation(libs.appcompat)
     implementation(libs.material)
