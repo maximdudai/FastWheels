@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,11 +19,13 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.sql.Timestamp;
@@ -289,5 +292,18 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+
+        // Set the adapter
+        lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
+        lvVehicles.invalidateViews(); // Force refresh
     }
 }

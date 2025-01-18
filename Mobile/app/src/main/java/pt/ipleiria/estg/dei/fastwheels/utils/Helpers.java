@@ -203,7 +203,8 @@ public class Helpers {
 
         for(Vehicle car: vehicleList) {
             if(car.getClientId() != loggedUser.getId()) {
-                auxVehicle.add(car);
+                if(!car.isStatus()) // false = not rented | true = rented
+                    auxVehicle.add(car);
             }
         }
         return auxVehicle;

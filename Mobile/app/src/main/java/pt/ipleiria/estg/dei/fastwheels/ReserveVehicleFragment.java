@@ -118,14 +118,14 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
                             newDateDisponivelDe.set(year, month, day);
 
                             etDataInicio.setText(String.format(Locale.getDefault(),
-                                    "%04d-%02d-%02d 00:00:00", year, month + 1, day));
+                                    "%04d-%02d-%02d", year, month + 1, day));
 
                             // Adjust the minimum limit for etDataFim
                             if (newDateDisponivelDe.compareTo(endRentAt) >= 0) {
                                 endRentAt.set(year, month, day);
                                 endRentAt.add(Calendar.DAY_OF_MONTH, 1);
                                 etDataFim.setText(String.format(Locale.getDefault(),
-                                        "%04d-%02d-%02d 00:00:00",
+                                        "%04d-%02d-%02d",
                                         endRentAt.get(Calendar.YEAR),
                                         endRentAt.get(Calendar.MONTH) + 1,
                                         endRentAt.get(Calendar.DAY_OF_MONTH)));
@@ -141,7 +141,7 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
                 Helpers.showDatePickerDialog(requireContext(),
                         etDataFim, endRentAt, (year, month, day) -> {
                             etDataFim.setText(String.format(Locale.getDefault(),
-                                    "%04d-%02d-%02d 00:00:00", year, month + 1, day));
+                                    "%04d-%02d-%02d", year, month + 1, day));
                         }
                 )
         );
@@ -170,24 +170,6 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         String seguro = selectedSeguro.getText().toString();
         String pagamento = selectedPagamento.getText().toString();
 
-        // Convert string dates to Timestamp
-        Timestamp dataInicio;
-        Timestamp dataFim;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            Date parsedDataInicio = dateFormat.parse(dataInicioStr);
-            Date parsedDataFim = dateFormat.parse(dataFimStr);
-
-            if (parsedDataInicio != null && parsedDataFim != null) {
-                dataInicio = new Timestamp(parsedDataInicio.getTime());
-                dataFim = new Timestamp(parsedDataFim.getTime());
-            } else {
-                throw new ParseException("Invalid date format", 0);
-            }
-        } catch (ParseException e) {
-            Toast.makeText(getContext(), "Formato de data inválido! Use 'yyyy-MM-dd HH:mm:ss'.", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         Toast.makeText(getContext(), "Reserva confirmada!\n" +
                 "Nome: " + nome + "\n" +
@@ -195,15 +177,16 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
                 "Seguro: " + seguro + "\n" +
                 "Pagamento: " + pagamento, Toast.LENGTH_LONG).show();
 
-        System.out.println("--API veid: " + selectedVehicle);
 
-        // Create a new Reservation object
+        Timestamp disponivelDe = Timestamp.valueOf(dataInicioStr + " 00:00:00");
+        Timestamp disponivelAte = Timestamp.valueOf(dataFimStr + " 00:00:00");
+
         Reservation newReservation = new Reservation(
                 0,
                 loggedUser.getId(),
                 selectedVehicle,
-                dataInicio,
-                dataFim,
+                disponivelDe,
+                disponivelAte,
                 0,
                 24.00,
                 4.50,
@@ -216,6 +199,8 @@ public class ReserveVehicleFragment extends Fragment implements VehicleListener 
         // Update vehicle
         Vehicle vehData = SingletonFastWheels.getInstance(getContext()).getVehicleByIdBd(selectedVehicle);
         vehData.setStatus(true);
+
+        // set vehicle as rentend on database
         SingletonFastWheels.getInstance(getContext()).editVehicleAPI(vehData, getContext());
 
         // End the current fragment and return to the previous page

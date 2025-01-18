@@ -516,6 +516,8 @@ public class SingletonFastWheels {
                     params.put("carId", String.valueOf(reservationData.getCarId()));
                     params.put("dateStart", String.valueOf(reservationData.getDateEnd()));
                     params.put("dateEnd",String.valueOf(reservationData.getDateEnd()));
+                    params.put("createAt", Helpers.getCurrentDateTime());
+                    params.put("filled", "0");
                     params.put("value", String.valueOf(reservationData.getValue()));
                     params.put("feeValue", String.valueOf(reservationData.getFeeValue()));
                     params.put("carValue", String.valueOf(reservationData.getCarValue()));

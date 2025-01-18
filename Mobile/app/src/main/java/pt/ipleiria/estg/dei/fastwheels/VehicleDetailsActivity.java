@@ -157,5 +157,12 @@ public class VehicleDetailsActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment, "ReserveVehicleFragment")
                 .addToBackStack(null)
                 .commit();
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                finish();
+            }
+        });
     }
+
 }
