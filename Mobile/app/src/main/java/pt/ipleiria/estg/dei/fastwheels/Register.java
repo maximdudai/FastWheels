@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,6 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class Register extends AppCompatActivity {
@@ -61,7 +65,36 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        //TODO: Query to database (POST) to insert new user if inserted data is available
+
+        // Dados inseridos
+        String clientName = userName.getText().toString();
+        String clientEmail = userEmail.getText().toString();
+        String clientPassword = userPassword.getText().toString();
+
+        int clientId = 0;
+
+        // Criar o user
+        User newClient = new User(
+                "",
+                clientId,
+                clientName,
+                clientEmail,
+                "",
+                "",
+                ""
+        );
+        newClient.setPassword(clientPassword);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(Constants.KEY_KEEP_LOGGED_IN, false);
+        editor.putString(Constants.KEY_USERNAME, clientName);
+        editor.putString(Constants.KEY_EMAIL, clientEmail);
+        editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
+        editor.apply();
+
+        SingletonFastWheels.getInstance(getApplicationContext()).addUserAPI(newClient, getApplicationContext());
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);
