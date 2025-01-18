@@ -10,6 +10,8 @@ public class Constants {
 
     // API ENDPOINTS
     public static final String API_AUTH = "http://54.229.223.123:8080/api/clients/login";
+    public static final String API_VEHICLES = "http://54.229.223.123:8080/api/vehicles";
+    public static final String API_PROFILE = "http://54.229.223.123:8080/api/clients/update";
     public static final String API_FAVOTIRES = "http://54.229.223.123:8080/api/favorite";
 
     // MOSQUITTO
@@ -22,4 +24,3 @@ public class Constants {
 
 
 }
-

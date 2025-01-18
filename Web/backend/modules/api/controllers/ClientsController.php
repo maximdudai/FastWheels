@@ -115,7 +115,7 @@ class ClientsController extends ActiveController
             throw new \yii\web\BadRequestHttpException('Please provide all required fields');
         }
 
-        if(User::findByUsername($receivedUser['username']) || User::findByEmail($receivedUser['email'])) {
+        if (User::findByUsername($receivedUser['username']) || User::findByEmail($receivedUser['email'])) {
             throw new \yii\web\BadRequestHttpException('User already exists');
         }
 
@@ -183,39 +183,69 @@ class ClientsController extends ActiveController
         ];
     }
 
+    // public function beforeAction($action)
+    // {
+    //     if ($action->id == 'update') {
+    //         $receivedUser = \Yii::$app->request->post();
+
+    //         $user = User::find()->where(['id' => $receivedUser['id']])->one();
+
+    //         die( var_dump($user->attributes) );
+    //     }
+    //     return parent::beforeAction($action);
+    // }
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['update']); 
+        return $actions;
+    }
+
     public function actionUpdate($id)
     {
-        if (!\Yii::$app->request->isPut) {
-            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
-        }
+        $receivedUser = \Yii::$app->request->post();
 
-        $receivedUser = \Yii::$app->request->bodyParams; // Use `bodyParams` para PUT requests.
-
-        $modelClient = Client::findModel($id);
+        $modelClient = Client::findOne($id);
         $modelUser = User::findOne(['id' => $id]);
+        
+
+        $getUserToken = $modelUser->verification_token;
 
         if (!$modelClient || !$modelUser) {
             throw new \yii\web\NotFoundHttpException('User or client not found');
         }
 
         // Atualiza os dados do cliente
-        $modelClient->name = $receivedUser['username'] ?? $modelClient->name;
+        $modelClient->name = $receivedUser['name'] ?? $modelClient->name;
         $modelClient->email = $receivedUser['email'] ?? $modelClient->email;
         $modelClient->phone = $receivedUser['phone'] ?? $modelClient->phone;
         $modelClient->iban = $receivedUser['iban'] ?? $modelClient->iban;
         $modelClient->balance = $receivedUser['balance'] ?? $modelClient->balance;
 
-        // Atualiza os dados do usuário
-        $modelUser->username = $receivedUser['username'] ?? $modelUser->username;
+        $modelUser->username = $receivedUser['name'] ?? $modelUser->username;
         $modelUser->email = $receivedUser['email'] ?? $modelUser->email;
 
+        if(isset($receivedUser['password'])) {
+            $modelUser->setPassword($receivedUser['password']);
+            $modelUser->generateAuthKey();
+        }
+
         if ($modelClient->save() && $modelUser->save()) {
-            \Yii::$app->response->statusCode = 201;
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            \Yii::$app->response->statusCode = 200;
             return [
                 'status' => 'success',
-                'message' => 'User updated successfully',
+                'token' => $getUserToken,
+                'username' => $modelUser->username,
+                'id' => $modelUser->id,
+                'email' => $modelUser->email,
+                'phone' => $modelClient->phone,
+                'balance' => $modelClient->balance,
+                'iban' => $modelClient->iban,
             ];
         } else {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             \Yii::$app->response->statusCode = 400;
             return [
                 'status' => 'error',
@@ -223,6 +253,8 @@ class ClientsController extends ActiveController
             ];
         }
     }
+
+
     public function actionDelete($id)
     {
         if (!\Yii::$app->request->isDelete) {

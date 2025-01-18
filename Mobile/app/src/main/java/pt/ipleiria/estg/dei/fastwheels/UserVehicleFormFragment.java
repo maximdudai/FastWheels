@@ -39,6 +39,7 @@ import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 
 public class UserVehicleFormFragment extends Fragment {
 
@@ -319,7 +320,8 @@ public class UserVehicleFormFragment extends Fragment {
     //endregion
 
     private void loadVehicleDataByID(int vehicleId) {
-        Vehicle vehicle = SingletonFastWheels.getInstance(getContext()).getVehicleById(vehicleId);
+        SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
+        Vehicle vehicle = singleton.getVehicleByIdBd(vehicleId);
 
         if (vehicle != null) {
             ivEliminarVeiculo.setVisibility(View.VISIBLE);
@@ -352,7 +354,6 @@ public class UserVehicleFormFragment extends Fragment {
         }
     }
 
-
     private void saveVehicle() {
         if (!validateFields() || !validatePhotos()) {
             return;
@@ -382,27 +383,28 @@ public class UserVehicleFormFragment extends Fragment {
             disponivelAte = Timestamp.valueOf(disponivelAteFormatted + " 00:00:00");
             //endregion
 
-
             SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
+
             Bundle args = getArguments();
             int vehicleId = args != null ? args.getInt("VEHICLE_ID", -1) : -1;
 
             ArrayList<VehiclePhoto> vehiclePhotosList = new ArrayList<>();
 
-            Vehicle vehicle = new Vehicle(vehicleId, 1, marca, modelo, ano, numPortas, true,
+            User user = SingletonFastWheels.getInstance(getContext()).getUser();
+            int clientid = user.getId();
+
+            Vehicle vehicle = new Vehicle(vehicleId, clientid, marca, modelo, ano, numPortas, false,
                     disponivelDe, disponivelAte, morada, codigoPostal, cidade, precoDia, vehiclePhotosList);
 
             singleton.removeAllVehiclePhotosBD(vehicleId);
 
             if(vehicleId == -1) {
-                singleton.addVehicleDb(vehicle);
+                singleton.addVehicleAPI(vehicle, getContext());
                 Helpers.showMessage(getContext(), "Veículo adicionado com sucesso!");
 
             } else {
-                boolean updatedVehicle = singleton.editVehicleDb(vehicle);
-                if(updatedVehicle) {
-                    Helpers.showMessage(getContext(), "Veículo atualizado com sucesso!");
-                }
+                singleton.editVehicleAPI(vehicle,getContext());
+                Helpers.showMessage(getContext(), "Veículo atualizado com sucesso!");
             }
 
             for (Uri uri : selectedImages) {
@@ -439,7 +441,7 @@ public class UserVehicleFormFragment extends Fragment {
                 .setMessage("Pretende eliminar o registo deste veículo?")
                 .setPositiveButton("Sim", (dialog, which) -> {
                     SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
-                    singleton.removeVehicleDb(vehicleId);
+                    singleton.removeVehicleAPI(vehicleId, getContext());
                     Helpers.showMessage(getContext(), "Veículo e fotos eliminados com sucesso!");
 
                     if (getActivity() instanceof UserVehicles) {

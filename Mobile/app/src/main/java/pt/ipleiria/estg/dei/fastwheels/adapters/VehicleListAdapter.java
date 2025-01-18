@@ -9,16 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
-import pt.ipleiria.estg.dei.fastwheels.UserVehicleFormFragment;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 
@@ -61,6 +57,8 @@ public class VehicleListAdapter extends BaseAdapter {
                 convertView.setTag(new ViewHolderUserVehicle(convertView));
             }
         }
+
+        System.out.println("adapter: " + vehicles);
 
         Vehicle vehicle = vehicles.get(position);
 

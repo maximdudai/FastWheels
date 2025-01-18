@@ -4,9 +4,13 @@ import androidx.annotation.NonNull;
 
 import java.util.Date;
 
+import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
+
 public class User {
     private String token, name, email, phone, balance, iban;
     private int id;
+    private String password;
+    private generateBase64 base64token;
 
     public User() {
 
@@ -75,6 +79,22 @@ public class User {
 
     public void setIban(String iban) {
         this.iban = iban;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public generateBase64 getBase64token() {
+        return base64token;
+    }
+
+    public void setBase64token(generateBase64 base64token) {
+        this.base64token = base64token;
     }
 
     @NonNull

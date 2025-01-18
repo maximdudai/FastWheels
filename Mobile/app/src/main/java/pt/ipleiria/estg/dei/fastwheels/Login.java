@@ -3,7 +3,6 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.content.Context;
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,14 +14,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Objects;
-
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
-import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
-import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class Login extends AppCompatActivity implements LoginListener {
 
@@ -107,6 +102,9 @@ public class Login extends AppCompatActivity implements LoginListener {
             editor.putString(Constants.KEY_USERNAME, user.getName());
             editor.putString(Constants.KEY_EMAIL, user.getEmail());
             editor.putString(Constants.KEY_PASSWORD, userPassword.getText().toString());
+
+            //atualizar a pass do user
+            user.setPassword(userPassword.getText().toString());
 
             editor.apply();
 

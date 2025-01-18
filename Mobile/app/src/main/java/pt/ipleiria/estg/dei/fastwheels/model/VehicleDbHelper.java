@@ -16,7 +16,7 @@ import java.util.List;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 5;
 
     private final SQLiteDatabase db;
 
@@ -88,6 +88,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     //region METODOS GERIR VEHICLE
     public Vehicle addVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
+
+        values.put(ID, vehicle.getId());
         values.put(CLIENT_ID, vehicle.getClientId());
         values.put(CAR_BRAND, vehicle.getCarBrand());
         values.put(CAR_MODEL, vehicle.getCarModel());
@@ -101,39 +103,36 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         values.put(CITY, vehicle.getCity());
         values.put(PRICE_DAY, vehicle.getPriceDay().toPlainString());
 
-        long id = db.insert(TABLE_VEHICLES, null, values); //long: verificar operação for bem-sucedida
-        if (id > -1) { //db.insert retorna -1 quando falha
-            // Criar um novo objeto Vehicle com o ID gerado
-            Vehicle newVehicle = new Vehicle(
-                    (int) id, // ID gerado pelo banco
-                    vehicle.getClientId(),
-                    vehicle.getCarBrand(),
-                    vehicle.getCarModel(),
-                    vehicle.getCarYear(),
-                    vehicle.getCarDoors(),
-                    vehicle.isStatus(),
-                    vehicle.getAvailableFrom(),
-                    vehicle.getAvailableTo(),
-                    vehicle.getAddress(),
-                    vehicle.getPostalCode(),
-                    vehicle.getCity(),
-                    vehicle.getPriceDay(),
-                    vehicle.getVehiclePhotos()
-            );
+        db.insert(TABLE_VEHICLES, null, values); //long: verificar operação for bem-sucedida
 
-            // Adicionar fotos associadas
-            if (vehicle.getVehiclePhotos() != null) {
-                for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
-                    addPhotoDb(photo);
-                }
+        Vehicle newVehicle = new Vehicle(
+                vehicle.getId(),
+                vehicle.getClientId(),
+                vehicle.getCarBrand(),
+                vehicle.getCarModel(),
+                vehicle.getCarYear(),
+                vehicle.getCarDoors(),
+                vehicle.isStatus(),
+                vehicle.getAvailableFrom(),
+                vehicle.getAvailableTo(),
+                vehicle.getAddress(),
+                vehicle.getPostalCode(),
+                vehicle.getCity(),
+                vehicle.getPriceDay(),
+                vehicle.getVehiclePhotos());
+
+        if (vehicle.getVehiclePhotos() != null) {
+            for (VehiclePhoto photo : vehicle.getVehiclePhotos()) {
+                addPhotoDb(photo);
             }
-            return newVehicle;
         }
-        return null; // Retorna null em caso de falha
+        return newVehicle;
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
+
+        values.put(ID, vehicle.getId());
         values.put(CLIENT_ID, vehicle.getClientId());
         values.put(CAR_BRAND, vehicle.getCarBrand());
         values.put(CAR_MODEL, vehicle.getCarModel());
@@ -154,31 +153,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         removeAllPhotosByVehicleIdDB(id);
 
         return db.delete(TABLE_VEHICLES, ID + " = ?", new String[]{String.valueOf(id)}) > 0;
-    }
-
-    public Vehicle getVehicleById(int id) {
-        Cursor cursor = db.query(TABLE_VEHICLES, null, ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            Vehicle vehicle = new Vehicle(
-                    cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(CLIENT_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CAR_BRAND)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CAR_MODEL)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(CAR_YEAR)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(CAR_DOORS)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(STATUS)) == 1,
-                    Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_FROM))),
-                    Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_TO))),
-                    cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(POSTAL_CODE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CITY)),
-                    new BigDecimal(cursor.getString(cursor.getColumnIndexOrThrow(PRICE_DAY))),
-                    getAllPhotosByVehicleId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
-            );
-            cursor.close();
-            return vehicle;
-        }
-        return null;
     }
 
     public ArrayList<Vehicle> getAllVehiclesDb() {
@@ -209,6 +183,11 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         cursor.close();
         return vehicles;
     }
+
+    public void clearAllVehicles() {
+        db.delete(TABLE_VEHICLES, null, null);
+    }
+
     //endregion
 
     //region METODOS GERIR VEHICLEPHOTO
