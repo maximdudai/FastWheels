@@ -16,7 +16,7 @@ import java.util.List;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 11;
+    private static final int DB_VERSION = 14;
 
     private final SQLiteDatabase db;
 

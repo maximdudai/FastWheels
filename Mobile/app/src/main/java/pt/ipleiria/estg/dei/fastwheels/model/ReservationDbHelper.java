@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ReservationDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "fastwheels";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 14;
 
     private final SQLiteDatabase db;
 

@@ -42,7 +42,7 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         fabSaveVehicle.setOnClickListener(v -> {
             // Navega para o formulário do UserVehicle
             if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment(),"UserVehicleFormFragment");
+                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment(),"UserVehicleFormFragment", null);
             }
         });
 
@@ -75,7 +75,7 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
 
             // Navegar para o formulário
             if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(formFragment, "UserVehicleFormFragment");
+                ((UserVehicles) getActivity()).loadFragment(formFragment, "UserVehicleFormFragment", null);
             }
         });
 

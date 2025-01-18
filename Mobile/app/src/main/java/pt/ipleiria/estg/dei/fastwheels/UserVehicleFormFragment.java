@@ -429,7 +429,7 @@ public class UserVehicleFormFragment extends Fragment {
 
             // Navegar de volta para a Lista de Veículos
             if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
+                ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment", null);
             }
         } catch (Exception e) {
             Log.e("Error", "Erro ao salvar veículo: " + e.getMessage());
@@ -446,7 +446,7 @@ public class UserVehicleFormFragment extends Fragment {
 
                     if (getActivity() instanceof UserVehicles) {
                         getActivity().getSupportFragmentManager().popBackStack();
-                        ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment(),"UserVehicleListFragment");
+                        ((UserVehicles) getActivity()).loadFragment(new UserVehicleListFragment(),"UserVehicleListFragment", null);
                     }
                 })
                 .setNegativeButton("Não", null)

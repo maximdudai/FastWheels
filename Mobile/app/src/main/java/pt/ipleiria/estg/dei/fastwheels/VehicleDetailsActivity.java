@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 
@@ -39,6 +40,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
     private boolean isFavorite = false;
     private Button btnFav;
+    private User loggedUser = null;
 
 
     @Override
@@ -68,6 +70,8 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         calendarAvailableTo = (Calendar) calendarAvailableFrom.clone();
         calendarAvailableTo.add(Calendar.DAY_OF_MONTH, 1);
 
+        loggedUser = SingletonFastWheels.getInstance(getApplicationContext()).getUser();
+
         // Obter o ID do veículo passado pela Intent
         selectedVehicle = getIntent().getIntExtra("VEHICLE_ID", -1);
 
@@ -79,18 +83,18 @@ public class VehicleDetailsActivity extends AppCompatActivity {
             // Preenche os campos com os dados do veículo
             populateVehicleDetails(vehicle);
 
-            // Verifica o estado inicial do favorito
-            checkFavoriteStatus(vehicle.getId());
+            isFavorite = checkFavoriteStatus(vehicle.getId());
+            updateFavoriteButtonState();
 
             // Configura o clique no botão de favoritos
             btnFav.setOnClickListener(v -> {
                 if (isFavorite) {
                     SingletonFastWheels.getInstance(getApplicationContext())
-                            .removeFavoriteAPI(vehicle.getId(), getApplicationContext());
+                            .removeFavorite(loggedUser.getId(), vehicle.getId());
                     isFavorite = false;
                 } else {
                     SingletonFastWheels.getInstance(getApplicationContext())
-                            .addFavoriteAPI(vehicle.getId(), getApplicationContext());
+                            .addFavorite(loggedUser.getId(), vehicle.getId());
                     isFavorite = true;
                 }
                 updateFavoriteButtonState();
@@ -140,22 +144,20 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void checkFavoriteStatus(int vehicleId) {
+    private boolean checkFavoriteStatus(int vehicleId) {
         // Obter os favoritos (lista de objetos Favorite)
-        ArrayList<Favorite> favoriteList = SingletonFastWheels.getInstance(getApplicationContext()).getFavorites();
 
-        // Converter os favoritos (Favorite) para veículos (Vehicle)
-        ArrayList<Vehicle> favoriteVehicles = new ArrayList<>();
-        for (Favorite favorite : favoriteList) {
-            Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd((int) favorite.getCarId());
-            if (vehicle != null) {
-                favoriteVehicles.add(vehicle);
-            }
+        List<Favorite> favorites = SingletonFastWheels.getInstance(getApplicationContext()).getFavorites();
+
+        if(favorites == null)
+            return false;
+
+        for(Favorite favs: favorites) {
+            if(favs.getCarId() == vehicleId)
+                return true;
         }
+        return false;
 
-        // Verificar se o veículo atual está na lista de favoritos
-        isFavorite = favoriteVehicles.stream().anyMatch(vehicle -> vehicle.getId() == vehicleId);
-        updateFavoriteButtonState();
     }
 
     private void updateFavoriteButtonState() {
