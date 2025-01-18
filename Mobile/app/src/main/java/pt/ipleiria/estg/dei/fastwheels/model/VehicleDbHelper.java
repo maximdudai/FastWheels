@@ -16,7 +16,7 @@ import java.util.List;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 11;
 
     private final SQLiteDatabase db;
 
@@ -86,7 +86,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
 
     //region METODOS GERIR VEHICLE
-    public Vehicle addVehicleDb(Vehicle vehicle) {
+    public void addVehicleDb(Vehicle vehicle) {
+
         ContentValues values = new ContentValues();
 
         values.put(ID, vehicle.getId());
@@ -126,7 +127,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 addPhotoDb(photo);
             }
         }
-        return newVehicle;
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
@@ -185,6 +185,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     }
 
     public void clearAllVehicles() {
+        System.out.println("---API removed from local db vehicles");
         db.delete(TABLE_VEHICLES, null, null);
     }
 
@@ -228,8 +229,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
 
                 photos.add(new VehiclePhoto(id, carId, url));
             } while (cursor.moveToNext());
-        } else {
-            System.out.println("---> Debug: No photos found for Vehicle ID: " + vehicleId);
         }
 
         cursor.close();

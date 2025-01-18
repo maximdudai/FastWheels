@@ -2,8 +2,10 @@ package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +32,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
     private GridLayout glImgVehicle;
     private List<String> displayedImages = new ArrayList<>();
-
+    private int selectedVehicle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +61,11 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         calendarAvailableTo.add(Calendar.DAY_OF_MONTH, 1);
 
         // Obter o ID do veículo passado pela Intent
-        int vehicleId = getIntent().getIntExtra("VEHICLE_ID", -1);
+        selectedVehicle = getIntent().getIntExtra("VEHICLE_ID", -1);
 
-        if (vehicleId != -1) {
+        if (selectedVehicle != -1) {
             // Busca o veículo no Singleton
-            Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd(vehicleId);
+            Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd(selectedVehicle);
 
             if (vehicle != null) {
                 // Preenche os campos com os dados do veículo
@@ -144,4 +146,23 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         // Atualizar o container de imagens
         refreshImageContainer();
     }
+
+    public void handleRentVehicle(View v) {
+        ReserveVehicleFragment fragment = new ReserveVehicleFragment();
+        Bundle args = new Bundle();
+        args.putInt("vehicleId", selectedVehicle);
+        fragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, "ReserveVehicleFragment")
+                .addToBackStack(null)
+                .commit();
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                finish();
+            }
+        });
+    }
+
 }

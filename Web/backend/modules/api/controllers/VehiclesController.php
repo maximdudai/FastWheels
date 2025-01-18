@@ -25,7 +25,6 @@ class VehiclesController extends ActiveController
         'index',
         'view',
         'count',
-        'list'
       ],
       'auth' => [$this, 'authintercept']
     ];
@@ -49,15 +48,18 @@ class VehiclesController extends ActiveController
     return ['count' => UserCar::find()->count()];
   }
 
-  public function actionList()
+  public function actions()
   {
-    return UserCar::find()->all();
+      $actions = parent::actions();
+      unset($actions['index']); 
+      return $actions;
   }
 
-  public function actionIndex($id)
+  public function actionIndex()
   {
-    return UserCar::findOne($id);
+      return UserCar::find()->all();
   }
+  
 
   public function actionCreate()
   {

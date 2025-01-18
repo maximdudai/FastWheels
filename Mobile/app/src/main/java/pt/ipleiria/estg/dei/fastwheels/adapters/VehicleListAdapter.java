@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
@@ -22,7 +23,7 @@ public class VehicleListAdapter extends BaseAdapter {
 
     private static Context context;
     private LayoutInflater inflater;
-    private ArrayList<Vehicle> vehicles;
+    private ArrayList<Vehicle> vehicles = null;
     private int layoutResourceId; // Layout a ser utilizado
 
     public VehicleListAdapter(Context context, ArrayList<Vehicle> vehicles, int layoutResourceId) {
@@ -55,11 +56,10 @@ public class VehicleListAdapter extends BaseAdapter {
                 convertView.setTag(new ViewHolderVehicle(convertView));
             } else if (layoutResourceId == R.layout.item_vehicle) {
                 convertView.setTag(new ViewHolderUserVehicle(convertView));
+            } else if ((layoutResourceId == R.layout.item_reserved)) {
+                convertView.setTag(new ViewHolderReservedVehicles(convertView));
             }
         }
-
-        System.out.println("adapter: " + vehicles);
-
         Vehicle vehicle = vehicles.get(position);
 
         if (layoutResourceId == R.layout.vehicle_list_item) {
@@ -68,7 +68,11 @@ public class VehicleListAdapter extends BaseAdapter {
         } else if (layoutResourceId == R.layout.item_vehicle) {
             ViewHolderUserVehicle viewHolder = (ViewHolderUserVehicle) convertView.getTag();
             viewHolder.update(vehicle);
+        } else if (layoutResourceId == R.layout.item_reserved) {
+            ViewHolderReservedVehicles viewHolder = (ViewHolderReservedVehicles) convertView.getTag();
+            viewHolder.update(vehicle);
         }
+
 
         return convertView;
     }
@@ -107,8 +111,53 @@ public class VehicleListAdapter extends BaseAdapter {
             tvDoors.setText(String.valueOf(vehicle.getCarDoors()));
             tvAddress.setText(vehicle.getCity());
             tvPrice.setText(String.format("%.2f€", vehicle.getPriceDay()));
+        }
+    }
+
+    private class ViewHolderReservedVehicles {
+        private ImageView imgVehicle;
+        private TextView tvBrand, tvModel, tvDataComeco, tvDataFim, tvPreco;
+
+        public ViewHolderReservedVehicles(View view) {
+            imgVehicle = view.findViewById(R.id.ivVehicle);
+            tvBrand = view.findViewById(R.id.tvListaMarca);
+            tvModel = view.findViewById(R.id.tvListaModelo);
+            tvPreco = view.findViewById(R.id.tvListaPreco);
 
 
+
+            tvDataComeco = view.findViewById(R.id.tvListaDataComeco);
+            tvDataFim = view.findViewById(R.id.tvListaDataFim);
+        }
+
+        public void update(Vehicle vehicle) {
+
+            if (!vehicle.getVehiclePhotos().isEmpty()) {
+                VehiclePhoto firstPhoto = vehicle.getVehiclePhotos().get(0);  // Get the first photo object
+                String photoUrl = firstPhoto.getPhotoUrl();  // Get the URL string
+                Uri photoUri = Uri.parse(photoUrl);
+
+                // Load the image using Glide
+                Glide.with(context)
+                        .load(photoUri)  // Pass the URI object
+                        .placeholder(R.drawable.gallery_icon)
+                        .error(R.drawable.gallery_icon)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(imgVehicle);
+            }
+            tvBrand.setText(vehicle.getCarBrand());
+            tvModel.setText(vehicle.getCarModel());
+            tvPreco.setText(" "+ vehicle.getPriceDay() + "€");
+
+            String availableFrom = String.valueOf(vehicle.getAvailableFrom());
+            String availableTo = String.valueOf(vehicle.getAvailableTo());
+
+            //prevent showing hour:minutes:seconds
+            String dateFrom = availableFrom.split(" ")[0];
+            String dateTo = availableTo.split(" ")[0];
+
+            tvDataComeco.setText(dateFrom);
+            tvDataFim.setText(dateTo);
         }
     }
 

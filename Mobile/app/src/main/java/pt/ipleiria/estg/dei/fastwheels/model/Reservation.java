@@ -7,7 +7,7 @@ public class Reservation {
     private Double value, feeValue, carValue;
     private Timestamp dateStart, dateEnd, createAt;
 
-    public Reservation(int id, int clientId, int carId, Timestamp dateStart, Timestamp dateEnd, Timestamp createAt, int filled, double value, double feeValue, double carValue) {
+    public Reservation(int id, int clientId, int carId, Timestamp dateStart, Timestamp dateEnd, int filled, double value, double feeValue, double carValue) {
         this.id = id;
         this.clientId = clientId;
         this.carId = carId;
@@ -17,7 +17,7 @@ public class Reservation {
         this.carValue = carValue;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
-        this.createAt = createAt;
+        this.createAt = new Timestamp(System.currentTimeMillis());
     }
 
     public int getId() {
@@ -98,5 +98,21 @@ public class Reservation {
 
     public void setCreateAt(Timestamp createAt) {
         this.createAt = createAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", clientId=" + clientId +
+                ", carId=" + carId +
+                ", filled=" + filled +
+                ", value=" + value +
+                ", feeValue=" + feeValue +
+                ", carValue=" + carValue +
+                ", dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", createAt=" + createAt +
+                '}';
     }
 }

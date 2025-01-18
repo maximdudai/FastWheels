@@ -20,7 +20,7 @@ import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte;
+    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goReservations;
     TextView tvMainLoggedName, tvMainLoggedEmail;
 
     @Override
@@ -95,7 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // TODO Reservas
-
+        goReservations = findViewById(R.id.LayoutMainReservas);
+        goReservations.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            intent.putExtra("TAG_Vehicle", "ViewHolderReservedVehicles");
+            startActivity(intent);
+        });
 
         // TODO Notificacoes
 
