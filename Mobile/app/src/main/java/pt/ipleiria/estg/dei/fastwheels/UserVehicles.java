@@ -28,7 +28,7 @@ public class UserVehicles extends AppCompatActivity {
             } else if("ViewHolderReservedVehicles".equals(fragmentTag)) {
 
                 // minhas reservas
-                loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
+                loadFragment(new UserReservedVehicleFragment(), "UserVehicleListFragment");
             }
         }
     }
@@ -50,9 +50,9 @@ public class UserVehicles extends AppCompatActivity {
         } else if (currentFragment != null && currentFragment instanceof VehicleListFragment) {
             super.onBackPressed();
             finish();
-        }  else {
-            // Volta para o fragmento anterior
-            getSupportFragmentManager().popBackStack();
+        }  else if (currentFragment != null && currentFragment instanceof UserReservedVehicleFragment) {
+            super.onBackPressed();
+            finish();
         }
     }
 }

@@ -55,13 +55,9 @@ class VehiclesController extends ActiveController
       return $actions;
   }
 
-  public function actionIndex($id = null)
+  public function actionIndex()
   {
-      $query = UserCar::find()->andWhere(['status' => null])->orWhere(['status' => 0]);
-      if ($id !== null) {
-          $query->andWhere(['id' => $id]);
-      }
-      return $query->all();
+      return UserCar::find()->all();
   }
   
 

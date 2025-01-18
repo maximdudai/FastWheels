@@ -1,11 +1,14 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,7 +26,7 @@ import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 public class UserReservedVehicleFragment extends Fragment implements VehicleListener {
 
     private ListView lvReservations;
-    private ArrayList<Vehicle> reservationsList = null, vehiclesToShow = null;
+    private ArrayList<Vehicle> vehicleList = null, vehiclesToShow = null;
     private ArrayList<Reservation> allReservations;
 
     private User loggedUser;
@@ -37,52 +40,55 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
 
-        // Configurar o FloatingActionButton
-        FloatingActionButton fabSaveVehicle = view.findViewById(R.id.fabSaveVehicle);
-        fabSaveVehicle.setVisibility(View.VISIBLE); // Torna o botão visível
-
-        fabSaveVehicle.setOnClickListener(v -> {
-            // Navega para o formulário do UserVehicle
-            if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(new UserVehicleFormFragment(),"UserVehicleFormFragment");
-            }
-        });
+        Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
+        if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
         //VehicleListener
         singleton.setVehicleListener(this);
 
         // Configuração da ListView
-        reservationsList = new ArrayList<Vehicle>();
+        vehicleList = new ArrayList<Vehicle>();
         allReservations = new ArrayList<Reservation>();
 
         lvReservations = view.findViewById(R.id.lvImgVehicle);
 
-        singleton.getReservationAPI(getContext());
+        singleton.getVehiclesAPI(getContext());
         singleton.getReservationAPI(getContext());
 
         loggedUser = singleton.getUser();
-        reservationsList = singleton.getVehiclesDb();
+        vehicleList = singleton.getVehiclesDb();
         allReservations = singleton.getReservationsDb();
 
-        vehiclesToShow = Helpers.filterVehicleByReserved(reservationsList, allReservations);
+        vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations);
 
-
-        lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
+        lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_reserved));
         lvReservations.setOnItemClickListener((adapterView, itemView, position, id) -> {
             Vehicle selectedVehicle = vehiclesToShow.get(position);
 
-            UserVehicleFormFragment formFragment = new UserVehicleFormFragment();
+            new AlertDialog.Builder(getContext())
+                    .setMessage("Pretende remover a reserva?")
+                    .setPositiveButton("Sim", (dialog, which) -> {
+//                        vehiclesToShow.removeIf(car -> car.getId() == selectedVehicle.getId());
 
-            // Passar os dados do veículo como argumentos
-            Bundle args = new Bundle();
-            args.putInt("VEHICLE_ID", selectedVehicle.getId());
-            formFragment.setArguments(args);
+                        Reservation clickedReserve = Helpers.getReservationByVehicleAndUser(allReservations, loggedUser.getId(), selectedVehicle.getId());
 
-            // Navegar para o formulário
-            if (getActivity() instanceof UserVehicles) {
-                ((UserVehicles) getActivity()).loadFragment(formFragment, "UserVehicleFormFragment");
-            }
+                        System.out.println("--->API clickedReserve" + clickedReserve);
+
+                        if(clickedReserve != null) {
+                            singleton.removeReservationAPI(clickedReserve.getId(), getContext());
+
+                            //false = mark as unrented | true = mark as rented
+                            selectedVehicle.setStatus(false);
+                            singleton.editVehicleAPI(selectedVehicle, getContext());
+                        }
+
+                    })
+                    .setNegativeButton("Não", null)
+                    .show();
         });
 
         return view;
@@ -95,13 +101,17 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
 
     @Override
     public void onRefreshVehicle() {
-        vehiclesToShow = reservationsList = new ArrayList<Vehicle>();
+        this.updateVehicleList();
+    }
 
-        reservationsList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+    private void updateVehicleList() {
+        vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         allReservations = SingletonFastWheels.getInstance(getContext()).getReservationsDb();
 
-        vehiclesToShow = Helpers.filterVehicleByReserved(reservationsList, allReservations);
+        vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations);
 
-        lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
+        lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_reserved));
     }
 }

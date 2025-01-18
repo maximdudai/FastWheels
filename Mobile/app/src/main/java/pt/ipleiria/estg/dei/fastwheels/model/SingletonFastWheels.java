@@ -73,12 +73,11 @@ public class SingletonFastWheels {
 
     // Construtor privado
     private SingletonFastWheels(Context context) {
-        vehicles = new ArrayList<>();
-        vehicleDbHelper = new VehicleDbHelper(context);
-
         reservations = new ArrayList<>();
         reservationDbHelper = new ReservationDbHelper(context);
 
+        vehicles = new ArrayList<>();
+        vehicleDbHelper = new VehicleDbHelper(context);
     }
 
     // region get/set user
@@ -483,7 +482,17 @@ public class SingletonFastWheels {
         reservationDbHelper.deleteAllReservationDB();
     }
 
+    public void removeReservationDb(int id) {
+        if(reservationDbHelper.deleteReservationDB(id) != -1) {
+            reservations = reservationDbHelper.getAllReservations();
+        }
+    }
+
     public ArrayList<Reservation> getReservationsDb() {
+        if(reservationDbHelper == null) {
+            return null;
+        }
+
         reservations = reservationDbHelper.getAllReservations();
         return reservations;
     }
@@ -499,6 +508,8 @@ public class SingletonFastWheels {
                         @Override
                         public void onResponse(String response) {
                             Reservation reservation = ReservationParser.parseReservationData(response);
+
+                            System.out.println("--->API reservation loaded: " + reservation.toString());
 
                             if (reservation != null) {
                                 addReservationDB(reservation);
@@ -563,13 +574,12 @@ public class SingletonFastWheels {
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
-                            removeReservationsDb();
-
                             reservations.clear();
                             reservations = ReservationParser.parseReservationsData(response);
 
-                            //make a loop only if there is vehicles on API
                             if (!reservations.isEmpty()) {
+                                removeReservationsDb();
+
                                 for (Reservation res : reservations) {
                                     addReservationDB(res);
                                 }
@@ -581,12 +591,65 @@ public class SingletonFastWheels {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    String errorMsg = (error.getMessage() != null) ? error.getMessage() : "An unexpected error occurred.";
-                    Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show();
+                    if (error.networkResponse != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
 
             volleyQueue.add(jsonRequest);
+
+        }
+    }
+
+    public void removeReservationAPI (final int resId, final Context context){
+        if(!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.DELETE,
+                    Constants.API_RESERVATION + "/delete/" + resId,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            removeReservationDb(resId);
+
+                            if (reservationListener != null) reservationListener.onReservationUpdate();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
+            volleyQueue.add(request);
         }
     }
 

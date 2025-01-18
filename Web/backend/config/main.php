@@ -88,7 +88,7 @@ return [
                         'GET index' => 'index',
                         'POST create' => 'create',
                         'PUT {id}/update' => 'update',
-                        'DELETE {id}' => 'delete',
+                        'DELETE delete/{id}' => 'delete',
                         'GET user/{id}' => 'user',
                     ],
                     'tokens' => [

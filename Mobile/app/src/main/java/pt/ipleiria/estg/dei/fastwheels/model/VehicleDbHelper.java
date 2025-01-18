@@ -16,7 +16,7 @@ import java.util.List;
 public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 11;
 
     private final SQLiteDatabase db;
 
@@ -127,7 +127,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 addPhotoDb(photo);
             }
         }
-        System.out.println("--->API addVehicleDb - sucesso: " + newVehicle.toString());
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {

@@ -99,4 +99,20 @@ public class Reservation {
     public void setCreateAt(Timestamp createAt) {
         this.createAt = createAt;
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", clientId=" + clientId +
+                ", carId=" + carId +
+                ", filled=" + filled +
+                ", value=" + value +
+                ", feeValue=" + feeValue +
+                ", carValue=" + carValue +
+                ", dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", createAt=" + createAt +
+                '}';
+    }
 }

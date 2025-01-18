@@ -227,4 +227,18 @@ public class Helpers {
         return auxVehicle;
     }
 
+    public static Reservation getReservationByVehicleAndUser(ArrayList<Reservation> resList, int userId, int selectedVehicle) {
+
+        System.out.println("--->API getReservationByVehicleAndUser: " + userId + " veh: " + selectedVehicle);
+
+        // Loop through reservations to find a match
+        for (Reservation reservs : resList) {
+            if (reservs.getCarId() == selectedVehicle && reservs.getClientId() == userId) {
+                return reservs; // Return the matching reservation
+            }
+        }
+
+        return null; // Return null if no match is found
+    }
+
 }

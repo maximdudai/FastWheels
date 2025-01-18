@@ -5,17 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.util.Log;
 import androidx.annotation.Nullable;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ReservationDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "fastwheels";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 11;
 
     private final SQLiteDatabase db;
 
@@ -40,19 +38,26 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_RESERVATIONS + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_CLIENT_ID + " INTEGER, " +
-                COLUMN_CAR_ID + " INTEGER, " +
-                COLUMN_DATE_START + " TIMESTAMP, " +
-                COLUMN_DATE_END + " TIMESTAMP, " +
-                COLUMN_CREATED_AT + " TIMESTAMP, " +
-                COLUMN_FILLED + " INTEGER, " +
-                COLUMN_VALUE + " REAL, " +
-                COLUMN_FEE_VALUE + " REAL, " +
-                COLUMN_CAR_VALUE + " REAL)";
-        db.execSQL(createTable);
+        Log.d("DATABASE:RESERVATION", "onCreate called");
+        try {
+            String createTable = "CREATE TABLE IF NOT EXISTS reservations (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "client_id INTEGER, " +
+                    "car_id INTEGER, " +
+                    "date_start TEXT, " +
+                    "date_end TEXT, " +
+                    "created_at TEXT, " +
+                    "filled INTEGER, " +
+                    "value REAL, " +
+                    "fee_value REAL, " +
+                    "car_value REAL)";
+            db.execSQL(createTable);
+            Log.d("DATABASE:RESERVATION", "Table created successfully");
+        } catch (Exception e) {
+            Log.e("DATABASE:ERROR", "Error creating table: " + e.getMessage());
+        }
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -61,8 +66,7 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
     }
 
     // Insert a new reservation
-    public long addReservationDB(Reservation reservation) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void addReservationDB(Reservation reservation) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLIENT_ID, reservation.getClientId());
         values.put(COLUMN_CAR_ID, reservation.getCarId());
@@ -73,13 +77,15 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
         values.put(COLUMN_VALUE, reservation.getValue());
         values.put(COLUMN_FEE_VALUE, reservation.getFeeValue());
         values.put(COLUMN_CAR_VALUE, reservation.getCarValue());
-        return db.insert(TABLE_RESERVATIONS, null, values);
+
+        db.insert(TABLE_RESERVATIONS, null, values);
+
+        new Reservation(reservation.getId(), reservation.getClientId(), reservation.getCarId(), reservation.getDateStart(), reservation.getDateEnd(), 0, reservation.getValue(), reservation.getFeeValue(), reservation.getCarValue());
     }
 
     // Get all reservations
     public ArrayList<Reservation> getAllReservations() {
         ArrayList<Reservation> reservations = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_RESERVATIONS, null, null, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -105,7 +111,6 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
 
     // Update a reservation
     public int updateReservationDB(Reservation reservation) {
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_CLIENT_ID, reservation.getClientId());
         values.put(COLUMN_CAR_ID, reservation.getCarId());
@@ -121,7 +126,6 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
 
     // Delete a reservation
     public int deleteReservationDB(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_RESERVATIONS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
