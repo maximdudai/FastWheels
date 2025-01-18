@@ -63,7 +63,9 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
         vehicleList = singleton.getVehiclesDb();
         allReservations = singleton.getReservationsDb();
 
-        vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations);
+        System.out.println("---> API loaded revs: " + allReservations.size());
+
+        vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations, loggedUser.getId());
 
         lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_reserved));
         lvReservations.setOnItemClickListener((adapterView, itemView, position, id) -> {
@@ -74,9 +76,11 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
                     .setPositiveButton("Sim", (dialog, which) -> {
 //                        vehiclesToShow.removeIf(car -> car.getId() == selectedVehicle.getId());
 
+                        System.out.println("---> API sending revs: " + allReservations.size());
+
                         Reservation clickedReserve = Helpers.getReservationByVehicleAndUser(allReservations, loggedUser.getId(), selectedVehicle.getId());
 
-                        System.out.println("--->API clickedReserve" + clickedReserve);
+                        System.out.println("--->API clickedReserve: " + clickedReserve);
 
                         if(clickedReserve != null) {
                             singleton.removeReservationAPI(clickedReserve.getId(), getContext());
@@ -97,6 +101,7 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
     @Override
     public void onResume() {
         super.onResume();
+        this.updateVehicleList();
     }
 
     @Override
@@ -110,7 +115,7 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         allReservations = SingletonFastWheels.getInstance(getContext()).getReservationsDb();
 
-        vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations);
+        vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations, loggedUser.getId());
 
         lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_reserved));
     }

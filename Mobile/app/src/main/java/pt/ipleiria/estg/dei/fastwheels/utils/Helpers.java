@@ -212,14 +212,14 @@ public class Helpers {
         }
         return auxVehicle;
     }
-    public static ArrayList<Vehicle> filterVehicleByReserved(ArrayList<Vehicle> vehicleList, ArrayList<Reservation> reservatonList) {
+    public static ArrayList<Vehicle> filterVehicleByReserved(ArrayList<Vehicle> vehicleList, ArrayList<Reservation> reservatonList, int loggedUser) {
 
         ArrayList<Vehicle> auxVehicle = new ArrayList<>();
 
         for(Vehicle car: vehicleList) {
 
             for(Reservation reservs: reservatonList) {
-                if(reservs.getCarId() == car.getId()) {
+                if(reservs.getCarId() == car.getId() && reservs.getClientId() == loggedUser) {
                     auxVehicle.add(car);
                 }
             }
@@ -229,16 +229,19 @@ public class Helpers {
 
     public static Reservation getReservationByVehicleAndUser(ArrayList<Reservation> resList, int userId, int selectedVehicle) {
 
-        System.out.println("--->API getReservationByVehicleAndUser: " + userId + " veh: " + selectedVehicle);
+        System.out.println("--->API resList: " + resList);
+        System.out.println("--->API userId: " + userId + ", selectedVehicle: " + selectedVehicle);
 
-        // Loop through reservations to find a match
         for (Reservation reservs : resList) {
+            System.out.println("--->API Checking: CarId=" + reservs.getCarId() + ", ClientId=" + reservs.getClientId());
             if (reservs.getCarId() == selectedVehicle && reservs.getClientId() == userId) {
-                return reservs; // Return the matching reservation
+                System.out.println("--->API Match found: " + reservs);
+                return reservs;
             }
         }
 
-        return null; // Return null if no match is found
+        System.out.println("--->API No match found for userId=" + userId + ", vehicleId=" + selectedVehicle);
+        return null;
     }
 
 }
