@@ -83,7 +83,7 @@ public class UserVehicleFormFragment extends Fragment {
         etMorada = view.findViewById(R.id.etMorada);
         etCodigoPostal = view.findViewById(R.id.etpaCodigoPostal);
         etCidade = view.findViewById(R.id.etCidade);
-        etDisponivelDe = view.findViewById(R.id.etdDisponivelDe);
+        etDisponivelDe = view.findViewById(R.id.et_data_inicio);
         etDisponivelAte = view.findViewById(R.id.etdDisponivelAte);
         etPrecoDia = view.findViewById(R.id.etdPriceDay);
 
