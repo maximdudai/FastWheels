@@ -4,10 +4,8 @@ import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,21 +18,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import pt.ipleiria.estg.dei.fastwheels.adapters.ImageListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
-import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
     private TextView tvBrand, tvModel, tvYear, tvDoors, tvResidence, tvPrice, tvPostalCode, tvCity, tvAvailableFrom, tvAvailableTo;
-    private ListView lvImgVehicle;
     private Calendar calendarAvailableFrom, calendarAvailableTo;
     private ArrayList<Uri> selectedImages;
-
-    private static final int REQUEST_MEDIA_PERMISSION = 100;
-    private static final int MAX_IMAGES = 3;
 
     private GridLayout glImgVehicle;
     private List<String> displayedImages = new ArrayList<>();

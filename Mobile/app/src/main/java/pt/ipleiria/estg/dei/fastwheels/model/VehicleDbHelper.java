@@ -88,6 +88,8 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     //region METODOS GERIR VEHICLE
     public Vehicle addVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
+
+        values.put(ID, vehicle.getId());
         values.put(CLIENT_ID, vehicle.getClientId());
         values.put(CAR_BRAND, vehicle.getCarBrand());
         values.put(CAR_MODEL, vehicle.getCarModel());
@@ -124,12 +126,13 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
                 addPhotoDb(photo);
             }
         }
-        System.out.println("--->API addVehicleDb - sucesso: " + newVehicle.toString());
         return newVehicle;
     }
 
     public boolean editVehicleDb(Vehicle vehicle) {
         ContentValues values = new ContentValues();
+
+        values.put(ID, vehicle.getId());
         values.put(CLIENT_ID, vehicle.getClientId());
         values.put(CAR_BRAND, vehicle.getCarBrand());
         values.put(CAR_MODEL, vehicle.getCarModel());
@@ -150,31 +153,6 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
         removeAllPhotosByVehicleIdDB(id);
 
         return db.delete(TABLE_VEHICLES, ID + " = ?", new String[]{String.valueOf(id)}) > 0;
-    }
-
-    public Vehicle getVehicleById(int id) {
-        Cursor cursor = db.query(TABLE_VEHICLES, null, ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            Vehicle vehicle = new Vehicle(
-                    cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(CLIENT_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CAR_BRAND)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CAR_MODEL)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(CAR_YEAR)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(CAR_DOORS)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(STATUS)) == 1,
-                    Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_FROM))),
-                    Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(AVAILABLE_TO))),
-                    cursor.getString(cursor.getColumnIndexOrThrow(ADDRESS)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(POSTAL_CODE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CITY)),
-                    new BigDecimal(cursor.getString(cursor.getColumnIndexOrThrow(PRICE_DAY))),
-                    getAllPhotosByVehicleId(cursor.getInt(cursor.getColumnIndexOrThrow(ID)))
-            );
-            cursor.close();
-            return vehicle;
-        }
-        return null;
     }
 
     public ArrayList<Vehicle> getAllVehiclesDb() {
