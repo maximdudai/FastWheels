@@ -119,7 +119,7 @@ public class VehicleListAdapter extends BaseAdapter {
         private TextView tvBrand, tvModel, tvDataComeco, tvDataFim, tvPreco;
 
         public ViewHolderReservedVehicles(View view) {
-            imgVehicle = view.findViewById(R.id.imgVehicle);
+            imgVehicle = view.findViewById(R.id.ivVehicle);
             tvBrand = view.findViewById(R.id.tvListaMarca);
             tvModel = view.findViewById(R.id.tvListaModelo);
             tvPreco = view.findViewById(R.id.tvListaPreco);
@@ -141,6 +141,7 @@ public class VehicleListAdapter extends BaseAdapter {
                 Glide.with(context)
                         .load(photoUri)  // Pass the URI object
                         .placeholder(R.drawable.gallery_icon)
+                        .error(R.drawable.gallery_icon)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(imgVehicle);
             }
