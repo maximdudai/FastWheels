@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
         tvMainLoggedEmail = findViewById(R.id.tvMainLoggedEmail);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-
-        System.out.println("---> reg name: " + sharedPreferences.getString(Constants.KEY_USERNAME, null));
-        System.out.println("---> reg email: " + sharedPreferences.getString(Constants.KEY_EMAIL, null));
 
         tvMainLoggedName.setText(sharedPreferences.getString(Constants.KEY_USERNAME, null));
         tvMainLoggedEmail.setText(sharedPreferences.getString(Constants.KEY_EMAIL, null));
@@ -108,5 +107,16 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        User loggedUser = SingletonFastWheels.getInstance(getApplicationContext()).getUser();
+
+        tvMainLoggedName.setText(loggedUser.getName());
+        tvMainLoggedEmail.setText(loggedUser.getEmail());
+    }
+
 
 }
