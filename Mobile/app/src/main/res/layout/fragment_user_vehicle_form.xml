@@ -271,7 +271,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etdDisponivelDe"
+                    android:id="@+id/et_data_inicio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"

@@ -229,13 +229,8 @@ public class Helpers {
 
     public static Reservation getReservationByVehicleAndUser(ArrayList<Reservation> resList, int userId, int selectedVehicle) {
 
-        System.out.println("--->API resList: " + resList);
-        System.out.println("--->API userId: " + userId + ", selectedVehicle: " + selectedVehicle);
-
         for (Reservation reservs : resList) {
-            System.out.println("--->API Checking: CarId=" + reservs.getCarId() + ", ClientId=" + reservs.getClientId());
             if (reservs.getCarId() == selectedVehicle && reservs.getClientId() == userId) {
-                System.out.println("--->API Match found: " + reservs);
                 return reservs;
             }
         }

@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
@@ -110,5 +112,16 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        User loggedUser = SingletonFastWheels.getInstance(getApplicationContext()).getUser();
+
+        tvMainLoggedName.setText(loggedUser.getName());
+        tvMainLoggedEmail.setText(loggedUser.getEmail());
+    }
+
 
 }

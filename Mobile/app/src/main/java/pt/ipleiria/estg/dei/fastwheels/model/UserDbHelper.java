@@ -51,13 +51,13 @@ public class UserDbHelper extends SQLiteOpenHelper {
 
     public User addUserDb(User user) {
         ContentValues values = new ContentValues();
+        values.put(ID, user.getId());
         values.put(TOKEN, user.getToken());
         values.put(NAME, user.getName());
         values.put(EMAIL, user.getEmail());
         values.put(PHONE, user.getPhone());
         values.put(BALANCE, user.getBalance());
         values.put(IBAN, user.getIban());
-
 
         long id = this.db.insert(TABLE_NAME, null, values);
         if (id > -1) {

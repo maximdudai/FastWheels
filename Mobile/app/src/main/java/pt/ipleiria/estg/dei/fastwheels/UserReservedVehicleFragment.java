@@ -31,8 +31,18 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
 
     private User loggedUser;
 
+    SingletonFastWheels singleton = null;
+
     public UserReservedVehicleFragment() {
-        // Required empty public constructor
+        singleton = SingletonFastWheels.getInstance(getContext());
+        singleton.setVehicleListener(this);
+
+        vehicleList = new ArrayList<Vehicle>();
+        allReservations = new ArrayList<Reservation>();
+
+        loggedUser = singleton.getUser();
+        vehicleList = singleton.getVehiclesDb();
+        allReservations = singleton.getReservationsDb();
     }
 
     @Override
@@ -46,24 +56,7 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
             ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        SingletonFastWheels singleton = SingletonFastWheels.getInstance(getContext());
-        //VehicleListener
-        singleton.setVehicleListener(this);
-
-        // Configuração da ListView
-        vehicleList = new ArrayList<Vehicle>();
-        allReservations = new ArrayList<Reservation>();
-
         lvReservations = view.findViewById(R.id.lvImgVehicle);
-
-        singleton.getVehiclesAPI(getContext());
-        singleton.getReservationAPI(getContext());
-
-        loggedUser = singleton.getUser();
-        vehicleList = singleton.getVehiclesDb();
-        allReservations = singleton.getReservationsDb();
-
-        System.out.println("---> API loaded revs: " + allReservations.size());
 
         vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations, loggedUser.getId());
 
@@ -74,13 +67,8 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
             new AlertDialog.Builder(getContext())
                     .setMessage("Pretende remover a reserva?")
                     .setPositiveButton("Sim", (dialog, which) -> {
-//                        vehiclesToShow.removeIf(car -> car.getId() == selectedVehicle.getId());
-
-                        System.out.println("---> API sending revs: " + allReservations.size());
 
                         Reservation clickedReserve = Helpers.getReservationByVehicleAndUser(allReservations, loggedUser.getId(), selectedVehicle.getId());
-
-                        System.out.println("--->API clickedReserve: " + clickedReserve);
 
                         if(clickedReserve != null) {
                             singleton.removeReservationAPI(clickedReserve.getId(), getContext());
@@ -89,6 +77,7 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
                             selectedVehicle.setStatus(false);
                             singleton.editVehicleAPI(selectedVehicle, getContext());
                         }
+                        this.updateVehicleList();
 
                     })
                     .setNegativeButton("Não", null)

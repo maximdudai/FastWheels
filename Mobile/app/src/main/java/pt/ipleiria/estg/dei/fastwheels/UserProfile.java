@@ -103,6 +103,10 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
         editor.putString(Constants.KEY_EMAIL, user.getEmail());
         editor.putString(Constants.KEY_PASSWORD, user.getPassword());
 
-        Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+        loggedEmail.setText(user.getEmail());
+        loggedName.setText(user.getName());
+
+        System.out.println("---> profile update: " + sharedPreferences.getString(Constants.KEY_USERNAME, null));
+        System.out.println("---> profile update: " + sharedPreferences.getString(Constants.KEY_EMAIL, null));
     }
 }
