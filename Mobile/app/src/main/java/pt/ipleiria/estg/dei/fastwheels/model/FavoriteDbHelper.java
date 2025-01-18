@@ -9,36 +9,35 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class FavoriteDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "fastwheels";
-    private static final int DATABASE_VERSION = 5;
+    private static final String DB_NAME = "fastwheels";
+    private static final int DB_VERSION = 1;
+
+    private static final String TABLE_FAVORITES = "favorites";
+    private static final String ID = "id";
+    private static final String USER_ID = "userId";
+    private static final String VEHICLE_ID = "vehicleId";
 
     private final SQLiteDatabase db;
 
-    // Table and columns
-    private static final String TABLE_FAVORITES = "favorites";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_CLIENT_ID = "client_id";
-    private static final String COLUMN_CAR_ID = "car_id";
-    private static final String COLUMN_CREATED_AT = "created_at";
-
     public FavoriteDbHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
         this.db = getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_FAVORITES + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_CLIENT_ID + " INTEGER, " +
-                COLUMN_CAR_ID + " INTEGER, " +
-                COLUMN_CREATED_AT + " TIMESTAMP)";
-        db.execSQL(createTable);
+        String createFavoritesTable = "CREATE TABLE " + TABLE_FAVORITES + " (" +
+                ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                USER_ID + " INTEGER NOT NULL, " +
+                VEHICLE_ID + " INTEGER NOT NULL, " +
+                "UNIQUE (" + USER_ID + ", " + VEHICLE_ID + ") ON CONFLICT REPLACE" +
+                ");";
+
+        db.execSQL(createFavoritesTable);
     }
 
     @Override
@@ -47,53 +46,34 @@ public class FavoriteDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Insert a new favorite
-    public long addFavoriteDB(Favorite favorite) {
+    // Adicionar um veículo aos favoritos
+    public boolean addFavorite(int userId, int vehicleId) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_CLIENT_ID, favorite.getClientId());
-        values.put(COLUMN_CAR_ID, favorite.getCarId());
-        values.put(COLUMN_CREATED_AT, favorite.getCreatedAt().toString());
-        return db.insert(TABLE_FAVORITES, null, values);
+        values.put(USER_ID, userId);
+        values.put(VEHICLE_ID, vehicleId);
+
+        return db.insert(TABLE_FAVORITES, null, values) != -1;
     }
 
-    // Get all favorites
-    public List<Favorite> getAllFavorites() {
-        List<Favorite> favorites = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_FAVORITES, null, null, null, null, null, null);
+    // Remover um veículo dos favoritos
+    public boolean removeFavorite(int userId, int vehicleId) {
+        return db.delete(TABLE_FAVORITES, USER_ID + " = ? AND " + VEHICLE_ID + " = ?",
+                new String[]{String.valueOf(userId), String.valueOf(vehicleId)}) > 0;
+    }
 
-        if (cursor != null && cursor.moveToFirst()) {
+    // Obter todos os veículos favoritos de um usuário
+    public List<Integer> getFavorites(int userId) {
+        List<Integer> favorites = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_FAVORITES, new String[]{VEHICLE_ID},
+                USER_ID + " = ?", new String[]{String.valueOf(userId)},
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
             do {
-                Favorite favorite = new Favorite(
-                        cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                        cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CLIENT_ID)),
-                        cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CAR_ID)),
-                        new Date(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT)))
-                );
-                favorites.add(favorite);
+                favorites.add(cursor.getInt(cursor.getColumnIndexOrThrow(VEHICLE_ID)));
             } while (cursor.moveToNext());
-            cursor.close();
         }
-
+        cursor.close();
         return favorites;
     }
-
-    // Delete a favorite
-    public int deleteFavoriteDB(long id) {
-        return db.delete(TABLE_FAVORITES, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
-    }
-
-    public List<Long> getFavoriteCarIdsByClientId(long clientId) {
-        List<Long> favoriteCarIds = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_FAVORITES, new String[]{COLUMN_CAR_ID}, COLUMN_CLIENT_ID + " = ?", new String[]{String.valueOf(clientId)}, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                favoriteCarIds.add(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_CAR_ID)));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-
-        return favoriteCarIds;
-    }
-
 }

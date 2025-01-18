@@ -17,7 +17,9 @@ import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
@@ -46,6 +48,9 @@ public class SingletonFastWheels {
     private LoginListener loginListener;
     private ProfileListener profileListener;
     private VehicleListener vehicleListener;
+
+    private FavoriteDbHelper favoriteDbHelper;
+    private List<Favorite> favorites;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -152,6 +157,41 @@ public class SingletonFastWheels {
         }
     }
 
+    public boolean isVehicleFavorite(int vehicleId) {
+        return favorites.stream().anyMatch(favorite -> favorite.getCarId() == vehicleId);
+    }
+
+    public void addFavorite(int clientId, int vehicleId) {
+        Vehicle vehicle = getVehicleByIdBd(vehicleId);
+        if (vehicle != null && favoriteDbHelper.addFavorite(clientId, vehicleId)) {
+            Favorite favorite = new Favorite(0, clientId, vehicleId, new Date());
+            favorites.add(favorite);
+        }
+    }
+
+    public void removeFavorite(int clientId, int vehicleId) {
+        if (favoriteDbHelper.removeFavorite(clientId, vehicleId)) {
+            favorites.removeIf(favorite -> favorite.getClientId() == clientId && favorite.getCarId() == vehicleId);
+        }
+    }
+
+    public void loadFavoritesFromDb(int clientId) {
+        List<Integer> favoriteVehicleIds = favoriteDbHelper.getFavorites(clientId);
+        favorites.clear();
+
+        for (int vehicleId : favoriteVehicleIds) {
+            Vehicle vehicle = getVehicleByIdBd(vehicleId);
+            if (vehicle != null) {
+                Favorite favorite = new Favorite(0, clientId, vehicleId, new Date()); // O `id` e `createdAt` podem ser melhor gerenciados se existirem no banco
+                favorites.add(favorite);
+            }
+        }
+    }
+
+    public ArrayList<Favorite> getFavorites() {
+        return new ArrayList<>(favorites);
+    }
+
     //region #Favorite API
     public void addFavoriteAPI(final int vehicleId, final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
@@ -254,7 +294,11 @@ public class SingletonFastWheels {
                             ArrayList<Vehicle> favorites = VehicleParser.parseVehiclesData(response);
 
                             if (favorites != null && !favorites.isEmpty()) {
-                                if (vehicleListener != null) vehicleListener.onFavoritesLoaded(favorites);
+                                // Atualize os dados de favoritos diretamente na lista principal
+                                vehicles.clear();
+                                vehicles.addAll(favorites);
+
+                                if (vehicleListener != null) vehicleListener.onRefreshVehicle();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -268,6 +312,7 @@ public class SingletonFastWheels {
             volleyQueue.add(jsonRequest);
         }
     }
+
 
     //endregion
 

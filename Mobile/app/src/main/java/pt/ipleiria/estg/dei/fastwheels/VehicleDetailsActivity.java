@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
@@ -72,16 +73,31 @@ public class VehicleDetailsActivity extends AppCompatActivity {
             Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd(vehicleId);
 
             if (vehicle != null) {
-                // Preenche os campos com os dados do veículo
-                populateVehicleDetails(vehicle);
-            } else {
-                // Lida com a ausência do veículo correspondente
-                showMessage(this, "O veículo não foi encontrado.");
-            }
+            // Preenche os campos com os dados do veículo
+            populateVehicleDetails(vehicle);
+
+            // Verifica o estado inicial do favorito
+            checkFavoriteStatus(vehicleId);
+
+            // Configura o clique no botão de favoritos
+            btnFav.setOnClickListener(v -> {
+                if (isFavorite) {
+                    SingletonFastWheels.getInstance(getApplicationContext())
+                            .removeFavoriteAPI(vehicleId, getApplicationContext());
+                    isFavorite = false;
+                } else {
+                    SingletonFastWheels.getInstance(getApplicationContext())
+                            .addFavoriteAPI(vehicleId, getApplicationContext());
+                    isFavorite = true;
+                }
+                updateFavoriteButtonState();
+            });
         } else {
-            // Lida com a ausência de um ID válido
-            showMessage(this, "ID do veículo inválido.");
+            showMessage(this, "O veículo não foi encontrado.");
         }
+    } else {
+        showMessage(this, "ID do veículo inválido.");
+    }
     }
 
     private void refreshImageContainer() {
@@ -121,6 +137,24 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void checkFavoriteStatus(int vehicleId) {
+        // Obter os favoritos (lista de objetos Favorite)
+        ArrayList<Favorite> favoriteList = SingletonFastWheels.getInstance(getApplicationContext()).getFavorites();
+
+        // Converter os favoritos (Favorite) para veículos (Vehicle)
+        ArrayList<Vehicle> favoriteVehicles = new ArrayList<>();
+        for (Favorite favorite : favoriteList) {
+            Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd((int) favorite.getCarId());
+            if (vehicle != null) {
+                favoriteVehicles.add(vehicle);
+            }
+        }
+
+        // Verificar se o veículo atual está na lista de favoritos
+        isFavorite = favoriteVehicles.stream().anyMatch(vehicle -> vehicle.getId() == vehicleId);
+        updateFavoriteButtonState();
+    }
+
     private void updateFavoriteButtonState() {
         if (isFavorite) {
             btnFav.setText("Remover dos Favoritos");
@@ -157,5 +191,23 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
         // Atualizar o container de imagens
         refreshImageContainer();
+
+        // Verificar se o veículo está nos favoritos
+        isFavorite = SingletonFastWheels.getInstance(getApplicationContext()).isVehicleFavorite(vehicle.getId());
+        updateFavoriteButtonState();
+
+        // Configurar a ação do botão
+        btnFav.setOnClickListener(v -> {
+            if (isFavorite) {
+                SingletonFastWheels.getInstance(getApplicationContext()).removeFavorite(vehicle.getClientId(), vehicle.getId());
+                showMessage(this, "Removido dos favoritos.");
+            } else {
+                SingletonFastWheels.getInstance(getApplicationContext()).addFavorite(vehicle.getClientId(), vehicle.getId());
+                showMessage(this, "Adicionado aos favoritos.");
+            }
+
+            isFavorite = !isFavorite;
+            updateFavoriteButtonState();
+        });
     }
 }
