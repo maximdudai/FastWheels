@@ -30,9 +30,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import pt.ipleiria.estg.dei.fastwheels.adapters.VehicleListAdapter;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
+import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
@@ -43,6 +45,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
     private ListView lvVehicles;
     private ArrayList<Vehicle> vehicleList, vehiclesToShow;
+    private List<Favorite> favoriteVehicles;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchView;
     private Integer appliedCarDoors;
@@ -50,24 +53,37 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     private String availableTo;
     private String locationFilter;
     private User loggedUser;
+    private String showFavorites;
 
     public VehicleListFragment() {
-        // Construtor padrão necessário
+        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
+
+        vehiclesToShow = vehicleList = new ArrayList<>();
+        favoriteVehicles = new ArrayList<>();
+
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            showFavorites = getArguments().getString("SHOW_FAVORITES");
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         // Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
-        // Configuração do SwipeRefreshLayout
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
 
         // Configuracao do Toolbar
         // Find the toolbar in the fragment's layout
         Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
-
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
 
         if (((AppCompatActivity) requireActivity()).getSupportActionBar() != null) {
@@ -75,22 +91,20 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         }
 
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
-        SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
-        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
 
-        vehiclesToShow = vehicleList = new ArrayList<>();
+        if(favoriteVehicles == null)
+            favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
-        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        if(vehicleList == null)
+            vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
-        appliedCarDoors = null;
-        availableFrom = null;
-        availableTo = null;
-        locationFilter = null;
+        if(showFavorites.equals("1")) {
+            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+        } else {
+            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        }
 
-        // Configuração da ListView
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
-
         lvVehicles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -106,6 +120,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         SingletonFastWheels.getInstance(getContext()).setVehicleListener(this);
         return view;
     }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
@@ -177,12 +192,20 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         showMessage(getContext(), "Filtros removidos");
     }
 
-
-
     private void reloadListWithoutFilters() {
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        if(favoriteVehicles != null) favoriteVehicles.clear();
+
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
+
+        if(showFavorites.equals("1")) {
+            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+        } else {
+            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        }
+
+        System.out.println("--->vehs: #2: " + vehiclesToShow.size());
 
         // Atualizar o adaptador da ListView com todos os veículos
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
@@ -274,22 +297,44 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         datePickerDialog.show();
     }
 
+
     @Override
     public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
+
         // Atualiza a lista ao realizar "pull to refresh"
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        if(favoriteVehicles != null) favoriteVehicles.clear();
+
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
+
+        if(showFavorites.equals("1")) {
+            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+        } else {
+            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        }
+
+        System.out.println("--->vehs: #3: " + vehiclesToShow.size());
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onRefreshVehicle() {
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        if(favoriteVehicles != null) favoriteVehicles.clear();
+
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
+
+        if(showFavorites.equals("1")) {
+            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+        } else {
+            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        }
+
+        System.out.println("--->vehs: #4: " + vehiclesToShow.size());
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
     }
@@ -299,8 +344,18 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         super.onResume();
 
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
+        if(favoriteVehicles != null) favoriteVehicles.clear();
+
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
+
+        if(showFavorites.equals("1")) {
+            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+        } else {
+            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+        }
+
+        System.out.println("--->vehs: #5: " + vehiclesToShow.size());
 
         // Set the adapter
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));

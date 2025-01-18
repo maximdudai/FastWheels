@@ -13,10 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
 import pt.ipleiria.estg.dei.fastwheels.model.Reservation;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
@@ -237,6 +239,26 @@ public class Helpers {
 
         System.out.println("--->API No match found for userId=" + userId + ", vehicleId=" + selectedVehicle);
         return null;
+    }
+
+    public static ArrayList<Vehicle> filterVehiclesByFavorites(ArrayList<Vehicle> vehicleList, List<Favorite> favList ) {
+
+        if(vehicleList.isEmpty() && favList.isEmpty())
+            return null;
+
+        System.out.println("--- fragment filterbyfavs: " + vehicleList.size() + " favs: " + favList.size());
+
+        ArrayList<Vehicle> auxVehicle = new ArrayList<>();
+
+        for(Vehicle car: vehicleList) {
+
+            for(Favorite fav: favList) {
+                if(car.getId() == fav.getCarId()) {
+                    auxVehicle.add(car);
+                }
+            }
+        }
+        return auxVehicle;
     }
 
 }

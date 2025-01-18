@@ -12,33 +12,39 @@ public class UserVehicles extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_vehicles);
 
-
-
         if (savedInstanceState == null) {
             String fragmentTag = getIntent().getStringExtra("TAG_Vehicle");
+            boolean showFavorites = getIntent().getBooleanExtra("SHOW_FAVORITES", false);
+
+            System.out.println("---> fragment oncreate uservehicles: " + showFavorites);
 
             if ("VehicleListFragment".equals(fragmentTag)) {
+                Bundle bundle = new Bundle();
+                bundle.putString("SHOW_FAVORITES", String.valueOf(showFavorites ? 1 : 0)); // Convert to String for Bundle
 
-                // veiculos disponiveis
-                loadFragment(new VehicleListFragment(), "VehicleListFragment");
-            } else if("UserVehicleListFragment".equals(fragmentTag)) {
+                loadFragment(new VehicleListFragment(), "VehicleListFragment", bundle);
 
-                // meus veiculos
-                loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment");
-            } else if("ViewHolderReservedVehicles".equals(fragmentTag)) {
-
+            } else if ("UserVehicleListFragment".equals(fragmentTag)) {
+                // meus veículos
+                loadFragment(new UserVehicleListFragment(), "UserVehicleListFragment", null);
+            } else if ("ViewHolderReservedVehicles".equals(fragmentTag)) {
                 // minhas reservas
-                loadFragment(new UserReservedVehicleFragment(), "UserVehicleListFragment");
+                loadFragment(new UserReservedVehicleFragment(), "UserVehicleListFragment", null);
             }
         }
     }
 
-    public void loadFragment(Fragment fragment, String tag) {
+
+    public void loadFragment(Fragment fragment, String tag, Bundle extras) {
+        if (extras != null) {
+            fragment.setArguments(extras); // Pass extras to the fragment
+        }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentUserVehicleManager, fragment, tag)
-                .addToBackStack(null) // Voltar para o fragmento anterior
+                .addToBackStack(null) // Go back to the previous fragment
                 .commit();
     }
+
 
     @Override
     public void onBackPressed() {

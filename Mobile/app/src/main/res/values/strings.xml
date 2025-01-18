@@ -46,7 +46,7 @@
     <string name="ndclose">ndClose</string>
     <string name="vehicle_form_lista_foto_adicionada">Lista fotografia(s) adicionadas</string>
     <string name="dialog_enter_value">Enter value</string>
-    <string name="vehicle_list_address">Local: </string>
+    <string name="vehicle_list_address">"Local: "</string>
     <string name="vehicle_details_price">Preço Dia</string>
     <string name="vehicle_details_brand">Marca</string>
     <string name="vehicle_details_model">Modelo</string>

@@ -31,6 +31,8 @@ public class VehicleListAdapter extends BaseAdapter {
         this.vehicles = vehicles;
         this.layoutResourceId = layoutResourceId;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        System.out.println("--- fragment adapter with vehs: " + vehicles.size());
     }
 
     @Override

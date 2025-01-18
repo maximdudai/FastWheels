@@ -43,6 +43,7 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
         loggedUser = singleton.getUser();
         vehicleList = singleton.getVehiclesDb();
         allReservations = singleton.getReservationsDb();
+
     }
 
     @Override

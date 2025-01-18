@@ -5,6 +5,8 @@ import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -20,7 +22,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
+import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
 
@@ -33,6 +37,11 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     private GridLayout glImgVehicle;
     private List<String> displayedImages = new ArrayList<>();
     private int selectedVehicle = 0;
+
+    private boolean isFavorite = false;
+    private Button btnFav;
+    private User loggedUser = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         tvAvailableFrom = findViewById(R.id.tvAvailableFrom);
         tvAvailableTo = findViewById(R.id.tvAvailableTo);
         glImgVehicle = findViewById(R.id.glImgVehicle);
+        btnFav = findViewById(R.id.btnFav);
 
         // Inicializando a lista de imagens
         selectedImages = new ArrayList<>();
@@ -60,6 +70,8 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         calendarAvailableTo = (Calendar) calendarAvailableFrom.clone();
         calendarAvailableTo.add(Calendar.DAY_OF_MONTH, 1);
 
+        loggedUser = SingletonFastWheels.getInstance(getApplicationContext()).getUser();
+
         // Obter o ID do veículo passado pela Intent
         selectedVehicle = getIntent().getIntExtra("VEHICLE_ID", -1);
 
@@ -68,16 +80,31 @@ public class VehicleDetailsActivity extends AppCompatActivity {
             Vehicle vehicle = SingletonFastWheels.getInstance(getApplicationContext()).getVehicleByIdBd(selectedVehicle);
 
             if (vehicle != null) {
-                // Preenche os campos com os dados do veículo
-                populateVehicleDetails(vehicle);
-            } else {
-                // Lida com a ausência do veículo correspondente
-                showMessage(this, "O veículo não foi encontrado.");
-            }
+            // Preenche os campos com os dados do veículo
+            populateVehicleDetails(vehicle);
+
+            isFavorite = checkFavoriteStatus(vehicle.getId());
+            updateFavoriteButtonState();
+
+            // Configura o clique no botão de favoritos
+            btnFav.setOnClickListener(v -> {
+                if (isFavorite) {
+                    SingletonFastWheels.getInstance(getApplicationContext())
+                            .removeFavorite(loggedUser.getId(), vehicle.getId());
+                    isFavorite = false;
+                } else {
+                    SingletonFastWheels.getInstance(getApplicationContext())
+                            .addFavorite(loggedUser.getId(), vehicle.getId());
+                    isFavorite = true;
+                }
+                updateFavoriteButtonState();
+            });
         } else {
-            // Lida com a ausência de um ID válido
-            showMessage(this, "ID do veículo inválido.");
+            showMessage(this, "O veículo não foi encontrado.");
         }
+    } else {
+        showMessage(this, "ID do veículo inválido.");
+    }
     }
 
     private void refreshImageContainer() {
@@ -117,6 +144,30 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private boolean checkFavoriteStatus(int vehicleId) {
+        // Obter os favoritos (lista de objetos Favorite)
+
+        List<Favorite> favorites = SingletonFastWheels.getInstance(getApplicationContext()).getFavorites();
+
+        if(favorites == null)
+            return false;
+
+        for(Favorite favs: favorites) {
+            if(favs.getCarId() == vehicleId)
+                return true;
+        }
+        return false;
+
+    }
+
+    private void updateFavoriteButtonState() {
+        if (isFavorite) {
+            btnFav.setText("Remover dos Favoritos");
+        } else {
+            btnFav.setText("Adicionar aos Favoritos");
+        }
+    }
+
     private void populateVehicleDetails(Vehicle vehicle) {
         // Preencher os campos principais
         tvBrand.setText(vehicle.getCarBrand());
@@ -145,6 +196,24 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
         // Atualizar o container de imagens
         refreshImageContainer();
+
+        // Verificar se o veículo está nos favoritos
+        isFavorite = SingletonFastWheels.getInstance(getApplicationContext()).isVehicleFavorite(vehicle.getId());
+        updateFavoriteButtonState();
+
+        // Configurar a ação do botão
+        btnFav.setOnClickListener(v -> {
+            if (isFavorite) {
+                SingletonFastWheels.getInstance(getApplicationContext()).removeFavorite(vehicle.getClientId(), vehicle.getId());
+                showMessage(this, "Removido dos favoritos.");
+            } else {
+                SingletonFastWheels.getInstance(getApplicationContext()).addFavorite(vehicle.getClientId(), vehicle.getId());
+                showMessage(this, "Adicionado aos favoritos.");
+            }
+
+            isFavorite = !isFavorite;
+            updateFavoriteButtonState();
+        });
     }
 
     public void handleRentVehicle(View v) {

@@ -20,7 +20,7 @@ import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goReservations;
+    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goReservations, goVeiculosFavoritos;
     TextView tvMainLoggedName, tvMainLoggedEmail;
 
     @Override
@@ -31,16 +31,10 @@ public class MainActivity extends AppCompatActivity {
         //region NOTIFICICACOES
         // Criar notificações
         Notification notificacao1 = new Notification(Notification.TITLE_WELCOME, "Obrigado por se registrar!");
-        Notification notificacao2 = new Notification(Notification.TITLE_SYSTEM_UPDATE, "Confira as novidades em nosso app.");
-
-        // Exibir notificações
-        System.out.println(notificacao1);
-        System.out.println(notificacao2);
+        Notification notificacao2 = new Notification(Notification.TITLE_SYSTEM_UPDATE, "Confira as novidades na nossa aplicação.");
 
         // Marcar uma notificação como lida
         notificacao1.markAsRead();
-        System.out.println("Após marcar como lida:");
-        System.out.println(notificacao1);
 
         showMessage(this, ""+ notificacao1);
         //endregion
@@ -90,6 +84,15 @@ public class MainActivity extends AppCompatActivity {
         goVeiculosDisponiveis.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UserVehicles.class);
             intent.putExtra("TAG_Vehicle", "VehicleListFragment");
+            startActivity(intent);
+        });
+
+        // VeiculosFavoritos
+        goVeiculosFavoritos = findViewById(R.id.layoutMainFavoritos);
+        goVeiculosFavoritos.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+            intent.putExtra("TAG_Vehicle", "VehicleListFragment");
+            intent.putExtra("SHOW_FAVORITES", true);
             startActivity(intent);
         });
 
