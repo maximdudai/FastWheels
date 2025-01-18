@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FavoriteDbHelper extends SQLiteOpenHelper {
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 
-    private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 14;
+public class FavoriteDbHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_FAVORITES = "favorites";
     private static final String ID = "id";
@@ -27,7 +26,7 @@ public class FavoriteDbHelper extends SQLiteOpenHelper {
     private final SQLiteDatabase db;
 
     public FavoriteDbHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         this.db = getWritableDatabase();
     }
 

@@ -7,12 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+
 public class UserDbHelper extends SQLiteOpenHelper {
-
-
-    private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 14;
-
     private final SQLiteDatabase db;
 
     private static final String TABLE_NAME = "users";
@@ -25,7 +22,7 @@ public class UserDbHelper extends SQLiteOpenHelper {
     private static final String IBAN = "iban";
 
     public UserDbHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         this.db = getWritableDatabase();
     }
 

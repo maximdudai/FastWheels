@@ -13,10 +13,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VehicleDbHelper extends SQLiteOpenHelper {
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 
-    private static final String DB_NAME = "fastwheels";
-    private static final int DB_VERSION = 14;
+public class VehicleDbHelper extends SQLiteOpenHelper {
 
     private final SQLiteDatabase db;
 
@@ -44,7 +43,7 @@ public class VehicleDbHelper extends SQLiteOpenHelper {
     private static final String PHOTO_URL = "photoUrl";
 
     public VehicleDbHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         this.db = getWritableDatabase();
     }
 

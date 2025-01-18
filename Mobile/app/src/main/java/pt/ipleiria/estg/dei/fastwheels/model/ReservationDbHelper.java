@@ -10,10 +10,9 @@ import androidx.annotation.Nullable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-public class ReservationDbHelper extends SQLiteOpenHelper {
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 
-    private static final String DATABASE_NAME = "fastwheels";
-    private static final int DATABASE_VERSION = 14;
+public class ReservationDbHelper extends SQLiteOpenHelper {
 
     private final SQLiteDatabase db;
 
@@ -32,7 +31,7 @@ public class ReservationDbHelper extends SQLiteOpenHelper {
 
 
     public ReservationDbHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         this.db = getWritableDatabase();
     }
 
