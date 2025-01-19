@@ -63,6 +63,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
+
+        System.out.println("--->API favoritesvehicles: " + favoriteVehicles.size());
     }
 
     @Override

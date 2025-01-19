@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -39,12 +40,10 @@ public class SingletonFastWheels {
 
     private ArrayList<Vehicle> vehicles; // Lista de veículos
     private ArrayList<Reservation> reservations;
+    private List<Favorite> favorites;
 
+    private final DatabaseHelper dbHelper;
     private static SingletonFastWheels instance = null; // Instância única
-
-    private VehicleDbHelper vehicleDbHelper = null; // Helper para banco de dados
-    private ReservationDbHelper reservationDbHelper = null;
-    private UserDbHelper userDbHelper = null; // Helper para banco de dados
 
     private User loggedUser = null;
 
@@ -57,12 +56,18 @@ public class SingletonFastWheels {
     private VehicleListener vehicleListener;
     private ReservationListener reservationListener;
 
-    private FavoriteDbHelper favoriteDbHelper;
-    private List<Favorite> favorites;
-
     // Mosquitto
     private static Mosquitto mosquitto = null;
     private static MosquittoManager mosquittoManager = null;
+
+    // Construtor privado
+    private SingletonFastWheels(Context context) {
+        favorites = new ArrayList<>();
+        reservations = new ArrayList<>();
+        vehicles = new ArrayList<>();
+
+        this.dbHelper = new DatabaseHelper(context.getApplicationContext());
+    }
 
     // Método para obter a instância única do Singleton
     public static synchronized SingletonFastWheels getInstance(Context context) {
@@ -78,17 +83,7 @@ public class SingletonFastWheels {
         return instance;
     }
 
-    // Construtor privado
-    private SingletonFastWheels(Context context) {
-        reservations = new ArrayList<>();
-        reservationDbHelper = new ReservationDbHelper(context);
 
-        favoriteDbHelper = new FavoriteDbHelper(context);
-        favorites = new ArrayList<>();
-
-        vehicles = new ArrayList<>();
-        vehicleDbHelper = new VehicleDbHelper(context);
-    }
 
     // region get/set user
     public User getUser() {
@@ -100,10 +95,7 @@ public class SingletonFastWheels {
     }
 
     public void addUserDb(User user) {
-        if (userDbHelper == null) {
-            return;  // Se nao estiver inicializado sai
-        }
-        userDbHelper.addUserDb(user); // Adicionar à bd através do Helper
+        dbHelper.addUserDb(user); // Adicionar à bd através do Helper
     }
 
     //region METODOS GERIR VEHICLE
@@ -119,41 +111,41 @@ public class SingletonFastWheels {
 
     // Adicionar veículo ao banco de dados e à lista
     public void addVehicleDb(Vehicle vehicle) {
-        if (vehicleDbHelper == null) {
+        if (dbHelper == null) {
             return;  // Se nao estiver inicializado sai
         }
-        vehicleDbHelper.addVehicleDb(vehicle); // Adicionar à bd através do Helper
+        dbHelper.addVehicleDb(vehicle); // Adicionar à bd através do Helper
     }
 
     public void editVehicleDb(Vehicle vehicle) {
-        if (vehicleDbHelper == null) {
+        if (dbHelper == null) {
             return;
         }
-        vehicleDbHelper.editVehicleDb(vehicle);
+        dbHelper.editVehicleDb(vehicle);
     }
 
     public void removeVehicleDb(int vehicleId) {
-        if (vehicleDbHelper.removeVehicleDb(vehicleId)) {
-            vehicles = vehicleDbHelper.getAllVehiclesDb(); // Atualiza a lista de veículos
+        if (dbHelper.removeVehicleDb(vehicleId)) {
+            vehicles = dbHelper.getAllVehiclesDb(); // Atualiza a lista de veículos
         }
     }
     public void removeVehiclesDb() {
-        vehicleDbHelper.clearAllVehicles();
+        dbHelper.clearAllVehicles();
     }
 
     // Carregar todos os veículos do banco de dados
     public ArrayList<Vehicle> getVehiclesDb() {
-        vehicles = vehicleDbHelper.getAllVehiclesDb();
+        vehicles = dbHelper.getAllVehiclesDb();
         return vehicles;
     }
 
     public void addVehiclesDb(ArrayList<Vehicle> vehiclesAPI) {
-        if (vehicleDbHelper == null) return;
+        if (dbHelper == null) return;
 
-        vehicleDbHelper.clearAllVehicles();
+        dbHelper.clearAllVehicles();
 
         for (Vehicle v : vehicles) {
-            vehicleDbHelper.addVehicleDb(v);
+            dbHelper.addVehicleDb(v);
         }
     }
 
@@ -162,7 +154,7 @@ public class SingletonFastWheels {
     //region METODOS GERIR VEHICLEPHOTO
     // Adicionar foto associada a um veículo
     public void addVehiclePhoto(int vehicleId, String photoUrl) {
-        VehiclePhoto newPhoto = vehicleDbHelper.addPhotoDb(new VehiclePhoto(0, vehicleId, photoUrl));
+        VehiclePhoto newPhoto = dbHelper.addPhotoDb(new VehiclePhoto(0, vehicleId, photoUrl));
         if (newPhoto != null) {
             Vehicle vehicle = getVehicleByIdBd(vehicleId);
             if (vehicle != null) {
@@ -173,7 +165,7 @@ public class SingletonFastWheels {
 
     // Remover todas fotos de um veiculo
     public void removeAllVehiclePhotosBD(int vehicleId) {
-        if (vehicleDbHelper.removeAllPhotosByVehicleIdDB(vehicleId)) {
+        if (dbHelper.removeAllPhotosByVehicleIdDB(vehicleId)) {
             System.out.println("Todas as fotos do veículo foram removidas com sucesso!");
         } else {
             System.err.println("Erro ao remover fotos do veículo!");
@@ -197,7 +189,7 @@ public class SingletonFastWheels {
             favorites = new ArrayList<>(); // Initialize the list if it's null
         }
 
-        int id = (int) favoriteDbHelper.addFavorite(clientId, vehicleId);
+        int id = (int) dbHelper.addFavorite(clientId, vehicleId);
         System.out.println("--- fragment addFavorite: id: " + id + " clientId: " + clientId + " vehId: " + vehicleId);
         if (id != -1) {
             Favorite favorite = new Favorite(id, clientId, vehicleId, new Date());
@@ -208,7 +200,7 @@ public class SingletonFastWheels {
 
     public void removeFavorite(int clientId, int vehicleId) {
         // Ensure favorites is not null
-        if (favorites != null && favoriteDbHelper.removeFavorite(clientId, vehicleId)) {
+        if (favorites != null && dbHelper.removeFavorite(clientId, vehicleId)) {
             favorites.removeIf(favorite -> favorite.getClientId() == clientId && favorite.getCarId() == vehicleId);
         } else if (favorites == null) {
             System.out.println("Error: Favorites list is null.");
@@ -236,7 +228,7 @@ public class SingletonFastWheels {
 
 
     public List<Favorite> getFavorites() {
-        return favoriteDbHelper.getFavorites(loggedUser.getId());
+        return dbHelper.getFavorites(loggedUser.getId());
     }
 
     //region #Favorite API
@@ -717,28 +709,28 @@ public class SingletonFastWheels {
     //region #Reservation API
 
     public void addReservationDB(Reservation reservation) {
-        if (reservationDbHelper == null) {
+        if (dbHelper == null) {
             return;  // Se nao estiver inicializado sai
         }
 
-        reservationDbHelper.addReservationDB(reservation); // Adicionar à bd através do Helper
+        dbHelper.addReservationDB(reservation); // Adicionar à bd através do Helper
     }
     public void removeReservationsDb() {
-        reservationDbHelper.deleteAllReservationDB();
+        dbHelper.deleteAllReservationDB();
     }
 
     public void removeReservationDb(int id) {
-        if(reservationDbHelper.deleteReservationDB(id) != -1) {
-            reservations = reservationDbHelper.getAllReservations();
+        if(dbHelper.deleteReservationDB(id) != -1) {
+            reservations = dbHelper.getAllReservations();
         }
     }
 
     public ArrayList<Reservation> getReservationsDb() {
-        if(reservationDbHelper == null) {
+        if(dbHelper == null) {
             return null;
         }
 
-        reservations = reservationDbHelper.getAllReservations();
+        reservations = dbHelper.getAllReservations();
         return reservations;
     }
 
