@@ -42,14 +42,12 @@ public class Login extends AppCompatActivity implements LoginListener {
         boolean keepLoggedIn = sharedPreferences.getBoolean(Constants.KEY_KEEP_LOGGED_IN, false);
 
         if (keepLoggedIn) {
-            String savedEmail = sharedPreferences.getString(Constants.KEY_EMAIL, null);
+            String savedUsername = sharedPreferences.getString(Constants.KEY_USERNAME, null);
             String savedPassword = sharedPreferences.getString(Constants.KEY_PASSWORD, null);
 
-            if (savedEmail != null && savedPassword != null) {
-                // Redirecionar automaticamente para a MainActivity=
-                Intent mainActivity = new Intent(this, MainActivity.class);
-                startActivity(mainActivity);
-                finish(); // Finalizar a tela de login
+            if(savedUsername != null && savedPassword != null) {
+                userEmail.setText(savedUsername);
+                userPassword.setText(savedPassword);
             }
         }
 

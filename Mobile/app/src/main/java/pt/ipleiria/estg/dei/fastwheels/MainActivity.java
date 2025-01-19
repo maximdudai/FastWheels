@@ -26,10 +26,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-
+        if(SingletonFastWheels.getInstance(getApplicationContext()).getUser() == null) {
+            Intent toLogin = new Intent(getApplicationContext(), Login.class);
+            startActivity(toLogin);
+            return;
+        }
         //region NOTIFICICACOES
         // Criar notificações
         Notification notificacao1 = new Notification(Notification.TITLE_WELCOME, "Obrigado por se registrar!");
@@ -124,8 +127,13 @@ public class MainActivity extends AppCompatActivity {
 
         User loggedUser = SingletonFastWheels.getInstance(getApplicationContext()).getUser();
 
-        tvMainLoggedName.setText(loggedUser.getName());
-        tvMainLoggedEmail.setText(loggedUser.getEmail());
+        if(loggedUser != null) {
+            tvMainLoggedName.setText(loggedUser.getName());
+            tvMainLoggedEmail.setText(loggedUser.getEmail());
+        } else {
+            Intent toLogin = new Intent(getApplicationContext(), Login.class);
+            startActivity(toLogin);
+        }
     }
 
 

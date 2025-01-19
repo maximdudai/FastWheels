@@ -64,7 +64,6 @@
             android:backgroundTint="@color/white"
             android:hint="@string/hintEmail"
             android:inputType="textEmailAddress"
-            android:text="fouser"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
@@ -89,7 +88,6 @@
             android:backgroundTint="@android:color/white"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:text="qweasdzxc"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
