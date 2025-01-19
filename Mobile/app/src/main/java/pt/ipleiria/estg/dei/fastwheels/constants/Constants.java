@@ -28,6 +28,5 @@ public class Constants {
     public static final String MQTT_RESERVATION_UPDATE = "RESERVATION:UPDATE";
     public static final String MQTT_RESERVATION_CREATE = "RESERVATION:CREATE";
     public static final String MQTT_CARREVIEW_CREATE = "CARREVIEW:CREATE";
-
-
+    public static final String MQTT_CHAT = "CHAT";
 }

@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,10 +24,12 @@ import java.util.List;
 import java.util.Locale;
 
 import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
+import pt.ipleiria.estg.dei.fastwheels.model.Reservation;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
@@ -39,7 +42,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     private int selectedVehicle = 0;
 
     private boolean isFavorite = false;
-    private Button btnFav;
+    private Button btnFav, btnChat;
     private User loggedUser = null;
 
 
@@ -61,6 +64,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         tvAvailableTo = findViewById(R.id.tvAvailableTo);
         glImgVehicle = findViewById(R.id.glImgVehicle);
         btnFav = findViewById(R.id.btnFav);
+        btnChat = findViewById(R.id.btnChat);
 
         // Inicializando a lista de imagens
         selectedImages = new ArrayList<>();
@@ -98,13 +102,15 @@ public class VehicleDetailsActivity extends AppCompatActivity {
                     isFavorite = true;
                 }
                 updateFavoriteButtonState();
-            });
+                });
+            } else {
+                showMessage(this, "O veículo não foi encontrado.");
+            }
         } else {
-            showMessage(this, "O veículo não foi encontrado.");
+            showMessage(this, "ID do veículo inválido.");
         }
-    } else {
-        showMessage(this, "ID do veículo inválido.");
-    }
+
+        btnChat.setOnClickListener(this::handleChatRequest);
     }
 
     private void refreshImageContainer() {
@@ -216,22 +222,14 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         });
     }
 
-    public void handleRentVehicle(View v) {
-        ReserveVehicleFragment fragment = new ReserveVehicleFragment();
-        Bundle args = new Bundle();
-        args.putInt("vehicleId", selectedVehicle);
-        fragment.setArguments(args);
+    public void handleChatRequest(View v) {
+        // boolean isUserValid = Singleton.isUserAvailableForChat(selectedVehicle.getClientId());
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, "ReserveVehicleFragment")
-                .addToBackStack(null)
-                .commit();
+        //if isUserValid -> show dialog
 
-        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                finish();
-            }
-        });
+        new AlertDialog.Builder(VehicleDetailsActivity.this)
+                .setMessage("Pedido enviado ao dono do veículo\nPor favor aguarde!")
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
-
 }
