@@ -95,7 +95,18 @@ return [
                         '{id}' => '<id:\\d+>',
                     ],
                 ],
-                
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/chat',
+                    'extraPatterns' => [
+                        'GET request/{clientId}/{ownerId}' => 'request',
+                        'PUT update/{clientId}/{ownerId}' => 'update',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<clientId:\\d+>',
+                        '{id}' => '<ownerId:\\d+>',
+                    ],
+                ],
             ],
         ],
     ],

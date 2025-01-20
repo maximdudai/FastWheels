@@ -77,7 +77,6 @@ public class Mosquitto {
             subscribe(Constants.MQTT_SUPPORTTICKET_CREATE);
             subscribe(Constants.MQTT_SUPPORTTICKET_UPDATE);
             subscribe(Constants.MQTT_CARREVIEW_CREATE);
-            subscribe(Constants.MQTT_CHAT);
 
         } catch (MqttException e) {
             Log.e("FW_MQTT", "Error connecting to the broker!", e);

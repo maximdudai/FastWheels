@@ -26,7 +26,6 @@ public class MosquittoManager implements MosquittoListener {
     @Override
     public void onMosquittoReceiveData(String topic, String data) {
         switch (topic) {
-
             case Constants.MQTT_SUPPORTTICKET_CREATE:
             case Constants.MQTT_SUPPORTTICKET_UPDATE:
                 Support createSupport = SupportParser.parseSupportData(data);

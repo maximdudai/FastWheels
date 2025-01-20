@@ -83,8 +83,6 @@ public class SingletonFastWheels {
         return instance;
     }
 
-
-
     // region get/set user
     public User getUser() {
         return loggedUser;

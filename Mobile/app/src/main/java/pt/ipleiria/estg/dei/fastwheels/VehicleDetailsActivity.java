@@ -23,15 +23,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
+import pt.ipleiria.estg.dei.fastwheels.model.Chat;
 import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
+import pt.ipleiria.estg.dei.fastwheels.model.Mosquitto;
 import pt.ipleiria.estg.dei.fastwheels.model.Reservation;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
+import pt.ipleiria.estg.dei.fastwheels.parsers.ChatParser;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
-public class VehicleDetailsActivity extends AppCompatActivity {
+public class VehicleDetailsActivity extends AppCompatActivity implements MosquittoListener {
 
     private TextView tvBrand, tvModel, tvYear, tvDoors, tvResidence, tvPrice, tvPostalCode, tvCity, tvAvailableFrom, tvAvailableTo;
     private Calendar calendarAvailableFrom, calendarAvailableTo;
@@ -227,9 +232,27 @@ public class VehicleDetailsActivity extends AppCompatActivity {
 
         //if isUserValid -> show dialog
 
+        Mosquitto.getInstance(getApplicationContext()).subscribe(Constants.MQTT_CHAT_REQUEST);
+
         new AlertDialog.Builder(VehicleDetailsActivity.this)
                 .setMessage("Pedido enviado ao dono do veículo\nPor favor aguarde!")
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    @Override
+    public void onMosquittoReceiveData(String topic, String data) {
+        if(!topic.equals(Constants.MQTT_CHAT_REQUEST))
+            return;
+
+        Chat chatData = ChatParser.parseChatData(data);
+
+        if(chatData.getOwner() == loggedUser.getId() || chatData.getClient() == loggedUser.getId()) {
+            if(chatData.getIsAvailable() == 1) {
+                Mosquitto.getInstance(getApplicationContext()).subscribe(Constants.MQTT_CHAT_ACTIVE);
+
+                //send to another activity
+            }
+        }
     }
 }
