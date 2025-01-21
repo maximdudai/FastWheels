@@ -3,6 +3,7 @@ package pt.ipleiria.estg.dei.fastwheels;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,11 @@ import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
-public class UserVehicleListFragment extends Fragment implements VehicleListener {
+public class UserVehicleListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, VehicleListener {
 
     private ListView lvVehicles;
     private ArrayList<Vehicle> vehicleList = null, vehiclesToShow = null;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private User loggedUser;
 
@@ -35,6 +37,9 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         // Configurar o FloatingActionButton
         FloatingActionButton fabSaveVehicle = view.findViewById(R.id.fabSaveVehicle);
@@ -95,5 +100,10 @@ public class UserVehicleListFragment extends Fragment implements VehicleListener
         vehiclesToShow.addAll(Helpers.filterVehicleListByPersonal(loggedUser, vehicleList));
 
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_vehicle));
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
