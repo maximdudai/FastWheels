@@ -97,6 +97,7 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
     @Override
     public void onRefreshVehicle() {
         this.updateVehicleList();
+
     }
 
     private void updateVehicleList() {

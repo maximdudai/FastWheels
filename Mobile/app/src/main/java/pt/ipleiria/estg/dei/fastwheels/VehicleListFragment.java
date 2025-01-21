@@ -63,8 +63,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
-
-        System.out.println("--->API favoritesvehicles: " + favoriteVehicles.size());
     }
 
     @Override
@@ -335,9 +333,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }
-
-        System.out.println("--->vehs: #4: " + vehiclesToShow.size());
-
+        swipeRefreshLayout.setRefreshing(false);
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
     }
 
@@ -356,8 +352,6 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }
-
-        System.out.println("--->vehs: #5: " + vehiclesToShow.size());
 
         // Set the adapter
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));

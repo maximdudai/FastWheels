@@ -408,6 +408,7 @@
                         android:backgroundTint="@android:color/holo_orange_dark"
                         android:padding="12dp"
                         android:text="Alugar este veículo"
+                        android:onClick="handleRentVehicle"
                         android:textColor="@android:color/white"
                         android:textStyle="bold" />
 
