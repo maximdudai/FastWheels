@@ -95,8 +95,10 @@ public class Register extends AppCompatActivity {
         editor.apply();
 
         SingletonFastWheels.getInstance(getApplicationContext()).addUserAPI(newClient, getApplicationContext());
+        SingletonFastWheels.getInstance(getApplicationContext()).setUser(newClient);
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);
+        finish();
     }
 }

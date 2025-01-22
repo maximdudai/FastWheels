@@ -365,8 +365,8 @@ public class SingletonFastWheels {
                     public void onResponse(String response) {
                         User newUser = RegistoParser.parseRegistoData(response);
                         if (newUser != null) {
-                            addUserDb(newUser);
                             setUser(newUser); //atualiza loggedUser
+                            addUserDb(newUser);
                         }
                     }
                 }, new Response.ErrorListener() {
