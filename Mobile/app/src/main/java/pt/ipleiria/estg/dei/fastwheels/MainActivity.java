@@ -33,17 +33,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(toLogin);
             return;
         }
-        //region NOTIFICICACOES
-        // Criar notificações
-        Notification notificacao1 = new Notification(Notification.TITLE_WELCOME, "Obrigado por se registrar!");
-        Notification notificacao2 = new Notification(Notification.TITLE_SYSTEM_UPDATE, "Confira as novidades na nossa aplicação.");
-
-        // Marcar uma notificação como lida
-        notificacao1.markAsRead();
-
-        showMessage(this, ""+ notificacao1);
-        //endregion
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

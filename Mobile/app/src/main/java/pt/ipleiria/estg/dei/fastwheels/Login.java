@@ -18,6 +18,7 @@ import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
+import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class Login extends AppCompatActivity implements LoginListener {
 
@@ -105,6 +106,11 @@ public class Login extends AppCompatActivity implements LoginListener {
             user.setPassword(userPassword.getText().toString());
 
             editor.apply();
+
+            Notification notificacao1 = new Notification(Notification.TITLE_WELCOME, "Bem vindo! Novos veículos estão a sua espera");
+            notificacao1.markAsRead();
+            showMessage(this, ""+ notificacao1);
+            //endregion
 
             // Redirecionar para a MainActivity
             Intent mainActivity = new Intent(this,  MainActivity.class);
