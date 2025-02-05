@@ -25,7 +25,6 @@ public class ChatParser {
             chatData = new Chat(id, isAvailable, client, owner, chat_id);
         } catch (JSONException e) {
             e.printStackTrace();
-
         }
         return chatData;
     }

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.listeners.ChatListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ReservationListener;
@@ -36,7 +37,7 @@ import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
 
-public class SingletonFastWheels {
+public class SingletonFastWheels implements ChatListener {
 
     private ArrayList<Vehicle> vehicles; // Lista de veículos
     private ArrayList<Reservation> reservations;
@@ -55,6 +56,7 @@ public class SingletonFastWheels {
     private ProfileListener profileListener;
     private VehicleListener vehicleListener;
     private ReservationListener reservationListener;
+    private ChatListener chatListener;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -886,8 +888,57 @@ public class SingletonFastWheels {
         }
     }
 
+    public void chatRequestAPI (final int requestUserId, final int ownerId, final Context context){
+        if(!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.GET,
+                    Constants.API_CHAT_REQUEST + requestUserId + "/" + ownerId,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+//                            if (chatListener != null) chatListener.OnChatRequest();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+                    headers.put("Authorization", base64Token.getBase64Token());
+                    headers.put("Content-Type", "application/json; charset=UTF-8");
+                    return headers;
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
     public void setReservationListener(ReservationListener reservationListener){
         this.reservationListener = reservationListener;
+    }
+
+    public void setChatListener(ChatListener chatListener) {
+        this.chatListener = chatListener;
+    }
+
+    @Override
+    public void OnChatRequest(int requestUserId, int ownerId, Context context) {
+        if(ownerId == loggedUser.getId()) {
+
+        }
     }
 
     // endregion

@@ -5,7 +5,7 @@ namespace backend\modules\api\controllers;
 use common\models\Client;
 use yii\rest\ActiveController;
 
-class ClientsController extends ActiveController
+class ChatController extends ActiveController
 {
     public function actionRequest($client, $owner) {
         $checkIfOwnerIsOnline = Client::find()

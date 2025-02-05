@@ -238,6 +238,9 @@ public class VehicleDetailsActivity extends AppCompatActivity implements Mosquit
                 .setMessage("Pedido enviado ao dono do veículo\nPor favor aguarde!")
                 .setNegativeButton("Cancelar", null)
                 .show();
+
+        //singleton send request to the api then invoke the listener
+
     }
 
     @Override
