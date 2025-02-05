@@ -16,8 +16,6 @@ public class UserVehicles extends AppCompatActivity {
             String fragmentTag = getIntent().getStringExtra("TAG_Vehicle");
             boolean showFavorites = getIntent().getBooleanExtra("SHOW_FAVORITES", false);
 
-            System.out.println("---> fragment oncreate uservehicles: " + showFavorites);
-
             if ("VehicleListFragment".equals(fragmentTag)) {
                 Bundle bundle = new Bundle();
                 bundle.putString("SHOW_FAVORITES", String.valueOf(showFavorites ? 1 : 0)); // Convert to String for Bundle
@@ -34,16 +32,16 @@ public class UserVehicles extends AppCompatActivity {
         }
     }
 
-
     public void loadFragment(Fragment fragment, String tag, Bundle extras) {
         if (extras != null) {
-            fragment.setArguments(extras); // Pass extras to the fragment
+            fragment.setArguments(extras);
         }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentUserVehicleManager, fragment, tag)
-                .addToBackStack(null) // Go back to the previous fragment
+                .addToBackStack(tag) // Use the tag for back stack
                 .commit();
     }
+
 
 
     @Override
@@ -59,6 +57,8 @@ public class UserVehicles extends AppCompatActivity {
         }  else if (currentFragment != null && currentFragment instanceof UserReservedVehicleFragment) {
             super.onBackPressed();
             finish();
+        } else if (currentFragment != null && currentFragment instanceof UserVehicleFormFragment) {
+            super.onBackPressed();
         }
     }
 }

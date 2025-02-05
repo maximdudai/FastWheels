@@ -221,7 +221,7 @@ public class Helpers {
         for(Vehicle car: vehicleList) {
 
             for(Reservation reservs: reservatonList) {
-                if(reservs.getCarId() == car.getId() && reservs.getClientId() == loggedUser) {
+                if(reservs.getCarId() == car.getId() && reservs.getClientId() == loggedUser && car.isStatus()) {
                     auxVehicle.add(car);
                 }
             }

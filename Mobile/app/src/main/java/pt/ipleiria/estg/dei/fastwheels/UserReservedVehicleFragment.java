@@ -10,6 +10,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -23,11 +24,12 @@ import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
-public class UserReservedVehicleFragment extends Fragment implements VehicleListener {
+public class UserReservedVehicleFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, VehicleListener {
 
     private ListView lvReservations;
     private ArrayList<Vehicle> vehicleList = null, vehiclesToShow = null;
     private ArrayList<Reservation> allReservations;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private User loggedUser;
 
@@ -50,6 +52,9 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_vehicle_list, container, false);
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
@@ -94,11 +99,6 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
         this.updateVehicleList();
     }
 
-    @Override
-    public void onRefreshVehicle() {
-        this.updateVehicleList();
-    }
-
     private void updateVehicleList() {
         vehiclesToShow = vehicleList = new ArrayList<Vehicle>();
 
@@ -108,5 +108,15 @@ public class UserReservedVehicleFragment extends Fragment implements VehicleList
         vehiclesToShow = Helpers.filterVehicleByReserved(vehicleList, allReservations, loggedUser.getId());
 
         lvReservations.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.item_reserved));
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefreshVehicle() {
+        this.updateVehicleList();
     }
 }

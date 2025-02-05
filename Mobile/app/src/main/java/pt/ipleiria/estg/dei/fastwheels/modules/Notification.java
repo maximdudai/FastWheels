@@ -68,13 +68,7 @@ public class Notification {
 
     @Override
     public String toString() {
-        return "Notificação{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", message='" + message + '\'' +
-                ", sendDate=" + sendDate +
-                ", read=" + read +
-                '}';
+        return message;
     }
 }
 
