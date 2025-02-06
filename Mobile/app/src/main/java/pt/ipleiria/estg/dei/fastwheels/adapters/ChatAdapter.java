@@ -71,9 +71,9 @@ public class ChatAdapter extends BaseAdapter {
         }
 
         public void update(Chat chat) {
-            chatMessage.setText(chat.getChatMessages());
-            chatUsername.setText(chat.getChatUsername());
-            chatTime.setText(chat.getChatHour());
+//            chatMessage.setText(chat.getChatMessages());
+//            chatUsername.setText(chat.getChatUsername());
+//            chatTime.setText(chat.getChatHour());
         }
     }
 }

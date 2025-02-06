@@ -32,7 +32,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
 
-        chatList = findViewById(R.id.listViewMessages);
+//        chatList = findViewById(R.id.listViewMessages);
         textInput = findViewById(R.id.editTextMessage);
         sendMessage = findViewById(R.id.buttonSend);
 

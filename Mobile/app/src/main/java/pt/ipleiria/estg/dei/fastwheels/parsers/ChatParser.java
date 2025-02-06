@@ -22,7 +22,7 @@ public class ChatParser {
             int owner = fetchData.getInt("owner");
             String chat_id = fetchData.getString("chatId");
 
-            chatData = new Chat(id, isAvailable, client, owner, chat_id);
+//            chatData = new Chat(id, isAvailable, client, owner, chat_id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
