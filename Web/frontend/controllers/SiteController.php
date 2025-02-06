@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\User;
+use common\models\UserCar;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -90,8 +91,24 @@ class SiteController extends BaseController
     public function actionIndex()
     {
         $carPhotos = \common\models\CarPhoto::find()->with('car')->all();
+
+        $carList = UserCar::find()->all();
+        $randomCars = array();
+
+        
+        while (count($randomCars) < 3) {
+            $randomCar = $carList[array_rand($carList)];
+        
+            // Verify if the car is already in the array
+            if (!in_array($randomCar, $randomCars)) {
+                $randomCars[] = $randomCar;
+            }
+        }
+        
+
         return $this->render('index', [
             'carPhotos' => $carPhotos,
+            'randomCars' => $randomCars,
         ]);
     }
 

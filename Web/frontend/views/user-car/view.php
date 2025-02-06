@@ -56,7 +56,7 @@ $this->title = $model->carBrand . ' ' . $model->carModel;
                 <span><?= !empty($model->carreviews) ? number_format(array_sum(array_column($model->carreviews, 'rating')) / count($model->carreviews), 1) : '0,0' ?></span>
             </div>
             <div>
-                <strong>To:</strong>
+                <strong>Expire:</strong>
                 <span><?= Html::encode(date('m/Y', strtotime($model->availableTo))) ?></span>
             </div>
             <div>
