@@ -8,13 +8,15 @@ import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 
 public class User {
     private String token, name, email, phone, balance, iban;
-    private int id;
+    private int id, inChat;
     private String password;
     private generateBase64 base64token;
+
 
     public User() {
 
     }
+
 
     public User(String token, int id, String name, String email, String phone, String balance, String iban) {
         this.id = id;
@@ -24,7 +26,17 @@ public class User {
         this.phone = phone;
         this.balance = balance;
         this.iban = iban;
+        this.inChat = 0;
     }
+
+    public int getInChat() {
+        return inChat;
+    }
+
+    public void setInChat(int inChat) {
+        this.inChat = inChat;
+    }
+
 
     public String getToken() {
         return token;

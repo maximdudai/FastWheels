@@ -99,7 +99,8 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/chat',
                     'extraPatterns' => [
-                        'GET request/{clientId}/{ownerId}' => 'request',
+                        'POST request/{clientId}/{ownerId}' => 'request',
+                        'POST accept/{clientId}/{ownerId}' => 'accept',
                         'PUT update/{clientId}/{ownerId}' => 'update',
                     ],
                     'tokens' => [

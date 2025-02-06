@@ -3,67 +3,169 @@
 namespace backend\modules\api\controllers;
 
 use common\models\Client;
+use Yii;
 use yii\rest\ActiveController;
 
 class ChatController extends ActiveController
 {
-    public function actionRequest($client, $owner) {
-        $checkIfOwnerIsOnline = Client::find()
-            ->where(['id' => $owner, 'online' => 1])
-            ->andWhere(['chat' => 0])
-            ->one();
+    public $modelClass = 'common\models\Client';
 
-        $getOwner = Client::find()
-            ->where(['id' => $owner])
-            ->one();
+    public function behavios()
+    {
+        $behaviors = parent::behaviors();
 
-        $getClient = Client::find()
-            ->where(['id' => $client])
-            ->one();
+        $behaviors['access'] = [
+            'class' => \yii\filters\AccessControl::class,
+            'rules' => [
+                [
+                    'allow' => true,
+                    'actions' => ['request'],
+                    'verbs' => ['GET'],
+                    'roles' => ['@'],
+                ],
+                [
+                    'allow' => true,
+                    'actions' => ['update'],
+                    'verbs' => ['PUT'],
+                    'roles' => ['@'],
+                ],
+            ],
+        ];
 
-        if ($checkIfOwnerIsOnline === null) {
-            //update database for both client and owner to chat = 1
-            $getOwner->chat = 1;
-            $getOwner->save();
+        return $behaviors;
+    }
 
-            $getClient->chat = 1;
-            $getClient->save();
-            
-            $generateChatId = "chat_" . uniqid();
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['request'], $actions['update']);
+        return $actions;
+    }
 
-            return [
-                'inchat' => 0,
-                'client' => $getClient->id,
-                'owner' => $getOwner->id,
-                'chatId' => $generateChatId
-            ];
-        } else {
+
+    public function actionRequest()
+    {
+        if (!\Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
+
+        $receivedUser = \Yii::$app->request->post();
+
+        $owner = $receivedUser['owner'];
+        $client = $receivedUser['client'];
+
+        $ownerRecord = Client::findOne($owner);
+        $clientRecord = Client::findOne($client);
+
+        if (!$ownerRecord || !$clientRecord) {
+            return ['status' => 'error', 'message' => 'Invalid client or owner ID'];
+        }
+
+        $isOwnerAvailable = Client::find()
+            ->where(['id' => $owner, 'online' => 1, 'chat' => 0])
+            ->exists();
+
+        if (!$isOwnerAvailable) {
             return [
                 'inchat' => 1,
-                'client' => $getClient->id,
-                'owner' => $getOwner->id,
-                'chatId' => null
             ];
+        }
+
+        // Use transactions to ensure both updates succeed together
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $ownerRecord->chat = 1;
+            $clientRecord->chat = 1;
+
+            if ($ownerRecord->save() && $clientRecord->save()) {
+                $transaction->commit();
+
+                return [
+                    'inchat' => 0,
+                    'client' => $clientRecord->id,
+                    'owner' => $ownerRecord->id,
+                    'chatId' => "chat_" . uniqid()
+                ];
+            } else {
+                $transaction->rollBack();
+                return ['status' => 'error', 'message' => 'Failed to update chat status'];
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
 
-    public function actionUpdate($client, $owner) {
-        $getOwner = Client::find()
-            ->where(['id' => $owner])
-            ->one();
+    public function actionAccept() {
+        if (!\Yii::$app->request->isPost) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
 
-        $getClient = Client::find()
-            ->where(['id' => $client])
-            ->one();
+        $receivedUser = \Yii::$app->request->post();
 
-        $getOwner->chat = 0;
-        $getOwner->save();
+        $owner = $receivedUser['owner'];
+        $client = $receivedUser['client'];
 
-        $getClient->chat = 0;
-        $getClient->save();
+        $ownerRecord = Client::findOne($owner);
+        $clientRecord = Client::findOne($client); 
 
-        return [
-            'status' => 'success',
-        ];
+        // Check if the client is in chat with someone
+        $isClientInChatWithSomeOne = Client::find()
+            ->where(['id' => $client, 'chat' => 1])
+            ->whereNot(['id' => $owner])
+            ->exists();
+
+        if(!$isClientInChatWithSomeOne) {
+            return [
+                'status' => 'error',
+                'message' => 'Client is not in chat with anyone'
+            ];
+        }
+
+        // Check if the owner is in chat with client who made the request
+        $isOwnerInChatWithSomeOne = Client::find()
+            ->where(['id' => $owner, 'chat' => $owner])
+            ->whereNot(['id' => $client])
+            ->exists();
+
+        if(!$isOwnerInChatWithSomeOne) {
+            return [
+                'status' => 'error',
+                'message' => 'Owner is not in chat with the client'
+            ];
+        }
+            
+    }
+
+    public function actionUpdate($client, $owner)
+    {
+        if (!Yii::$app->request->isPut) {
+            throw new \yii\web\MethodNotAllowedHttpException('Invalid request method');
+        }
+
+
+        $ownerRecord = Client::findOne($owner);
+        $clientRecord = Client::findOne($client);
+
+        if (!$ownerRecord || !$clientRecord) {
+            return ['status' => 'error', 'message' => 'Invalid client or owner ID'];
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $ownerRecord->chat = 0;
+            $clientRecord->chat = 0;
+
+            if ($ownerRecord->save() && $clientRecord->save()) {
+                $transaction->commit();
+                return ['status' => 'success'];
+            } else {
+                $transaction->rollBack();
+                return ['status' => 'error', 'message' => 'Failed to update chat status'];
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 }

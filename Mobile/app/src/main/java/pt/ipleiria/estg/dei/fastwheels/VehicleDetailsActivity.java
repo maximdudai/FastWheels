@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -238,9 +239,6 @@ public class VehicleDetailsActivity extends AppCompatActivity implements Mosquit
                 .setMessage("Pedido enviado ao dono do veículo\nPor favor aguarde!")
                 .setNegativeButton("Cancelar", null)
                 .show();
-
-        //singleton send request to the api then invoke the listener
-
     }
 
     @Override
@@ -250,12 +248,12 @@ public class VehicleDetailsActivity extends AppCompatActivity implements Mosquit
 
         Chat chatData = ChatParser.parseChatData(data);
 
-        if(chatData.getOwner() == loggedUser.getId() || chatData.getClient() == loggedUser.getId()) {
-            if(chatData.getIsAvailable() == 1) {
-                Mosquitto.getInstance(getApplicationContext()).subscribe(Constants.MQTT_CHAT_ACTIVE);
-
-                //send to another activity
-            }
-        }
+//        if(chatData.getOwner() == loggedUser.getId() || chatData.getClient() == loggedUser.getId()) {
+//            if(chatData.getIsAvailable() == 1) {
+//                Mosquitto.getInstance(getApplicationContext()).subscribe(Constants.MQTT_CHAT_ACTIVE);
+//
+//                //send to another activity
+//            }
+//        }
     }
 }

@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.model.Chat;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
@@ -56,10 +58,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // MeusVeiculos
+//        goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
+//        goMeusVeiculos.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
+//            intent.putExtra("TAG_Vehicle", "UserVehicleListFragment");
+//            startActivity(intent);
+//        });
+
         goMeusVeiculos = findViewById(R.id.layoutMainMeusVeiculos);
         goMeusVeiculos.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, UserVehicles.class);
-            intent.putExtra("TAG_Vehicle", "UserVehicleListFragment");
+            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
             startActivity(intent);
         });
 
