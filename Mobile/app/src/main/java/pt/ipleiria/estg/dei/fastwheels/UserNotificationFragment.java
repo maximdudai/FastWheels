@@ -56,10 +56,11 @@ public class UserNotificationFragment extends Fragment implements NotificationLi
                         .setMessage(selectedNotification.getContent())
                         .setPositiveButton("Close", (dialog, which) -> {
 
-                            selectedNotification.setRead(1);
-                            SingletonFastWheels.getInstance(getContext()).updateNotificationAPI(selectedNotification, getContext());
-
-                            onNotificationUpdate();
+                            if(selectedNotification.getRead() == 0) {
+                                selectedNotification.setRead(1);
+                                SingletonFastWheels.getInstance(getContext()).updateNotificationAPI(selectedNotification, getContext());
+                                onNotificationUpdate();
+                            }
                         })
                         .show();
             }

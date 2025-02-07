@@ -53,8 +53,6 @@ public class NotificationParser {
                 Notification notification = new Notification(id, clientId, read, content, createdAt);
                 notificationList.add(notification);
 
-                Log.d("NOTIFICATION", "New notification has been parse, total: " + notificationList.size());
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

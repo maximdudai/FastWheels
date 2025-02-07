@@ -938,6 +938,7 @@ public class SingletonFastWheels {
                     @Override
                     public void onResponse(JSONArray response) {
                         notifications = NotificationParser.parseNotificationsData(response);
+                        dbHelper.clearNotificationsBD();
 
                         if (!notifications.isEmpty()) {
                             for (Notification res : notifications) {
@@ -1040,11 +1041,10 @@ public class SingletonFastWheels {
                 }
             }) {
                 @Override
-                public byte[] getBody() {
-                    Map<String, String> params = new HashMap<>();
-                    Log.d("NOTIFICATION:API", "Notification data: " + not.toString());
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
                     params.put("id", String.valueOf(not.getId()));
-                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+                    return params;
                 }
             };
             volleyQueue.add(request);

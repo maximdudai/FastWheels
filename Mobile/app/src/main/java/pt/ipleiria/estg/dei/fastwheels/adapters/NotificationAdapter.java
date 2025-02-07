@@ -79,6 +79,7 @@ public class NotificationAdapter extends BaseAdapter {
         public void update(Notification not) {
             notHour.setText(not.getCreatedAt().toString());
             notContent.setText(getMinimizedContent(not.getContent()));
+
             notRead.setChecked(not.getRead() == 1);
         }
 
