@@ -42,12 +42,12 @@ class NotificationsController extends ActiveController
     }
 
     public function actionMarkread() {
-        if(!Yii::$app->request->isPost) {
+        if(!Yii::$app->request->isPut) {
             throw new BadRequestHttpException('Incorrect request method');
         }
         $data = Yii::$app->request->post();
 
-        $model = Notification::findOne($data['id']);
+        $model = Notification::find()->where(['id' => $data['id']])->one();
 
         if (!$model) {
             throw new NotFoundHttpException('Notification not found');
