@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.MosquittoListener;
-import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ReservationParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.SupportParser;
 

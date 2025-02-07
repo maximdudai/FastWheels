@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
@@ -89,7 +88,7 @@ public class VehicleListAdapter extends BaseAdapter {
             tvModel = view.findViewById(R.id.tvModel);
             tvDoors = view.findViewById(R.id.tvDoors);
             tvAddress = view.findViewById(R.id.tvAddress);
-            tvPrice = view.findViewById(R.id.tvPrice);
+            tvPrice = view.findViewById(R.id.tvDate);
         }
 
         public void update(Vehicle vehicle) {

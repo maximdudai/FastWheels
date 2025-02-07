@@ -2,11 +2,9 @@ package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -54,7 +52,7 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         tvYear = findViewById(R.id.tvYear);
         tvDoors = findViewById(R.id.tvDoors);
         tvResidence = findViewById(R.id.tvResidence);
-        tvPrice = findViewById(R.id.tvPrice);
+        tvPrice = findViewById(R.id.tvDate);
         tvPostalCode = findViewById(R.id.tvPostalCode);
         tvCity = findViewById(R.id.tvCity);
         tvAvailableFrom = findViewById(R.id.tvAvailableFrom);

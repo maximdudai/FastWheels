@@ -95,7 +95,19 @@ return [
                         '{id}' => '<id:\\d+>',
                     ],
                 ],
-                
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/notifications',
+                    'extraPatterns' => [
+                        'GET index/{id}' => 'index',
+                        'POST create' => 'create',
+                        'PUT update/{id}' => 'update',
+                        'DELETE delete/{id}' => 'delete',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ],
             ],
         ],
     ],

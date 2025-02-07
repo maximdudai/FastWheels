@@ -3,7 +3,7 @@ package pt.ipleiria.estg.dei.fastwheels.constants;
 
 public class Constants {
     public static final String DB_NAME = "fastwheels";
-    public static final int DB_VERSION = 5;
+    public static final int DB_VERSION = 6;
 
     public static final String PREFS_NAME = "FastWheelsPrefs";
     public static final String KEY_USERNAME = "username";
@@ -19,6 +19,7 @@ public class Constants {
     public static final String API_REGISTER = "http://54.229.223.123:8080/api/clients/register";
     public static final String API_RESERVATION = "http://54.229.223.123:8080/api/reservations";
     public static final String API_FAVORITES = "http://54.229.223.123:8080/api/favorite";
+    public static final String API_NOTIFICATION = "http://54.229.223.123:8080/api/notifications";
 
     // MOSQUITTO
 

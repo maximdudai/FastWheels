@@ -1,7 +1,5 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
-import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import androidx.appcompat.widget.Toolbar;
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
-import pt.ipleiria.estg.dei.fastwheels.modules.Notification;
 
 public class MainActivity extends AppCompatActivity {
 

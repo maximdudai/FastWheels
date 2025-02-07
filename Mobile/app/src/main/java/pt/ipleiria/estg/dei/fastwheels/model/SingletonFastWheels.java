@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 
@@ -25,10 +26,12 @@ import java.util.Map;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
+import pt.ipleiria.estg.dei.fastwheels.listeners.NotificationListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ReservationListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
+import pt.ipleiria.estg.dei.fastwheels.parsers.NotificationParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ReservationParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.RegistoParser;
@@ -41,6 +44,8 @@ public class SingletonFastWheels {
     private ArrayList<Vehicle> vehicles; // Lista de veículos
     private ArrayList<Reservation> reservations;
     private List<Favorite> favorites;
+
+    private ArrayList<Notification> notifications;
 
     private final DatabaseHelper dbHelper;
     private static SingletonFastWheels instance = null; // Instância única
@@ -55,6 +60,7 @@ public class SingletonFastWheels {
     private ProfileListener profileListener;
     private VehicleListener vehicleListener;
     private ReservationListener reservationListener;
+    private NotificationListener notificationListener;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -65,6 +71,7 @@ public class SingletonFastWheels {
         favorites = new ArrayList<>();
         reservations = new ArrayList<>();
         vehicles = new ArrayList<>();
+        notifications = new ArrayList<>();
 
         this.dbHelper = new DatabaseHelper(context.getApplicationContext());
     }
@@ -892,6 +899,165 @@ public class SingletonFastWheels {
         this.reservationListener = reservationListener;
     }
 
-    // endregion
+    //endregion
+    //region Notifications
+
+    public void addNotificationDB(Notification not) {
+        if(dbHelper == null)
+            return;
+
+        dbHelper.addNotificationDB(not);
+        notifications.add(not);
+    }
+
+    public void updateNotificationDB(Notification not) {
+        if(dbHelper == null)
+            return;
+
+        dbHelper.editNotificationDB(not);
+
+        //confirmar se e preciso atualizar ao chamar este metodo para read = 1 ou se atualiza ao clicar na notificacao
+    }
+
+    public void getNotificationsAPI(final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+
+            if (notificationListener != null)
+                notificationListener.onNotificationUpdate();
+        } else {
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    Constants.API_NOTIFICATION + "/" + loggedUser.getId(),
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            notifications.clear();
+                            notifications = NotificationParser.parseNotificationsData(response);
+
+                            if (!notifications.isEmpty()) {
+                                dbHelper.clearNotificationsBD();
+
+                                for (Notification res : notifications) {
+                                    addNotificationDB(res);
+                                }
+
+                                if (notificationListener != null)
+                                    notificationListener.onNotificationUpdate();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+//            {
+//                @Override
+//                public Map<String, String> getHeaders() {
+//                    Map<String, String> headers = new HashMap<>();
+//                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
+//                    headers.put("Authorization", base64Token.getBase64Token());
+//                    headers.put("Content-Type", "application/json; charset=UTF-8");
+//                    return headers;
+//                }
+//            };
+
+            volleyQueue.add(jsonRequest);
+
+        }
+    }
+
+    public void createNotificationAPI (Notification not, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.POST,
+                    Constants.API_NOTIFICATION + "/create",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Notification createdNotification = NotificationParser.parseNotificationData(response);
+
+                            notifications.add(createdNotification);
+                            addNotificationDB(createdNotification);
+
+                            if (notificationListener != null)
+                                notificationListener.onNotificationUpdate();
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public byte[] getBody() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("clientId", String.valueOf(not.getClientId()));
+                    params.put("content", String.valueOf(not.getContent()));
+                    params.put("createdAt", String.valueOf(not.getCreatedAt()));
+                    params.put("read", "0");
+
+                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+
+    public void updateNotificationAPI (Notification not, final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        } else {
+            StringRequest request = new StringRequest(
+                    Request.Method.PUT,
+                    Constants.API_NOTIFICATION + "/update",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            updateNotificationDB(not);
+
+                            if (notificationListener != null)
+                                notificationListener.onNotificationUpdate();
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error.networkResponse != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                        Log.e("API_ERROR", "Response Data: " + responseData);
+                    }
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }) {
+                @Override
+                public byte[] getBody() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("id", String.valueOf(not.getId()));
+                    params.put("read", "1");
+                    return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
+                }
+            };
+            volleyQueue.add(request);
+        }
+    }
+    public void setNotificationListener(NotificationListener notificationListener) {
+        this.notificationListener = notificationListener;
+    }
     //endregion
 }

@@ -10,7 +10,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.sql.Timestamp;
+
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
+import pt.ipleiria.estg.dei.fastwheels.model.Notification;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
@@ -96,6 +99,9 @@ public class Register extends AppCompatActivity {
 
         SingletonFastWheels.getInstance(getApplicationContext()).addUserAPI(newClient, getApplicationContext());
         SingletonFastWheels.getInstance(getApplicationContext()).setUser(newClient);
+
+        Notification welcomeNotifiy = new Notification(0, newClient.getId(), 1, "Bem vindo! Novos veículos estão a sua espera", new Timestamp(System.currentTimeMillis()));
+        SingletonFastWheels.getInstance(getApplicationContext()).createNotificationAPI(welcomeNotifiy, getApplicationContext());
 
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);

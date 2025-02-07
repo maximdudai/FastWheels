@@ -89,6 +89,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_PHOTO_URL = "photoUrl";
 
 
+    // ========================
+    // 5) NOTIFICATIONS TABLE
+    // ========================
+
+    private static final String TABLE_NOTIFICATIONS = "notifications";
+    private static final String NOT_ID = "not_id";        // PK
+    private static final String NOT_CLIENT_ID = "not_client_id";
+    private static final String NOT_READ = "not_read";
+    private static final String NOT_CONTENT = "not_content";
+    private static final String NOT_CREATED_TIME = "not_created_time";
+
     public DatabaseHelper(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
     }
@@ -184,6 +195,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.e("DATABASE", "Error creating carphotos table: " + e.getMessage());
         }
+        // 6) NOTIFICATIONS TABLE
+
+        try {
+            String sqlUsers = "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIFICATIONS + " ("
+                    + NOT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + NOT_CLIENT_ID + " TEXT NOT NULL, "
+                    + NOT_READ + " TEXT NOT NULL, "
+                    + NOT_CONTENT + " TEXT NOT NULL, "
+                    + NOT_CREATED_TIME + " TEXT NOT NULL"
+                    + ");";
+            db.execSQL(sqlUsers);
+            Log.d("DATABASE", "Table notifications created successfully");
+        } catch (Exception e) {
+            Log.e("DATABASE", "Error creating notifications table: " + e.getMessage());
+        }
     }
 
     @Override
@@ -194,6 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE_PHOTOS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATIONS);
 
         // Recreate
         onCreate(db);
@@ -497,4 +524,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return photos;
     }
+
+    //=========================
+    // NOTIFICATIONS CRUD
+    //=========================
+
+    public Notification addNotificationDB(Notification not) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        // user.getId() might be for a server ID; if you want to force local PK, omit or rename
+        values.put(NOT_ID, not.getId());
+        values.put(NOT_CLIENT_ID, not.getClientId());
+        values.put(NOT_CONTENT, not.getContent());
+        values.put(NOT_CREATED_TIME, not.getCreatedAt().toString());
+        values.put(NOT_READ, not.getRead());
+
+
+        long rowId = db.insert(TABLE_NOTIFICATIONS, null, values);
+        if (rowId != -1) {
+            // Set the newly inserted row ID if needed
+            not.setId((int) rowId);
+            return not;
+        }
+        return null;
+    }
+
+    public void editNotificationDB(Notification not) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NOT_ID, not.getId());
+        values.put(NOT_CLIENT_ID, not.getClientId());
+        values.put(NOT_CONTENT, not.getContent());
+        values.put(NOT_CREATED_TIME, not.getCreatedAt().toString());
+        values.put(NOT_READ, not.getRead());
+
+        db.update(TABLE_NOTIFICATIONS,
+                values,
+                NOT_ID + " = ?",
+                new String[]{String.valueOf(not.getId())});
+    }
+
+    public void clearNotificationsBD() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NOTIFICATIONS, null, null);
+    }
+
 }
