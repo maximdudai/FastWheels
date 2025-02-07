@@ -1,5 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels.parsers;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +52,8 @@ public class NotificationParser {
 
                 Notification notification = new Notification(id, clientId, read, content, createdAt);
                 notificationList.add(notification);
+
+                Log.d("NOTIFICATION", "New notification has been parse, total: " + notificationList.size());
 
             } catch (JSONException e) {
                 e.printStackTrace();

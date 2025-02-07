@@ -101,7 +101,7 @@ return [
                     'extraPatterns' => [
                         'GET search/{id}' => 'search',
                         'POST create' => 'create',
-                        'PUT update/{id}' => 'update',
+                        'PUT markread/{id}' => 'markread',
                         'DELETE delete/{id}' => 'delete',
                     ],
                     'tokens' => [

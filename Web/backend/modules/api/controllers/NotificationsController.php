@@ -41,7 +41,7 @@ class NotificationsController extends ActiveController
         }
     }
 
-    public function actionUpdate() {
+    public function actionMarkread() {
         if(!Yii::$app->request->isPost) {
             throw new BadRequestHttpException('Incorrect request method');
         }

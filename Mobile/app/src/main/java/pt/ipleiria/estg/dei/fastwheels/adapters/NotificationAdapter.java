@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 
 import pt.ipleiria.estg.dei.fastwheels.R;
 import pt.ipleiria.estg.dei.fastwheels.model.Notification;
-
 public class NotificationAdapter extends BaseAdapter {
 
     private Context context;
@@ -30,36 +30,39 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return notifications.size(); // FIXED!
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return notifications.get(i); // FIXED!
     }
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return notifications.get(i).getId(); // Or use notifications.get(i).getId() if available
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(inflater == null) {
+        if (inflater == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        if(view == null) {
+        if (view == null) {
             view = inflater.inflate(R.layout.notification_list_item, null);
         }
 
         ViewHolderLista viewHolderLista = (ViewHolderLista) view.getTag();
-        if(viewHolderLista == null) {
+        if (viewHolderLista == null) {
             viewHolderLista = new ViewHolderLista(view);
             view.setTag(viewHolderLista);
         }
 
-        viewHolderLista.update(notifications.get(i));
+        if (i >= 0 && i < notifications.size()) { // FIXED: Prevent crash
+            viewHolderLista.update(notifications.get(i));
+        }
+
         return view;
     }
 
@@ -75,15 +78,15 @@ public class NotificationAdapter extends BaseAdapter {
 
         public void update(Notification not) {
             notHour.setText(not.getCreatedAt().toString());
-
-            String minimizedContent = this.getMinimizedContent(not.getContent());
-            notContent.setText(minimizedContent);
-
-            notRead.setChecked(not.getRead() == 1 ? true : false);
-
+            notContent.setText(getMinimizedContent(not.getContent()));
+            notRead.setChecked(not.getRead() == 1);
         }
+
         private String getMinimizedContent(String content) {
-            return content.trim().substring(0, 30);
+            String formatContent = content.trim().substring(0, Math.min(content.length(), 30));
+
+            return formatContent.substring(0, formatContent.length() - 3) + "...";
         }
+
     }
 }

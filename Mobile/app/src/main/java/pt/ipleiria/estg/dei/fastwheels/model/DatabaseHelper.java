@@ -529,6 +529,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // NOTIFICATIONS CRUD
     //=========================
 
+    public ArrayList<Notification> getAllNotifications() {
+        ArrayList<Notification> notifications = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NOTIFICATIONS, null, null, null,
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Notification notification = new Notification(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(NOT_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(NOT_CLIENT_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(NOT_READ)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(NOT_CONTENT)),
+                        Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(NOT_CREATED_TIME)))
+                );
+                notifications.add(notification);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return notifications;
+    }
+
     public Notification addNotificationDB(Notification not) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

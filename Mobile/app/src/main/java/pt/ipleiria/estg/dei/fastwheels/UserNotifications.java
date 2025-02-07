@@ -1,6 +1,8 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,12 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.ArrayList;
 
-import pt.ipleiria.estg.dei.fastwheels.listeners.NotificationListener;
-import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
-
-public class UserNotifications extends AppCompatActivity implements NotificationListener {
+public class UserNotifications extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
 
@@ -24,24 +22,14 @@ public class UserNotifications extends AppCompatActivity implements Notification
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_notifications);
 
-        // Load notification
-        this.reloadNotification();
-
         fragmentManager = getSupportFragmentManager();
 
         Fragment fragment = new UserNotificationFragment();
         setTitle("Notifications");
 
         if(fragment != null)
-            fragmentManager.beginTransaction().replace(R.id.fragmentNotificationsManager, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fragmentNotificationsManager, fragment)
+                    .commitAllowingStateLoss();
     }
 
-    @Override
-    public void onNotificationUpdate() {
-        this.reloadNotification();
-    }
-
-    private void reloadNotification() {
-        SingletonFastWheels.getInstance(getApplicationContext()).getNotificationsAPI(getApplicationContext());
-    }
 }

@@ -57,4 +57,15 @@ public class Notification {
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "id=" + id +
+                ", clientId=" + clientId +
+                ", read=" + read +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

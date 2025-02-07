@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 
@@ -68,10 +69,10 @@ public class SingletonFastWheels {
 
     // Construtor privado
     private SingletonFastWheels(Context context) {
-        favorites = new ArrayList<>();
-        reservations = new ArrayList<>();
-        vehicles = new ArrayList<>();
-        notifications = new ArrayList<>();
+        favorites = new ArrayList<Favorite>();
+        reservations = new ArrayList<Reservation>();
+        vehicles = new ArrayList<Vehicle>();
+        notifications = new ArrayList<Notification>();
 
         this.dbHelper = new DatabaseHelper(context.getApplicationContext());
     }
@@ -903,11 +904,7 @@ public class SingletonFastWheels {
     //region Notifications
 
     public void addNotificationDB(Notification not) {
-        if(dbHelper == null)
-            return;
-
         dbHelper.addNotificationDB(not);
-        notifications.add(not);
     }
 
     public void updateNotificationDB(Notification not) {
@@ -915,67 +912,60 @@ public class SingletonFastWheels {
             return;
 
         dbHelper.editNotificationDB(not);
-
         //confirmar se e preciso atualizar ao chamar este metodo para read = 1 ou se atualiza ao clicar na notificacao
     }
 
     public ArrayList<Notification> getNotificationsDB() {
+        notifications = dbHelper.getAllNotifications();
+
         return notifications;
     }
-
     public void getNotificationsAPI(final Context context) {
-        if (!VehicleParser.isConnectionInternet(context)) {
-            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+        if (loggedUser == null) {
+            Log.e("API_ERROR", "loggedUser is null!");
+            return;
+        }
 
-            if (notificationListener != null)
-                notificationListener.onNotificationUpdate();
-        } else {
-            JsonArrayRequest jsonRequest = new JsonArrayRequest(
-                    Request.Method.GET,
-                    Constants.API_NOTIFICATION + "/" + loggedUser.getId(),
-                    null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            notifications.clear();
-                            notifications = NotificationParser.parseNotificationsData(response);
+        if (volleyQueue == null) {
+            volleyQueue = Volley.newRequestQueue(context.getApplicationContext());
+        }
 
-                            if (!notifications.isEmpty()) {
-                                dbHelper.clearNotificationsBD();
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                Constants.API_NOTIFICATION + "/search/" + loggedUser.getId(),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        notifications = NotificationParser.parseNotificationsData(response);
 
-                                for (Notification res : notifications) {
-                                    addNotificationDB(res);
-                                }
+                        if (!notifications.isEmpty()) {
+                            for (Notification res : notifications) {
+                                addNotificationDB(res);
+                            }
 
-                                if (notificationListener != null)
-                                    notificationListener.onNotificationUpdate();
+                            if (notificationListener != null) {
+                                notificationListener.onNotificationUpdate();
                             }
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if (error.networkResponse != null) {
-                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
-                        Log.e("API_ERROR", "Response Data: " + responseData);
                     }
-                    Toast.makeText(context, "Something went wrong, please try again later!", Toast.LENGTH_SHORT).show();
-                }
-            });
-//            {
-//                @Override
-//                public Map<String, String> getHeaders() {
-//                    Map<String, String> headers = new HashMap<>();
-//                    generateBase64 base64Token = new generateBase64(loggedUser.getName(), loggedUser.getPassword());
-//                    headers.put("Authorization", base64Token.getBase64Token());
-//                    headers.put("Content-Type", "application/json; charset=UTF-8");
-//                    return headers;
-//                }
-//            };
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null) {
+                            String responseData = new String(error.networkResponse.data, Charset.forName("UTF-8"));
+                            Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
+                            Log.e("API_ERROR", "Response Data: " + responseData);
+                        } else {
+                            Log.e("API_ERROR", "No network response!");
+                        }
 
-            volleyQueue.add(jsonRequest);
+                        Toast.makeText(context, "Something went wrong, please try again later!", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        }
+        volleyQueue.add(jsonRequest);
     }
 
     public void createNotificationAPI (Notification not, final Context context) {
@@ -1046,7 +1036,7 @@ public class SingletonFastWheels {
                         Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
                         Log.e("API_ERROR", "Response Data: " + responseData);
                     }
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Something went wrong! Please try again later!", Toast.LENGTH_SHORT).show();
                 }
             }) {
                 @Override
