@@ -30,7 +30,7 @@ public class MosquittoManager implements MosquittoListener {
             case Constants.MQTT_SUPPORTTICKET_UPDATE:
                 Support createSupport = SupportParser.parseSupportData(data);
                 String supportMessage = "New Update about your support ticket, please check it on our web platform";
-                new Notification("Support Ticket", supportMessage);
+//                new Notification("Support Ticket", supportMessage);
                 new Handler(Looper.getMainLooper()).post(() -> {
                     Toast.makeText(context, supportMessage, Toast.LENGTH_SHORT).show();
                 });
@@ -41,7 +41,7 @@ public class MosquittoManager implements MosquittoListener {
                 Reservation createReservation = ReservationParser.parseReservationData(data);
                 String reservationMessage = "New Update about your reservation, please check it on our web platform";
 
-                new Notification("Reservation", reservationMessage);
+//                new Notification("Reservation", reservationMessage);
                 new Handler(Looper.getMainLooper()).post(() -> {
                     Toast.makeText(context, reservationMessage, Toast.LENGTH_SHORT).show();
                 });

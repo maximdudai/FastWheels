@@ -919,6 +919,10 @@ public class SingletonFastWheels {
         //confirmar se e preciso atualizar ao chamar este metodo para read = 1 ou se atualiza ao clicar na notificacao
     }
 
+    public ArrayList<Notification> getNotificationsDB() {
+        return notifications;
+    }
+
     public void getNotificationsAPI(final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
@@ -955,7 +959,7 @@ public class SingletonFastWheels {
                         Log.e("API_ERROR", "Status Code: " + error.networkResponse.statusCode);
                         Log.e("API_ERROR", "Response Data: " + responseData);
                     }
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Something went wrong, please try again later!", Toast.LENGTH_SHORT).show();
                 }
             });
 //            {

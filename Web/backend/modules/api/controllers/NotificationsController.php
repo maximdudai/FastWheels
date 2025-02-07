@@ -16,6 +16,14 @@ class NotificationsController extends ActiveController
 {
     public $modelClass = 'common\models\Notification';
 
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['index']); 
+        return $actions;
+    }
+
     public function actionIndex($id)
     {
         return Notification::find()->where(['clientId' => $id])->all();

@@ -17,7 +17,7 @@ import pt.ipleiria.estg.dei.fastwheels.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goReservations, goVeiculosFavoritos;
+    LinearLayout goPerfil, goMeusVeiculos, goVeiculosDisponiveis, goSuporte, goReservations, goVeiculosFavoritos, goNotifications;
     TextView tvMainLoggedName, tvMainLoggedEmail;
 
     @Override
@@ -97,7 +97,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // TODO Notificacoes
-
+        goNotifications = findViewById(R.id.LayoutMainNotificacoes);
+        goNotifications.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserNotifications.class);
+            startActivity(intent);
+        });
 
         // endregion
     }
