@@ -51,8 +51,6 @@ public class UserNotificationFragment extends Fragment implements NotificationLi
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Notification selectedNotification = notifications.get(i);
 
-                Log.d("NOTIFICATION:FRAGMENT", "not info: " + selectedNotification.getContent() + " l: " + l + " i: " + i);
-
                 new AlertDialog.Builder(getContext())
                         .setTitle("Received Notification")
                         .setMessage(selectedNotification.getContent())
@@ -75,9 +73,7 @@ public class UserNotificationFragment extends Fragment implements NotificationLi
     @Override
     public void onNotificationUpdate() {
         notifications.clear();
-
         notifications.addAll(SingletonFastWheels.getInstance(requireContext()).getNotificationsDB());
-
         requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
     }
 }

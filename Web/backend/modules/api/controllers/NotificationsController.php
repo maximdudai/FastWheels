@@ -47,6 +47,10 @@ class NotificationsController extends ActiveController
         }
         $data = Yii::$app->request->post();
 
+        if (!isset($data['id'])) {
+            throw new BadRequestHttpException('Missing required parameter: id');
+        }
+
         $model = Notification::find()->where(['id' => $data['id']])->one();
 
         if (!$model) {

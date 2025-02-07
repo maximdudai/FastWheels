@@ -1019,7 +1019,7 @@ public class SingletonFastWheels {
         } else {
             StringRequest request = new StringRequest(
                     Request.Method.PUT,
-                    Constants.API_NOTIFICATION + "/update",
+                    Constants.API_NOTIFICATION + "/markread",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -1042,8 +1042,8 @@ public class SingletonFastWheels {
                 @Override
                 public byte[] getBody() {
                     Map<String, String> params = new HashMap<>();
+                    Log.d("NOTIFICATION:API", "Notification data: " + not.toString());
                     params.put("id", String.valueOf(not.getId()));
-                    params.put("read", "1");
                     return new JSONObject(params).toString().getBytes(StandardCharsets.UTF_8);
                 }
             };
