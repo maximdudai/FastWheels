@@ -16,7 +16,6 @@ class NotificationsController extends ActiveController
 {
     public $modelClass = 'common\models\Notification';
 
-
     public function actions()
     {
         $actions = parent::actions();
@@ -24,9 +23,11 @@ class NotificationsController extends ActiveController
         return $actions;
     }
 
-    public function actionIndex($id)
+    public function actionSearch($id)
     {
-        return Notification::find()->where(['clientId' => $id])->all();
+        $searchByClientId = Notification::find()->where(['clientId' => $id])->all();
+
+        return $searchByClientId;
     }
 
     public function actionCreate() {

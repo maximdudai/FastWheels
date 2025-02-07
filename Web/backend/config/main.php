@@ -99,7 +99,7 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/notifications',
                     'extraPatterns' => [
-                        'GET index/{id}' => 'index',
+                        'GET search/{id}' => 'search',
                         'POST create' => 'create',
                         'PUT update/{id}' => 'update',
                         'DELETE delete/{id}' => 'delete',
