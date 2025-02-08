@@ -28,23 +28,25 @@ $this->title = 'Fast Wheels';
             <div class="row">
                 <div class="col-12">
                     <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
-                        <div class="row">
-                            <?php foreach ($randomCars as $car): ?>
-                                <div class="col-md-4 mb-3">
-                                    <div class="card">
-                                        <img class="img-fluid" alt="100%x280" src="<?= $car->getFirstPhoto() ?>">
-                                        <div class="card-body">
-                                            <h4 class="card-title"><?= Html::encode($car->carBrand . ' ' . $car->carModel) ?></h4>
-                                            <div class="carAvailable">
-                                                <strong>Inicio </strong> <span><?= date('Y-m-d', strtotime($car->availableFrom)) ?></span>
-                                                <strong> Fim </strong> <span><?= date('Y-m-d', strtotime($car->availableTo)) ?></span>
+                        <?php if (!empty($randomCars)): ?>
+                            <div class="row">
+                                <?php foreach ($randomCars as $car): ?>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <img class="img-fluid" alt="100%x280" src="<?= $car->getFirstPhoto() ?>">
+                                            <div class="card-body">
+                                                <h4 class="card-title"><?= Html::encode($car->carBrand . ' ' . $car->carModel) ?></h4>
+                                                <div class="carAvailable">
+                                                    <strong>Inicio </strong> <span><?= date('Y-m-d', strtotime($car->availableFrom)) ?></span>
+                                                    <strong> Fim </strong> <span><?= date('Y-m-d', strtotime($car->availableTo)) ?></span>
+                                                </div>
+                                                <a href="<?= Url::to(['user-car/view', 'id' => $car->id]) ?>" class="my-2 btn btn-outline-warning">Detalhes</a>
                                             </div>
-                                            <a href="<?= Url::to(['user-car/view', 'id' => $car->id]) ?>" class="my-2 btn btn-outline-warning">Detalhes</a>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

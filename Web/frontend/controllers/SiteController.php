@@ -91,28 +91,29 @@ class SiteController extends BaseController
     public function actionIndex()
     {
         $carPhotos = \common\models\CarPhoto::find()->with('car')->all();
-
+    
         $carList = UserCar::find()->all();
-        $randomCars = array();
-        
-        if($carList != null) {
-        
-            while (count($randomCars) < 3) {
-                $randomCar = $carList[array_rand($carList)];
-            
-                // Verify if the car is already in the array
-                if (!in_array($randomCar, $randomCars)) {
-                    $randomCars[] = $randomCar;
-                }
+        $randomCars = [];
+    
+        if (!empty($carList)) {
+            $totalCars = count($carList);
+            $randomIndexes = array_rand($carList, min(3, $totalCars));
+    
+            if (!is_array($randomIndexes)) {
+                $randomIndexes = [$randomIndexes]; 
+            }
+    
+            foreach ($randomIndexes as $index) {
+                $randomCars[] = $carList[$index];
             }
         }
-        
-
+    
         return $this->render('index', [
             'carPhotos' => $carPhotos,
             'randomCars' => $randomCars,
         ]);
     }
+    
 
 
     /**
