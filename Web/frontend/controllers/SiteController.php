@@ -94,14 +94,16 @@ class SiteController extends BaseController
 
         $carList = UserCar::find()->all();
         $randomCars = array();
-
         
-        while (count($randomCars) < 3) {
-            $randomCar = $carList[array_rand($carList)];
+        if($carList != null) {
         
-            // Verify if the car is already in the array
-            if (!in_array($randomCar, $randomCars)) {
-                $randomCars[] = $randomCar;
+            while (count($randomCars) < 3) {
+                $randomCar = $carList[array_rand($carList)];
+            
+                // Verify if the car is already in the array
+                if (!in_array($randomCar, $randomCars)) {
+                    $randomCars[] = $randomCar;
+                }
             }
         }
         

@@ -1,5 +1,10 @@
 <?php
 
+
+// php yii migrate --migrationPath=@yii/rbac/migrations
+// php yii rbac/init
+// php yii migrate
+
 use yii\db\Migration;
 
 class m130524_201442_init extends Migration

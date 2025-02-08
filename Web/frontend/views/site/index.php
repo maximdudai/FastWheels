@@ -11,7 +11,6 @@ $this->title = 'Fast Wheels';
 ?>
 <div id="site-index">
     <div id="hero-section">
-        <!-- <img id="companyImageSource" src="<?= Yii::getAlias('@uploads') . '/fwlogo.png' ?>" alt="Fast Wheels Logo"> -->
         <div class="contentCtoButton">
             <h1 id="companyName">Fast Wheels</h1>
             <p id="companyDescription">Rent a car for your next adventure!</p>
