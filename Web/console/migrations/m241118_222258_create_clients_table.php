@@ -24,7 +24,7 @@ class m241118_222258_create_clients_table extends Migration
             'createdAt' => $this->timestamp()->notNull(),
             'balance' => $this->decimal(10,2)->notNull(),
             'iban' => $this->string(30)->notNull(),
-        ]);
+        ] , 'ENGINE=InnoDB');
 
         // creates index for column `roleId`
         $this->createIndex(

@@ -26,7 +26,7 @@ class m241118_222507_create_usercars_table extends Migration
             'status' => $this->boolean(),
             'availableFrom' => $this->timestamp()->notNull(),
             'availableTo' => $this->timestamp()->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `clientId`
         $this->createIndex(

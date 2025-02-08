@@ -25,7 +25,7 @@ class m241118_225735_create_reservations_table extends Migration
             'createAt' => $this->timestamp(),
             'filled' => $this->boolean(),
             'value' => $this->decimal(10,2)->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `clientId`
         $this->createIndex(

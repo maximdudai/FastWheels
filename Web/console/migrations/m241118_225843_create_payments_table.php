@@ -25,7 +25,7 @@ class m241118_225843_create_payments_table extends Migration
             'method' => $this->string(30)->notNull(),
             'value' => $this->decimal(10,2)->notNull(),
             'status' => $this->string(50)->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `reserveId`
         $this->createIndex(

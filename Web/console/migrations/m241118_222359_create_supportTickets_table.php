@@ -21,7 +21,7 @@ class m241118_222359_create_supporttickets_table extends Migration
             'content' => $this->string(1000)->notNull(),
             'createdAt' => $this->timestamp()->notNull(),
             'closed' => $this->boolean(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `clientId`
         $this->createIndex(

@@ -15,7 +15,7 @@ class m241227_180401_create_taxes_table extends Migration
         $this->createTable('{{%taxes}}', [
             'id' => $this->primaryKey(),
             'tax_value' => $this->decimal(10,2)->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         $this->insert('{{%taxes}}', [
             'tax_value' => 10.0, // Default tax value

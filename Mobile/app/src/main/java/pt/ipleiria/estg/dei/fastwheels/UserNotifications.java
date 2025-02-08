@@ -6,6 +6,7 @@ import android.os.Looper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -23,6 +24,14 @@ public class UserNotifications extends AppCompatActivity {
         setContentView(R.layout.activity_user_notifications);
 
         fragmentManager = getSupportFragmentManager();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         Fragment fragment = new UserNotificationFragment();
         setTitle("Notifications");

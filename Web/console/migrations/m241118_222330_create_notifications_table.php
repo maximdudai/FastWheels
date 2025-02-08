@@ -21,7 +21,7 @@ class m241118_222330_create_notifications_table extends Migration
             'content' => $this->string(300)->notNull(),
             'createdAt' => $this->timestamp()->notNull(),
             'read' => $this->boolean(),
-        ]);
+        ] , 'ENGINE=InnoDB');
 
         // creates index for column `clientId`
         $this->createIndex(

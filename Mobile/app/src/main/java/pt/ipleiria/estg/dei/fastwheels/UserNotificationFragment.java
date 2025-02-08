@@ -46,6 +46,7 @@ public class UserNotificationFragment extends Fragment implements NotificationLi
         View view = inflater.inflate(R.layout.fragment_user_notification, container, false);
         lvNotifications = view.findViewById(R.id.lvNotifications);
 
+
         lvNotifications.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

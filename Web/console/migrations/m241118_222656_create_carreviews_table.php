@@ -20,7 +20,7 @@ class m241118_222656_create_carreviews_table extends Migration
             'carId' => $this->integer()->notNull(),
             'comment' => $this->string(300)->notNull(),
             'createdAt' => $this->timestamp()->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `carId`
         $this->createIndex(

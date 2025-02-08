@@ -16,7 +16,7 @@ class m241118_222149_create_roles_table extends Migration
         $this->createTable('{{%roles}}', [
             'id' => $this->primaryKey(),
             'roleName' => $this->string(50)->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
     }
 
     /**

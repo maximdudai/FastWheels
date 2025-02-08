@@ -21,7 +21,7 @@ class m241118_222643_create_favorites_table extends Migration
             'clientId' => $this->integer()->notNull(),
             'carId' => $this->integer()->notNull(),
             'createdAt' => $this->timestamp()->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `clientId`
         $this->createIndex(

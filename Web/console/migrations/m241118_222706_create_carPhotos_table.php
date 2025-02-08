@@ -19,7 +19,7 @@ class m241118_222706_create_carphotos_table extends Migration
             'id' => $this->primaryKey(),
             'carId' => $this->integer()->notNull(),
             'photoUrl' => $this->string(200)->notNull(),
-        ]);
+        ], 'ENGINE=InnoDB');
 
         // creates index for column `carId`
         $this->createIndex(
