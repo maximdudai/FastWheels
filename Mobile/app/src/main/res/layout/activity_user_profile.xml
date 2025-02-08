@@ -6,8 +6,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/black"
-    android:padding="16dp"
     tools:context=".UserProfile">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="@string/user_profile_toolbar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <!-- User Info Section -->
     <LinearLayout
@@ -76,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
         android:layout_weight="0"
+        android:padding="16dp"
         android:background="#000000"
         android:orientation="vertical">
 
@@ -204,6 +213,7 @@
             android:elevation="4dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:onClick="handleNotifications"
             android:padding="16dp">
 
             <ImageView

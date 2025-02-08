@@ -39,8 +39,8 @@ public class UserReservedVehicleFragment extends Fragment implements SwipeRefres
         singleton = SingletonFastWheels.getInstance(getContext());
         singleton.setVehicleListener(this);
 
-        vehicleList = new ArrayList<Vehicle>();
-        allReservations = new ArrayList<Reservation>();
+        //load data from api
+        singleton.getReservationAPI(getContext());
 
         loggedUser = singleton.getUser();
         vehicleList = singleton.getVehiclesDb();

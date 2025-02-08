@@ -58,8 +58,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     public VehicleListFragment() {
         loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
 
-        vehiclesToShow = vehicleList = new ArrayList<>();
-        favoriteVehicles = new ArrayList<>();
+        SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
+        SingletonFastWheels.getInstance(getContext()).getReviewsAPI(getContext());
 
         vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
@@ -101,7 +101,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
             vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
 
         if(showFavorites.equals("1")) {
-            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+            if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
+                vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }
@@ -202,7 +203,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
         if(showFavorites.equals("1")) {
-            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+            if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
+                vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }
@@ -312,7 +314,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
         if(showFavorites.equals("1")) {
-            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+            if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
+                vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }
@@ -331,7 +334,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
         if(showFavorites.equals("1")) {
-            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+            if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
+                vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }
@@ -350,7 +354,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
         if(showFavorites.equals("1")) {
-            vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
+            if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
+                vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
             vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
         }

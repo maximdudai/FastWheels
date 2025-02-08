@@ -355,7 +355,7 @@ public class UserVehicleFormFragment extends Fragment {
     }
 
     private void saveVehicle() {
-        if (!validateFields() || !validatePhotos()) {
+        if (!validateFields()) {
             return;
         }
         try {

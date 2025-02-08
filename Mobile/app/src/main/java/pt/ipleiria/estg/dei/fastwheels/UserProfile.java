@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
@@ -24,6 +25,14 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         loggedEmail = findViewById(R.id.loggedEmail);
         loggedName = findViewById(R.id.loggedName);
@@ -62,6 +71,10 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
     public void handleSupport(View v) {
         Intent supportPage = new Intent(this, Support.class);
         startActivity(supportPage);
+    }
+    public void handleNotifications(View v) {
+        Intent notPage = new Intent(this, UserNotifications.class);
+        startActivity(notPage);
     }
 
     private void showDialog(String title, String hint, String type) {
@@ -105,8 +118,5 @@ public class UserProfile extends AppCompatActivity implements InputDialog.OnInpu
 
         loggedEmail.setText(user.getEmail());
         loggedName.setText(user.getName());
-
-        System.out.println("---> profile update: " + sharedPreferences.getString(Constants.KEY_USERNAME, null));
-        System.out.println("---> profile update: " + sharedPreferences.getString(Constants.KEY_EMAIL, null));
     }
 }

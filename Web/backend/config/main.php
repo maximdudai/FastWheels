@@ -108,6 +108,18 @@ return [
                         '{id}' => '<id:\\d+>',
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/review',
+                    'extraPatterns' => [
+                        'GET reviews' => 'reviews',
+                        'GET search/{id}' => 'search',
+                        'POST create' => 'create',
+                    ],
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                ],
             ],
         ],
     ],

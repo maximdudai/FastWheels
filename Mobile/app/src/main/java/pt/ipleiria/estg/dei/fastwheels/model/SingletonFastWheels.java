@@ -1,6 +1,5 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,7 +13,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
@@ -30,12 +28,14 @@ import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.NotificationListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ProfileListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.ReservationListener;
+import pt.ipleiria.estg.dei.fastwheels.listeners.ReviewListener;
 import pt.ipleiria.estg.dei.fastwheels.listeners.VehicleListener;
 import pt.ipleiria.estg.dei.fastwheels.parsers.LoginParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.NotificationParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ProfileParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.ReservationParser;
 import pt.ipleiria.estg.dei.fastwheels.parsers.RegistoParser;
+import pt.ipleiria.estg.dei.fastwheels.parsers.ReviewParser;
 import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 import pt.ipleiria.estg.dei.fastwheels.utils.generateBase64;
 import pt.ipleiria.estg.dei.fastwheels.parsers.VehicleParser;
@@ -45,8 +45,8 @@ public class SingletonFastWheels {
     private ArrayList<Vehicle> vehicles; // Lista de veículos
     private ArrayList<Reservation> reservations;
     private List<Favorite> favorites;
-
     private ArrayList<Notification> notifications;
+    private ArrayList<Review> reviews;
 
     private final DatabaseHelper dbHelper;
     private static SingletonFastWheels instance = null; // Instância única
@@ -62,6 +62,7 @@ public class SingletonFastWheels {
     private VehicleListener vehicleListener;
     private ReservationListener reservationListener;
     private NotificationListener notificationListener;
+    private ReviewListener reviewListener;
 
     // Mosquitto
     private static Mosquitto mosquitto = null;
@@ -159,8 +160,7 @@ public class SingletonFastWheels {
 
     //endregion
 
-    //region METODOS GERIR VEHICLEPHOTO
-    // Adicionar foto associada a um veículo
+    //region VEHICLE PHOTO
     public void addVehiclePhoto(int vehicleId, String photoUrl) {
         VehiclePhoto newPhoto = dbHelper.addPhotoDb(new VehiclePhoto(0, vehicleId, photoUrl));
         if (newPhoto != null) {
@@ -171,7 +171,6 @@ public class SingletonFastWheels {
         }
     }
 
-    // Remover todas fotos de um veiculo
     public void removeAllVehiclePhotosBD(int vehicleId) {
         if (dbHelper.removeAllPhotosByVehicleIdDB(vehicleId)) {
             System.out.println("Todas as fotos do veículo foram removidas com sucesso!");
@@ -180,6 +179,7 @@ public class SingletonFastWheels {
         }
     }
 
+    //endregion
     public boolean isVehicleFavorite(int vehicleId) {
         if(favorites == null)
             return false;
@@ -214,26 +214,6 @@ public class SingletonFastWheels {
             System.out.println("Error: Favorites list is null.");
         }
     }
-
-
-    public ArrayList<Vehicle> getFavoriteVehiclesDb() {
-
-        if(favorites == null || vehicles == null)
-            return null;
-
-        ArrayList<Vehicle> favoriteVehicles = new ArrayList<>();
-
-        for(Vehicle cars: vehicles) {
-            for(Favorite favs: favorites) {
-                if(cars.getId() == favs.getCarId()) {
-                    favoriteVehicles.add(cars);
-                }
-            }
-        }
-
-        return favoriteVehicles;
-    }
-
 
     public List<Favorite> getFavorites() {
         return dbHelper.getFavorites(loggedUser.getId());
@@ -584,6 +564,9 @@ public class SingletonFastWheels {
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
+                            if(response.length() == 0)
+                                return;
+
                             removeVehiclesDb();
 
                             vehicles.clear();
@@ -713,6 +696,61 @@ public class SingletonFastWheels {
     public void setVehicleListener(VehicleListener vehicleListener) {
         this.vehicleListener = vehicleListener;
     }
+    //endregion
+
+    //region Reviews
+
+    public void addReviewDb(Review rev) {
+        dbHelper.addReview(rev);
+    }
+
+    public void removeReviewsDb() {
+        dbHelper.removeReviewsDB();
+    }
+
+    public void getReviewsAPI(final Context context) {
+        if (!VehicleParser.isConnectionInternet(context)) {
+            Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
+
+            if (reviewListener != null)
+                reviewListener.onReviewsUpdate();
+        } else {
+            JsonArrayRequest jsonRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    Constants.API_REVIEWS + "/reviews",
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            removeReviewsDb();
+
+                            reviews.clear();
+                            reviews = ReviewParser.parseReviewsData(response);
+
+                            if(!reviews.isEmpty()) {
+                                dbHelper.removeReviewsDB();
+
+                                for(Review rev: reviews) {
+                                    addReviewDb(rev);
+                                }
+                                if(reviewListener != null)
+                                    reviewListener.onReviewsUpdate();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    String errorMsg = (error.getMessage() != null) ? error.getMessage() : "An unexpected error occurred.";
+                    Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            volleyQueue.add(jsonRequest);
+        }
+    }
+
+
+    //endregion
 
     //region #Reservation API
 

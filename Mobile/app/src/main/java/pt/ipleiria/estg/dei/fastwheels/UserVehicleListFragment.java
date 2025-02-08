@@ -68,6 +68,7 @@ public class UserVehicleListFragment extends Fragment implements SwipeRefreshLay
 
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
         singleton.getVehiclesAPI(getContext());
+
         loggedUser = singleton.getUser();
         vehicleList = singleton.getVehiclesDb();
 

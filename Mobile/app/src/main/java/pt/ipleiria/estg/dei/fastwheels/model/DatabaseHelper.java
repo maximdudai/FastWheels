@@ -100,6 +100,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String NOT_CONTENT = "not_content";
     private static final String NOT_CREATED_TIME = "not_created_time";
 
+    // ========================
+    // 5) REVIEWS TABLE
+    // ========================
+
+    private static final String TABLE_REVIEWS = "carreview";
+    private static final String REVIEW_ID = "id";        // PK
+    private static final String REVIEW_CAR_ID = "carId";
+    private static final String REVIEW_COMMENT = "comment";
+    private static final String REVIEW_CREATEDAT = "createdAt";
+
     public DatabaseHelper(Context context) {
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
     }
@@ -210,6 +220,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.e("DATABASE", "Error creating notifications table: " + e.getMessage());
         }
+
+        try {
+            String sqlUsers = "CREATE TABLE IF NOT EXISTS " + TABLE_REVIEWS + " ("
+                    + REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + REVIEW_CAR_ID + " INTEGER NOT NULL, "
+                    + REVIEW_COMMENT + " TEXT NOT NULL, "
+                    + REVIEW_CREATEDAT + " TEXT NOT NULL"
+                    + ");";
+            db.execSQL(sqlUsers);
+            Log.d("DATABASE", "Table car reviews created successfully");
+        } catch (Exception e) {
+            Log.e("DATABASE", "Error creating car reviews table: " + e.getMessage());
+        }
+
     }
 
     @Override
@@ -221,6 +245,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE_PHOTOS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REVIEWS);
 
         // Recreate
         onCreate(db);
@@ -591,4 +616,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_NOTIFICATIONS, null, null);
     }
 
+    //=========================
+    // CARREVIEW CRUD
+    //=========================
+
+    public ArrayList<Review> getAllReviews() {
+        ArrayList<Review> reviews = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_REVIEWS, null, null, null,
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Review review = new Review(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(REVIEW_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(REVIEW_CAR_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(REVIEW_COMMENT)),
+                        Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(REVIEW_CREATEDAT)))
+                );
+                reviews.add(review);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return reviews;
+    }
+
+    public Review addReview(Review rev) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(REVIEW_ID, rev.getId());
+        values.put(REVIEW_CAR_ID, rev.getCarId());
+        values.put(REVIEW_COMMENT, rev.getComment());
+        values.put(REVIEW_CREATEDAT, rev.getCreatedAt().toString());
+
+
+        long rowId = db.insert(TABLE_REVIEWS, null, values);
+        if (rowId != -1) {
+            // Set the newly inserted row ID if needed
+            rev.setId((int) rowId);
+            return rev;
+        }
+        return null;
+    }
+
+    public void removeReviewsDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_REVIEWS, null, null);
+    }
 }

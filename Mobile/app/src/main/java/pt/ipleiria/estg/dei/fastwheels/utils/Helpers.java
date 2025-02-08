@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
 import pt.ipleiria.estg.dei.fastwheels.model.Reservation;
+import pt.ipleiria.estg.dei.fastwheels.model.Review;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
@@ -246,8 +247,6 @@ public class Helpers {
         if(vehicleList.isEmpty() && favList.isEmpty())
             return null;
 
-        System.out.println("--- fragment filterbyfavs: " + vehicleList.size() + " favs: " + favList.size());
-
         ArrayList<Vehicle> auxVehicle = new ArrayList<>();
 
         for(Vehicle car: vehicleList) {
@@ -259,6 +258,17 @@ public class Helpers {
             }
         }
         return auxVehicle;
+    }
+
+    public static ArrayList<Review> getReviewByCarId(ArrayList<Review> reviewList, final int carId) {
+        ArrayList<Review> filteredReviews = new ArrayList<>();
+        for (Review revs: reviewList) {
+            if(revs.getCarId() == carId) {
+
+                filteredReviews.add(revs);
+            }
+        }
+        return filteredReviews;
     }
 
 }

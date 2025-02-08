@@ -60,4 +60,6 @@
     <string name="vehicle_list_preco">Preço: </string>
     <string name="item_reserver_price">Preço</string>
     <string name="string_notifications">Notifications</string>
+    <string name="user_profile_toolbar">Profile</string>
+    <string name="car_reviews">Avaliacoes (0)</string>
 </resources>

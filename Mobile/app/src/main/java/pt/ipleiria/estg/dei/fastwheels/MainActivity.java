@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(toLogin);
             return;
         }
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         //region CARREGAR DADOS UTILIZADOR
         tvMainLoggedName = findViewById(R.id.tvMainLoggedName);

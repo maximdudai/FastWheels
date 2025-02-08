@@ -20,6 +20,7 @@ public class Constants {
     public static final String API_RESERVATION = "http://54.229.223.123:8080/api/reservations";
     public static final String API_FAVORITES = "http://54.229.223.123:8080/api/favorite";
     public static final String API_NOTIFICATION = "http://54.229.223.123:8080/api/notifications";
+    public static final String API_REVIEWS = "http://54.229.223.123:8080/api/review";
 
     // MOSQUITTO
 
