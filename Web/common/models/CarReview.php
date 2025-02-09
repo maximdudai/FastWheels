@@ -34,7 +34,7 @@ class CarReview extends \yii\db\ActiveRecord
             [['carId'], 'integer'],
             [['createdAt'], 'safe'],
             [['comment'], 'string', 'max' => 300],
-            [['carId'], 'exist', 'skipOnError' => true, 'targetClass' => Usercar::class, 'targetAttribute' => ['carId' => 'id']],
+            [['carId'], 'exist', 'skipOnError' => true, 'targetClass' => UserCar::class, 'targetAttribute' => ['carId' => 'id']],
         ];
     }
 
