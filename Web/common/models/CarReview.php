@@ -12,7 +12,7 @@ use Yii;
  * @property string $comment
  * @property string $createdAt
  *
- * @property Usercar $car
+ * @property UserCar $car
  */
 class CarReview extends \yii\db\ActiveRecord
 {
@@ -58,6 +58,6 @@ class CarReview extends \yii\db\ActiveRecord
      */
     public function getCar()
     {
-        return $this->hasOne(Usercar::class, ['id' => 'carId']);
+        return $this->hasOne(UserCar::class, ['id' => 'carId']);
     }
 }

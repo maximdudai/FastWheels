@@ -56,13 +56,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     private String showFavorites;
 
     public VehicleListFragment() {
-        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
 
-        SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
-        SingletonFastWheels.getInstance(getContext()).getReviewsAPI(getContext());
-
-        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
     }
 
     @Override
@@ -82,6 +76,13 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
+        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
+
+        SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
+        SingletonFastWheels.getInstance(getContext()).getReviewsAPI(getContext());
+
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
         // Configuracao do Toolbar
         // Find the toolbar in the fragment's layout
@@ -94,11 +95,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
 
         lvVehicles = view.findViewById(R.id.lvImgVehicle);
 
-        if(favoriteVehicles == null)
-            favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
-
-        if(vehicleList == null)
-            vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
+        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
+        vehiclesToShow = new ArrayList<Vehicle>();
 
         if(showFavorites.equals("1")) {
             if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
@@ -206,7 +205,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
             if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
                 vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
-            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            if(!vehicleList.isEmpty()) {
+                vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            }
         }
 
         System.out.println("--->vehs: #2: " + vehiclesToShow.size());
@@ -317,7 +318,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
             if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
                 vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
-            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            if(!vehicleList.isEmpty()) {
+                vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            }
         }
 
         System.out.println("--->vehs: #3: " + vehiclesToShow.size());
@@ -337,7 +340,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
             if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
                 vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
-            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            if(!vehicleList.isEmpty()) {
+                vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            }
         }
         swipeRefreshLayout.setRefreshing(false);
         lvVehicles.setAdapter(new VehicleListAdapter(getContext(), vehiclesToShow, R.layout.vehicle_list_item));
@@ -357,7 +362,9 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
             if(!vehicleList.isEmpty() && !favoriteVehicles.isEmpty())
                 vehiclesToShow.addAll(Helpers.filterVehiclesByFavorites(vehicleList, favoriteVehicles));
         } else {
-            vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            if(!vehicleList.isEmpty()) {
+                vehiclesToShow.addAll(Helpers.filterVehicleByNotPersonal(loggedUser, vehicleList));
+            }
         }
 
         // Set the adapter

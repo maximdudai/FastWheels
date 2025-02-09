@@ -193,6 +193,8 @@ public class Helpers {
     }
 
     public static ArrayList<Vehicle> filterVehicleListByPersonal(User loggedUser, ArrayList<Vehicle> vehicleList) {
+        if(loggedUser == null || vehicleList.isEmpty())
+            return new ArrayList<>();
 
         ArrayList<Vehicle> auxVehicle = new ArrayList<>();
 
@@ -204,6 +206,8 @@ public class Helpers {
         return auxVehicle;
     }
     public static ArrayList<Vehicle> filterVehicleByNotPersonal(User loggedUser, ArrayList<Vehicle> vehicleList) {
+        if(loggedUser == null || vehicleList.isEmpty())
+            return new ArrayList<>();
 
         ArrayList<Vehicle> auxVehicle = new ArrayList<>();
 
@@ -264,7 +268,6 @@ public class Helpers {
         ArrayList<Review> filteredReviews = new ArrayList<>();
         for (Review revs: reviewList) {
             if(revs.getCarId() == carId) {
-
                 filteredReviews.add(revs);
             }
         }

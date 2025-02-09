@@ -139,10 +139,13 @@ public class VehicleParser {
 
 
     public static boolean isConnectionInternet(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if(context != null) {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        return networkInfo != null && networkInfo.isConnected();
+            return networkInfo != null && networkInfo.isConnected();
+        }
+        return false;
     }
 
 }

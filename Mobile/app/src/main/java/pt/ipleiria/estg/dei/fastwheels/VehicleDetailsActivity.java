@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.fastwheels;
 
 import static pt.ipleiria.estg.dei.fastwheels.utils.Helpers.showMessage;
 
+import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -21,10 +22,12 @@ import java.util.List;
 import java.util.Locale;
 
 import pt.ipleiria.estg.dei.fastwheels.model.Favorite;
+import pt.ipleiria.estg.dei.fastwheels.model.Review;
 import pt.ipleiria.estg.dei.fastwheels.model.SingletonFastWheels;
 import pt.ipleiria.estg.dei.fastwheels.model.User;
 import pt.ipleiria.estg.dei.fastwheels.model.Vehicle;
 import pt.ipleiria.estg.dei.fastwheels.model.VehiclePhoto;
+import pt.ipleiria.estg.dei.fastwheels.utils.Helpers;
 
 public class VehicleDetailsActivity extends AppCompatActivity {
 
@@ -232,4 +235,19 @@ public class VehicleDetailsActivity extends AppCompatActivity {
         });
     }
 
+    public void handleOnClickReviews(View v) {
+        ArrayList<Review> reviews = new ArrayList<>();
+
+        AlertDialog reviewsDialog = new AlertDialog.Builder(getApplicationContext())
+                .setTitle("Vehicle Reviews")
+                .setMessage("Loading reviews...")
+                .setPositiveButton("Close", (dialog, which) -> {})
+                .show();
+
+
+        reviews = SingletonFastWheels.getInstance(getApplicationContext()).getReviewsDB();
+        reviews = Helpers.getReviewByCarId(reviews, selectedVehicle);
+        
+        reviewsDialog.setMessage(reviews.toString());
+    }
 }

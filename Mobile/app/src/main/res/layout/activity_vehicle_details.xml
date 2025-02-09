@@ -363,6 +363,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/holo_orange_dark"
                     android:text="reviews"
+                    android:onClick="handleOnClickReviews"
                     android:layout_marginRight="12sp"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />

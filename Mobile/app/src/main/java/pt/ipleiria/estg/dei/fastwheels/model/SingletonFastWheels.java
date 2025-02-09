@@ -553,9 +553,6 @@ public class SingletonFastWheels {
     public void getVehiclesAPI(final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
-
-            if (vehicleListener != null)
-                vehicleListener.onRefreshVehicle();
         } else {
             JsonArrayRequest jsonRequest = new JsonArrayRequest(
                     Request.Method.GET,
@@ -708,6 +705,11 @@ public class SingletonFastWheels {
         dbHelper.removeReviewsDB();
     }
 
+    public ArrayList<Review> getReviewsDB() {
+        dbHelper.getAllReviews();
+    }
+
+
     public void getReviewsAPI(final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
@@ -724,7 +726,6 @@ public class SingletonFastWheels {
                         public void onResponse(JSONArray response) {
                             removeReviewsDb();
 
-                            reviews.clear();
                             reviews = ReviewParser.parseReviewsData(response);
 
                             if(!reviews.isEmpty()) {
