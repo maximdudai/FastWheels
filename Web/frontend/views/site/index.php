@@ -19,7 +19,7 @@ $this->title = 'Fast Wheels';
 
         </div>
         <div class="demonstrativeImage">
-            <img id="companyImageSource" src="<?= Yii::getAlias('@uploads') . '/landingImage.png' ?>" alt="Fast Wheels Logo">
+            <img id="companyImageSource" src="<?= Yii::getAlias('/uploads') . '/landingImage.png' ?>" alt="Fast Wheels Logo">
         </div>
     </div>
 
@@ -59,7 +59,7 @@ $this->title = 'Fast Wheels';
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img class="img-fluid benefitsImage" alt="100%x280" src="<?= Yii::getAlias('@uploads') . '/winwin.png' ?>">
+                        <img class="img-fluid benefitsImage" alt="100%x280" src="<?= Yii::getAlias('/uploads') . '/winwin.png' ?>">
                         <div class="card-body">
                             <h4 class="card-title">Why choose us ?</h4>
                             <div class="whyChooseUs">
@@ -70,7 +70,7 @@ $this->title = 'Fast Wheels';
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img class="img-fluid benefitsImage" alt="100%x280" src="<?= Yii::getAlias('@uploads') . '/benefits.png' ?>">
+                        <img class="img-fluid benefitsImage" alt="100%x280" src="<?= Yii::getAlias('/uploads') . '/benefits.png' ?>">
                         <div class="card-body">
                             <h4 class="card-title">Benefits ? We have some</h4>
                             <div class="whyChooseUs">
@@ -81,7 +81,7 @@ $this->title = 'Fast Wheels';
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img class="img-fluid benefitsImage" alt="100%x280" src="<?= Yii::getAlias('@uploads') . '/safety.png' ?>">
+                        <img class="img-fluid benefitsImage" alt="100%x280" src="<?= Yii::getAlias('/uploads') . '/safety.png' ?>">
                         <div class="card-body">
                             <h4 class="card-title">Safety ? We have some</h4>
                             <div class="whyChooseUs">
@@ -113,9 +113,9 @@ $this->title = 'Fast Wheels';
             <?php if (empty($carPhotos)): ?>
                 <?php
                 $defaultImages = [
-                    Yii::getAlias('@uploads') . '/default_nocar.jpg',
-                    Yii::getAlias('@uploads') . '/default_nocar2.jpg',
-                    Yii::getAlias('@uploads') . '/default_nocar3.jpg',
+                    Yii::getAlias('/uploads') . '/default_nocar.jpg',
+                    Yii::getAlias('/uploads') . '/default_nocar2.jpg',
+                    Yii::getAlias('/uploads') . '/default_nocar3.jpg',
                 ];
                 ?>
                 <?php foreach ($defaultImages as $index => $defaultImage): ?>
