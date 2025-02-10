@@ -82,7 +82,7 @@ $this->title = $model->carBrand . ' ' . $model->carModel;
         <div class="reviews-section">
             <?php $reviews = $model->getCarReviews()->all(); ?>
             <?php if (!empty($reviews)): ?>
-                <ul class="reviews-list">
+                <ul class="reviews-list" style="max-height: 150px; overflow-y: auto;">
                     <?php foreach ($reviews as $review): ?>
                         <li class="review-item">
                             <strong>Comment:</strong> <?= Html::encode($review->comment) ?><br>
