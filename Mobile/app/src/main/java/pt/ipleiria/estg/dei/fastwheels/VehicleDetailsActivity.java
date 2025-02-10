@@ -236,18 +236,24 @@ public class VehicleDetailsActivity extends AppCompatActivity {
     }
 
     public void handleOnClickReviews(View v) {
-        ArrayList<Review> reviews = new ArrayList<>();
+        ArrayList<Review> reviews = SingletonFastWheels.getInstance(v.getContext()).getReviewsDB();
 
-        AlertDialog reviewsDialog = new AlertDialog.Builder(getApplicationContext())
+        if (selectedVehicle != -1) {
+            reviews = Helpers.getReviewByCarId(reviews, selectedVehicle);
+        }
+
+        // Convert the list to a properly formatted string
+        StringBuilder reviewsText = new StringBuilder();
+        for (Review review : reviews) {
+            reviewsText.append(review.toString()).append("\n"); // Ensures proper spacing
+        }
+
+        new AlertDialog.Builder(v.getContext())
                 .setTitle("Vehicle Reviews")
-                .setMessage("Loading reviews...")
+                .setMessage(reviews.isEmpty() ? "No reviews available." : reviewsText.toString().trim()) // Remove trailing newline
                 .setPositiveButton("Close", (dialog, which) -> {})
                 .show();
-
-
-        reviews = SingletonFastWheels.getInstance(getApplicationContext()).getReviewsDB();
-        reviews = Helpers.getReviewByCarId(reviews, selectedVehicle);
-        
-        reviewsDialog.setMessage(reviews.toString());
     }
+
+
 }

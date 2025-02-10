@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.fastwheels;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,15 +37,6 @@ public class UserReservedVehicleFragment extends Fragment implements SwipeRefres
     SingletonFastWheels singleton = null;
 
     public UserReservedVehicleFragment() {
-        singleton = SingletonFastWheels.getInstance(getContext());
-        singleton.setVehicleListener(this);
-
-        //load data from api
-        singleton.getReservationAPI(getContext());
-
-        loggedUser = singleton.getUser();
-        vehicleList = singleton.getVehiclesDb();
-        allReservations = singleton.getReservationsDb();
 
     }
 
@@ -55,6 +47,16 @@ public class UserReservedVehicleFragment extends Fragment implements SwipeRefres
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        singleton = SingletonFastWheels.getInstance(getContext());
+        singleton.setVehicleListener(this);
+
+        //load data from api
+        singleton.getReservationAPI(requireContext());
+
+        loggedUser = singleton.getUser();
+        vehicleList = singleton.getVehiclesDb();
+        allReservations = singleton.getReservationsDb();
 
         Toolbar toolbarCars = view.findViewById(R.id.toolbarCars);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarCars);
@@ -70,24 +72,11 @@ public class UserReservedVehicleFragment extends Fragment implements SwipeRefres
         lvReservations.setOnItemClickListener((adapterView, itemView, position, id) -> {
             Vehicle selectedVehicle = vehiclesToShow.get(position);
 
-            new AlertDialog.Builder(getContext())
-                    .setMessage("Pretende remover a reserva?")
-                    .setPositiveButton("Sim", (dialog, which) -> {
+            Intent showReservedDetails = new Intent(getActivity(), reservedVehicleDetails.class);
+            showReservedDetails.putExtra("VEHICLE_ID", selectedVehicle.getId());
+            startActivity(showReservedDetails);
 
-                        Reservation clickedReserve = Helpers.getReservationByVehicleAndUser(allReservations, loggedUser.getId(), selectedVehicle.getId());
-
-                        if(clickedReserve != null) {
-                            singleton.removeReservationAPI(clickedReserve.getId(), getContext());
-
-                            //false = mark as unrented | true = mark as rented
-                            selectedVehicle.setStatus(false);
-                            singleton.editVehicleAPI(selectedVehicle, getContext());
-                        }
-                        this.updateVehicleList();
-
-                    })
-                    .setNegativeButton("Não", null)
-                    .show();
+//
         });
 
         return view;

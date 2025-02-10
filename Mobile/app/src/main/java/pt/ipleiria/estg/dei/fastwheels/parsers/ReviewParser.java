@@ -11,6 +11,26 @@ import pt.ipleiria.estg.dei.fastwheels.model.Review;
 
 public class ReviewParser {
 
+    public static Review parseReviewData(String response) {
+
+        Review newRev = null;
+
+        try {
+            JSONObject fetchData = new JSONObject(response);
+
+            int id = fetchData.getInt("id");
+            int carId = fetchData.getInt("carId");
+            String comment = fetchData.getString("comment");
+            Timestamp createdAt = Timestamp.valueOf(fetchData.getString("createdAt"));
+
+            newRev = new Review(id, carId, comment, createdAt);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return newRev;
+    }
     public static ArrayList<Review> parseReviewsData(JSONArray response) {
         ArrayList<Review> reviewsList = new ArrayList<>();
 

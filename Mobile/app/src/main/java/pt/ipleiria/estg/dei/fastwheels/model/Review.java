@@ -1,6 +1,10 @@
 package pt.ipleiria.estg.dei.fastwheels.model;
 
+import android.os.Build;
+
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Review {
     private int id, carId;
@@ -45,4 +49,12 @@ public class Review {
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String formatDate = formatter.format(new Date(this.createdAt.getTime()));
+        return "(" + formatDate + ") " + comment + "\n\n";
+    }
+
 }

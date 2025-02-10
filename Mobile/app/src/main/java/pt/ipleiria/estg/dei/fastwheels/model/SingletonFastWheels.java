@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import pt.ipleiria.estg.dei.fastwheels.constants.Constants;
 import pt.ipleiria.estg.dei.fastwheels.listeners.LoginListener;
@@ -706,9 +707,43 @@ public class SingletonFastWheels {
     }
 
     public ArrayList<Review> getReviewsDB() {
-        dbHelper.getAllReviews();
+        return dbHelper.getAllReviews();
     }
 
+    public void addReviewAPI(Review rev, final Context context) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.API_REVIEWS + "/create", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Review newRev = ReviewParser.parseReviewData(response);
+
+                if(newRev != null) {
+                    addReviewDb(newRev);
+                    if (reviewListener != null) {
+                        reviewListener.onReviewsUpdate();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(context, "Something went wrong! Please try again later!", Toast.LENGTH_SHORT).show();
+                System.out.println("--->API Review err: " + error.getMessage());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("carId", String.valueOf(rev.getCarId()));
+                params.put("comment", rev.getComment());
+                params.put("createdAt", String.valueOf(rev.getCreatedAt()));
+                return params;
+            }
+
+        };
+        volleyQueue.add(request);
+    }
 
     public void getReviewsAPI(final Context context) {
         if (!VehicleParser.isConnectionInternet(context)) {
@@ -843,6 +878,9 @@ public class SingletonFastWheels {
 
 
     public void getReservationAPI(final Context context) {
+        if(context == null || loggedUser == null)
+            return;
+
         if (!VehicleParser.isConnectionInternet(context)) {
             Toast.makeText(context, "No internet access", Toast.LENGTH_SHORT).show();
 

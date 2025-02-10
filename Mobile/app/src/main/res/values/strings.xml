@@ -61,5 +61,7 @@
     <string name="item_reserver_price">Preço</string>
     <string name="string_notifications">Notifications</string>
     <string name="user_profile_toolbar">Profile</string>
-    <string name="car_reviews">Avaliacoes (0)</string>
+    <string name="car_reviews">Avaliacoes</string>
+    <string name="apagar_veiculo_reservado">Apagar reserva</string>
+    <string name="add_reserved_veh_review">Adicionar Avaliação</string>
 </resources>

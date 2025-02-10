@@ -56,7 +56,7 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
     private String showFavorites;
 
     public VehicleListFragment() {
-
+        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
     }
 
     @Override
@@ -76,13 +76,8 @@ public class VehicleListFragment extends Fragment implements SwipeRefreshLayout.
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        loggedUser = SingletonFastWheels.getInstance(getContext()).getUser();
-
         SingletonFastWheels.getInstance(getContext()).getVehiclesAPI(getContext());
         SingletonFastWheels.getInstance(getContext()).getReviewsAPI(getContext());
-
-        vehicleList = SingletonFastWheels.getInstance(getContext()).getVehiclesDb();
-        favoriteVehicles = SingletonFastWheels.getInstance(getContext()).getFavorites();
 
         // Configuracao do Toolbar
         // Find the toolbar in the fragment's layout

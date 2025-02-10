@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -264,13 +265,21 @@ public class Helpers {
         return auxVehicle;
     }
 
+    //return 5 random reviews at every request (if there are >5)
     public static ArrayList<Review> getReviewByCarId(ArrayList<Review> reviewList, final int carId) {
         ArrayList<Review> filteredReviews = new ArrayList<>();
-        for (Review revs: reviewList) {
-            if(revs.getCarId() == carId) {
+
+        for (Review revs : reviewList) {
+            if (revs.getCarId() == carId) {
                 filteredReviews.add(revs);
             }
         }
+
+        if (filteredReviews.size() > 5) {
+            Collections.shuffle(filteredReviews);
+            return new ArrayList<>(filteredReviews.subList(0, 5));
+        }
+
         return filteredReviews;
     }
 
