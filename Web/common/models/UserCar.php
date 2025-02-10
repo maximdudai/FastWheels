@@ -108,7 +108,7 @@ class UserCar extends \yii\db\ActiveRecord
      */
     public function getCarreviews()
     {
-        return $this->hasMany(Carreview::class, ['carId' => 'id']);
+        return $this->hasMany(CarReview::class, ['carId' => 'id']);
     }
 
     /**
