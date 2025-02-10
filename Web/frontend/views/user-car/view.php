@@ -28,6 +28,21 @@ $this->title = $model->carBrand . ' ' . $model->carModel;
                 <?php endif; ?>
             </div>
         </div>
+        <div class="rent-car-section">
+            <div class="rent-car-price">
+                <strong>Price:</strong> <?= Html::encode($model->priceDay) ?> €
+            </div>
+            <div class="rent-car-btn">
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <?= Html::button('Rent', [
+                        'class' => 'rent-btn btn-primary',
+                        'onclick' => "alert('You need to log in to rent a car.'); window.location.href = '" . Url::to(['/site/login']) . "';",
+                    ]) ?>
+                <?php else: ?>
+                    <?= Html::a('Rent Vehicle', ['/reservation', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
+                <?php endif; ?>
+            </div>
+        </div>
         <div class="car-name-section">
             <div class="car-name-pair">
                 <strong>Car:</strong> <?= Html::encode($model->carBrand . ' ' . $model->carModel) ?>
