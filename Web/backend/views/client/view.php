@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Role;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -29,15 +30,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'name',
             'email:email',
             'phone',
-            'roleId',
+            [
+                'attribute' => 'roleId',
+                'label' => 'Role',
+                'value' => function ($model) {
+                    return Role::findOne($model->roleId)->roleName;
+                },
+            ],
             'createdAt',
             'balance',
             'iban',
-            'userId',
+            'userId' => [
+                'attribute' => 'userId',
+                'label' => 'User',
+                'value' => function ($model) {
+                    return $model->user->username;
+                },
+            ],
         ],
     ]) ?>
 

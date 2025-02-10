@@ -44,6 +44,15 @@ $isUserHasAccessToDelete = ($client && $client->roleId === 3); // Check if the u
                     return $model->status === 1 ? 'Rented' : 'Unrented';
                 }
             ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{carreviews}',
+                'buttons' => [
+                    'carreviews' => function ($url, $model) {
+                        return Html::a('Reviews', ['carreview/index', 'id' => $model->id], ['class' => 'btn btn-primary']);
+                    }
+                ]
+            ],
             //'carDoors',
             //'createdAt',
             //'status',

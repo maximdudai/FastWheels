@@ -84,9 +84,17 @@ public class NotificationAdapter extends BaseAdapter {
         }
 
         private String getMinimizedContent(String content) {
-            String formatContent = content.trim().substring(0, Math.min(content.length(), 30));
+            String formatContent;
 
-            return formatContent.substring(0, formatContent.length() - 3) + "...";
+            if(content.length() >= 30) {
+                formatContent = content.trim().substring(0, Math.min(content.length(), 30));
+                formatContent = formatContent.substring(0, formatContent.length() - 3) + "...";
+            } else {
+                formatContent = content;
+            }
+
+
+            return formatContent;
         }
 
     }

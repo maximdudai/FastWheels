@@ -54,6 +54,7 @@ $loggedUserRole = $findRole?->roleName;
                     ['label' => 'Funcionarios', 'icon' => 'fa-regular fa-user', 'url' => ['/client/employees']],
                     ['label' => 'Clientes', 'icon' => 'fa-regular fa-user', 'url' => ['/client/clients']],
                     ['label' => 'Veiculos', 'icon' => 'fa-solid fa-car', 'url' => ['/user-car']], // Absolute URL
+                    ['label' => 'Reservas', 'icon' => 'fa-solid fa-marker', 'url' => ['/reservation']], // Absolute URL
 
                     ['label' => 'Company', 'header' => true],
                     ['label' => 'Support ticket', 'icon' => 'fa-solid fa-headset', 'url' => ['/support-ticket']],

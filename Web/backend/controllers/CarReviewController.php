@@ -37,10 +37,12 @@ class CarReviewController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
         $searchModel = new CarReviewSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider->query->andWhere(['carId' => $id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

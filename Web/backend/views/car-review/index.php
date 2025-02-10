@@ -15,26 +15,24 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="car-review-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Car Review', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'carId',
+            'carId' => [
+                'attribute' => 'carId',
+                'label' => 'Car',
+                'value' => function (CarReview $model) {
+                    return $model->car->carBrand . ' ' . $model->car->carModel;
+                }
+            ],
             'comment',
             'createdAt',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {delete}',
                 'urlCreator' => function ($action, CarReview $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

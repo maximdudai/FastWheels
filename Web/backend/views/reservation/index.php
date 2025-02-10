@@ -15,23 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="reservation-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Reservation', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'clientId',
-            'carId',
+            'clientId' => [
+                'attribute' => 'clientId',
+                'label' => 'Client',
+                'value' => function (Reservation $model) {
+                    return $model->client->name;
+                }
+            ],
+            'carId' => [
+                'attribute' => 'carId',
+                'label' => 'Car',
+                'value' => function (Reservation $model) {
+                    return $model->car->carBrand . ' ' . $model->car->carModel;
+                }
+            ],
             'dateStart',
             'dateEnd',
             //'createAt',

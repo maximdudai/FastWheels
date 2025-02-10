@@ -52,6 +52,8 @@ return [
                 'supportticket/<action>' => 'support-ticket/<action>',
                 'usercar' => 'user-car/index',
                 'usercar/<action>' => 'user-car/<action>',
+                'carreview' => 'car-review/index',
+                'carreview/<action>' => 'car-review/<action>',
                 // 'usercar/<action:\w+>/<id:\d+>' => 'user-car/<action>',
                 [
                     'class' => 'yii\rest\UrlRule',

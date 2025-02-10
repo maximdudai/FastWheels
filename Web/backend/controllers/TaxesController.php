@@ -2,9 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\Taxes;
+use backend\models\TaxesSearch;
 use Yii;
-use app\models\Taxes;
-use app\models\TaxesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

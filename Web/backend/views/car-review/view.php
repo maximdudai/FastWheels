@@ -13,10 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="car-review-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -29,8 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'carId',
+            'carId' => [
+                'attribute' => 'carId',
+                'label' => 'Car',
+                'value' => function (common\models\CarReview $model) {
+                    return $model->car->carBrand . ' ' . $model->car->carModel;
+                }
+            ],
             'comment',
             'createdAt',
         ],

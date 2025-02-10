@@ -14,11 +14,20 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clientId')->textInput() ?>
 
-    <?= $form->field($model, 'content')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'content')->textInput(['maxlength' => true, 'disabled' => true]) ?>
 
-    <?= $form->field($model, 'createdAt')->textInput() ?>
+    <?= $form->field($model, 'createdAt')->textInput(['maxlength' => true, 'disabled' => true]) ?>
 
-    <?= $form->field($model, 'closed')->textInput() ?>
+
+    <?= 
+        $form->field($model, 'closed')->textInput()
+        ->dropDownList(
+            [
+                '0' => "Não",
+                '1' => "Sim",
+            ]
+        );
+     ?>
 
     <?= 
         $form->field($model, 'status')->textInput()

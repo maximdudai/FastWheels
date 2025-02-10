@@ -5,6 +5,7 @@ namespace backend\modules\api\controllers;
 use Bluerhinos\phpMQTT;
 use common\models\Reservation;
 use common\models\User;
+use common\models\UserCar;
 use Yii;
 use yii\rest\ActiveController;
 use yii\filters\auth\HttpBasicAuth;
@@ -114,6 +115,14 @@ class ReservationsController extends ActiveController
         }
 
         $model = new Reservation();
+
+        $vehicle = UserCar::findOne($data['carId']);
+        if (!$vehicle) {
+            throw new NotFoundHttpException('Invalid vehicle ID');
+        }
+        if($vehicle->status != 0){
+            throw new BadRequestHttpException('Vehicle is not available');
+        }
 
         // Load data into the model and validate
         if ($model->load($data, '') && $model->validate()) {

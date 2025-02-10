@@ -11,14 +11,12 @@ use function TicketStatus\getTicketStatus;
 
 
 
-$this->title = $model->id;
+$this->title = "Support Ticket: #" . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Support Tickets', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="support-ticket-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -34,11 +32,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'clientId',
+            'clientId' => [
+                'attribute' => 'clientId',
+                'label' => 'Client',
+                'value' => function ($model) {
+                    return $model->client->name;
+                }
+            ],
             'content',
             'createdAt',
-            'closed',
+            'closed' => [
+                'attribute' => 'closed',
+                'value' => function ($model) {
+                    return $model->closed ? 'Yes' : 'No';
+                }
+            ],
             'status' => [
                 'attribute' => 'status',
                 'value' => function ($model) {

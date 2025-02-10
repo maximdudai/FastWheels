@@ -148,7 +148,7 @@
                         android:id="@+id/tvDisponivelDe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/vehicle_form_disponivel_de"
+                        android:text="Data Inicio"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -181,7 +181,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
-                        android:text="@string/vehicle_form_disponivel_ate"
+                        android:text="Data Fim"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />

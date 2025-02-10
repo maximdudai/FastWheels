@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Bluerhinos\phpMQTT;
 use common\models\Reservation;
+use common\models\UserCar;
 use frontend\models\ReservationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -41,10 +42,10 @@ class ReservationController extends Controller
     {
         $searchModel = new ReservationSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-    
+
         // Filter reservations by the logged-in user's ID
         $dataProvider->query->andWhere(['clientId' => \Yii::$app->user->id]);
-        
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -75,7 +76,19 @@ class ReservationController extends Controller
 
         if ($this->request->isPost) {
 
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+
+                $data = $this->request->post();
+                $vehicle = UserCar::findOne($data['Reservation']['carId']);
+
+                if ($vehicle->status != 0) {
+                    return $this->render('create', [
+                        'model' => $model,
+                        'error' => 'Veículo indisponível para reserva'
+                    ]);
+                }
+
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -187,9 +200,9 @@ class ReservationController extends Controller
         $newData = json_encode($newData);
 
         if ($insert)
-        ReservationController::publishToMosquitto("RESERVATION:CREATE", $newData);
+            ReservationController::publishToMosquitto("RESERVATION:CREATE", $newData);
         else
-        ReservationController::publishToMosquitto("RESERVATION:UPDATE", $newData);
+            ReservationController::publishToMosquitto("RESERVATION:UPDATE", $newData);
     }
 
     public function afterDelete()
