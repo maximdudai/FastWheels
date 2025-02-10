@@ -22,7 +22,7 @@ use Yii;
  * @property string $city
  * @property float $priceDay
  *
- * @property Carphoto[] $carphotos
+ * @property CarPhoto[] $carphotos
  * @property Carreview[] $carreviews
  * @property Client $client
  * @property Favorite[] $favorites
@@ -88,7 +88,7 @@ class UserCar extends \yii\db\ActiveRecord
      */
     public function getCarphotos()
     {
-        return $this->hasMany(Carphoto::class, ['carId' => 'id']);
+        return $this->hasMany(CarPhoto::class, ['carId' => 'id']);
     }
 
     public function getFirstPhoto()
