@@ -28,7 +28,7 @@ $this->title = $model->carBrand . ' ' . $model->carModel;
                 <?php endif; ?>
             </div>
         </div>
-        <div class="rent-car-section">
+        <div class="rent-car-section" style="display: flex; align-items:center; justify-content: space-between; border: 1px solid #ccc; padding: 10px; border-radius:10px;">
             <div class="rent-car-price">
                 <strong>Price:</strong> <?= Html::encode($model->priceDay) ?> €
             </div>
@@ -39,7 +39,7 @@ $this->title = $model->carBrand . ' ' . $model->carModel;
                         'onclick' => "alert('You need to log in to rent a car.'); window.location.href = '" . Url::to(['/site/login']) . "';",
                     ]) ?>
                 <?php else: ?>
-                    <?= Html::a('Rent Vehicle', ['/reservation', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
+                    <?= Html::a('Rent Vehicle', ['/reservation/create', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
                 <?php endif; ?>
             </div>
         </div>

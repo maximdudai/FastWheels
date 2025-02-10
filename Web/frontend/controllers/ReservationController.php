@@ -41,7 +41,10 @@ class ReservationController extends Controller
     {
         $searchModel = new ReservationSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
+    
+        // Filter reservations by the logged-in user's ID
+        $dataProvider->query->andWhere(['clientId' => \Yii::$app->user->id]);
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -71,6 +74,7 @@ class ReservationController extends Controller
         $model = new Reservation();
 
         if ($this->request->isPost) {
+
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -114,7 +118,7 @@ class ReservationController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['reservation/index']);
     }
 
     /**

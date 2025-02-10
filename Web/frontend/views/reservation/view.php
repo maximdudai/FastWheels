@@ -11,33 +11,61 @@ $this->params['breadcrumbs'][] = ['label' => 'Reservations', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="reservation-view">
+<div class="reservation-view container mt-4">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+                <div>
+                    <?= Html::a('<i class="fas fa-trash"></i> Apagar', ['delete', 'id' => $model->id], [
+                        'class' => 'btn btn-danger',
+                        'data' => [
+                            'confirm' => 'Tem a certeza que deseja apagar este item?',
+                            'method' => 'post',
+                        ],
+                    ]) ?>
+                </div>
+            </div>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'clientId',
-            'carId',
-            'dateStart',
-            'dateEnd',
-            'createAt',
-            'filled',
-            'value',
-        ],
-    ]) ?>
+            <div class="table-responsive">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'options' => ['class' => 'table table-bordered table-hover'],
+                    'attributes' => [
+                        [
+                            'attribute' => 'carId',
+                            'label' => 'Veiculo',
+                            'value' => $model->car->carBrand . ' ' . $model->car->carModel,
+                        ],
+                        [
+                            'attribute' => 'dateStart',
+                            'label' => 'Data de Início',
+                            'format' => ['date', 'php:d/m/Y'],
+                        ],
+                        [
+                            'attribute' => 'dateEnd',
+                            'label' => 'Data de Fim',
+                            'format' => ['date', 'php:d/m/Y'],
+                        ],
+                        [
+                            'attribute' => 'createAt',
+                            'label' => 'Criada em',
+                            'format' => ['date', 'php:d/m/Y H:i'],
+                        ],
+                        [
+                            'attribute' => 'filled',
+                            'label' => 'Estado',
+                            'value' => $model->filled ? 'Preenchido' : 'Pendente',
+                        ],
+                        [
+                            'attribute' => 'value',
+                            'label' => 'Valor (€)',
+                            'format' => ['decimal', 2],
+                        ],
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    </div>
 
 </div>

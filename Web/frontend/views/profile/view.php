@@ -77,6 +77,7 @@ $photoUrl = Yii::getAlias('@uploads') . '/profile_icon.png';
             <?= Html::a('<i class="fas fa-edit"></i> Edit Profile', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('<i class="fas fa-headset"></i> Support Ticket', ['support-ticket/index', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
             <?= Html::a('<i class="fas fa-star"></i> Favorites', ['/favorite'], ['class' => 'btn btn-warning']) ?>
+            <?= Html::a('<i class="fas fa-star"></i> Reservas', ['/reservation'], ['class' => 'btn btn-info']) ?>
         </div>
     </div>
 

@@ -1,7 +1,18 @@
 <?php
 
+use backend\models\Taxes;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
+$loggedUser = Yii::$app->user->id;
+$carId = Yii::$app->request->get('id');
+$currentTimpestamp = date('Y-m-d H:i:s');
+$getCarValue = \common\models\UserCar::find()->where(['id' => $carId])->one();
+
+$businessFee = Taxes::find()->where(['id' => 1])->one()->tax_value;
+$calculateFee = $getCarValue->priceDay * $businessFee;
+
+$currentTimestamp = date('Y-m-d H:i:s');
 
 /** @var yii\web\View $this */
 /** @var common\models\Reservation $model */
@@ -12,21 +23,24 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'clientId')->textInput() ?>
+    <?= $form->field($model, 'clientId')->hiddenInput(['value' => $loggedUser])->label(false) ?>
+    <?= $form->field($model, 'carId')->hiddenInput(['value' => $carId])->label(false) ?>
 
-    <?= $form->field($model, 'carId')->textInput() ?>
+    <div class="row mt-5">
+        <?= $form->field($model, 'dateStart')->textInput(['type' => 'date', 'value' => $currentTimpestamp])->label('Start Date') ?>
+    </div>
+    <div class="row mt-5">
+        <?= $form->field($model, 'dateEnd')->textInput(['type' => 'date', 'value' => $currentTimpestamp])->label('End Date') ?>
+    </div>
+    
+    <?= $form->field($model, 'filled')->hiddenInput(['value' => 0])->label(false) ?>
+    <?= $form->field($model, 'createAt')->hiddenInput(['value' => $currentTimestamp])->label(false) ?>
 
-    <?= $form->field($model, 'dateStart')->textInput() ?>
+    <?= $form->field($model, 'carValue')->hiddenInput(['value' => $getCarValue->priceDay])->label(false) ?>
+    <?= $form->field($model, 'feeValue')->hiddenInput(['value' => $businessFee])->label(false) ?>
+    <?= $form->field($model, 'value')->hiddenInput(['value' => $calculateFee])->label(false) ?>
 
-    <?= $form->field($model, 'dateEnd')->textInput() ?>
-
-    <?= $form->field($model, 'createAt')->textInput() ?>
-
-    <?= $form->field($model, 'filled')->textInput() ?>
-
-    <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
+    <div class="form-group mt-5">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
