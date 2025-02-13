@@ -47,8 +47,8 @@ class UserCarController extends Controller
         $searchModel = new UserCarSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        // filter by status, fetch only vehicles that status is different than 1 even if the status are null
-        $dataProvider->query->andWhere(['!=', 'status', 1]);
+        $dataProvider->query->andWhere(['not in', 'status', [1]]);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
