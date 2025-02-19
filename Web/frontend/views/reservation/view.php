@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'filled',
                             'label' => 'Estado',
-                            'value' => $model->filled ? 'Em Reserva' : 'Finalizado',
+                            'value' => !$model->filled ? 'Em Reserva' : 'Finalizada',
                         ],
                         [
                             'attribute' => 'value',

@@ -57,7 +57,7 @@ class SupportTicket extends \yii\db\ActiveRecord
             'createdAt' => 'Created At',
             'closed' => 'Closed',
             'subject' => 'Subject',
-            'reservationId' => 'Reservation ID',
+            'reservationId' => 'Reservation',
             'status' => 'Status',
         ];
     }

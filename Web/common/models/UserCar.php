@@ -95,9 +95,7 @@ class UserCar extends \yii\db\ActiveRecord
     {
         $photos = $this->carphotos;
 
-        return !empty($photos)
-            ? Yii::getAlias('@carphotos') . '/' . $photos[0]->photoUrl
-            : Yii::getAlias('@carphotos') . '/default_car.jpg';
+        return Yii::getAlias('@web') . '/uploads/car-photos/default_car.jpg';
     }
 
 
