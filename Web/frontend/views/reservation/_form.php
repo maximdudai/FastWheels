@@ -25,14 +25,36 @@ $currentTimestamp = date('Y-m-d H:i:s');
 
     <?= $form->field($model, 'clientId')->hiddenInput(['value' => $loggedUser])->label(false) ?>
     <?= $form->field($model, 'carId')->hiddenInput(['value' => $carId])->label(false) ?>
+    <div class="row mt-5">
+        <div class="col">
+            <?= $form->field($model, 'dateStart')->textInput(['type' => 'date', 'value' => $currentTimpestamp])->label('Start Date') ?>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <?= $form->field($model, 'dateEnd')->textInput(['type' => 'date', 'value' => $currentTimpestamp])->label('End Date') ?>
+        </div>
+    </div>
 
     <div class="row mt-5">
-        <?= $form->field($model, 'dateStart')->textInput(['type' => 'date', 'value' => $currentTimpestamp])->label('Start Date') ?>
+        <div class="col">
+            <div class="form-group">
+                <?= Html::label("Contacto", "phone", ['class' => 'form-label']) ?>
+                <?= Html::textInput('phone', '', ['class' => 'form-control', 'maxlength' => true]) ?>
+            </div>
+        </div>
     </div>
+
     <div class="row mt-5">
-        <?= $form->field($model, 'dateEnd')->textInput(['type' => 'date', 'value' => $currentTimpestamp])->label('End Date') ?>
+        <div class="col">
+            <div class="form-group">
+                <?= Html::label("Localização", "address", ['class' => 'form-label']) ?>
+                <?= Html::textInput('address', '', ['class' => 'form-control', 'maxlength' => true]) ?>
+            </div>
+        </div>
     </div>
-    
+
+
     <?= $form->field($model, 'filled')->hiddenInput(['value' => 0])->label(false) ?>
     <?= $form->field($model, 'createAt')->hiddenInput(['value' => $currentTimestamp])->label(false) ?>
 
