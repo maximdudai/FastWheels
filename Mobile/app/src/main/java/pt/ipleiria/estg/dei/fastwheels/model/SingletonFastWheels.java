@@ -526,7 +526,7 @@ public class SingletonFastWheels {
                     params.put("carModel", vehicleData.getCarModel());
                     params.put("carYear", String.valueOf(vehicleData.getCarYear()));
                     params.put("carDoors", String.valueOf(vehicleData.getCarDoors()));
-                    params.put("status", String.valueOf(!vehicleData.isStatus() ? 0 : 1));
+                    params.put("status", "0");
                     params.put("availableFrom", String.valueOf(vehicleData.getAvailableFrom()));
                     params.put("availableTo", String.valueOf(vehicleData.getAvailableTo()));
                     params.put("address", vehicleData.getAddress());

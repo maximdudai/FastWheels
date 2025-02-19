@@ -19,7 +19,7 @@ $this->title = 'Fast Wheels';
 
         </div>
         <div class="demonstrativeImage">
-            <img id="companyImageSource" src="<?= Yii::getAlias('/uploads') . '/landingImage.png' ?>" alt="Fast Wheels Logo">
+            <img id="companyImageSource" src="<?= Yii::getAlias('@web') . '/uploads/landingImage.png' ?>" alt="Fast Wheels Logo">
         </div>
     </div>
 
