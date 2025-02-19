@@ -28,7 +28,6 @@ $photoUrl = Yii::getAlias('@uploads') . '/profile_icon.png';
             <div class="avatar-wrapper mb-3">
                 <?= Html::img($photoUrl, ['width' => 150]) ?>
             </div>
-            <?= Html::a('Change Profile Picture', ['update-avatar', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
         </div>
     </div>
 
